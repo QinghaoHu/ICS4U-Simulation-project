@@ -2,4 +2,4 @@
 *.ctxt
 .DS_Store
 .idea/
-*.imi
+*.iml
