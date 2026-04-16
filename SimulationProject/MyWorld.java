@@ -1,6 +1,7 @@
-import greenfoot.*;
 import java.util.HashMap;
 import java.util.Map;
+=======
+>>>>>>> main
 
 /**
  * Write a description of class MyWorld here.
@@ -19,6 +20,7 @@ public class MyWorld extends World {
     private static GreenfootImage background;
     private Map<String, Runnable> states = new HashMap<>();
     
+    private static GreenfootImage background;
     
     public MyWorld() {
         // Create a new world with 600x400 cells with a cell size of 1x1 pixels.
