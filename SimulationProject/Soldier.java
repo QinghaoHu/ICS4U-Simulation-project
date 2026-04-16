@@ -8,6 +8,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Soldier extends People
 {
+    public Soldier(){
+
+    }
     /**
      * Act - do whatever the Soldier wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
