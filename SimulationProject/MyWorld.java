@@ -1,8 +1,4 @@
-import java.util.HashMap;
-import java.util.Map;
-=======
->>>>>>> main
-
+import java.util.*;
 /**
  * Write a description of class MyWorld here.
  *
