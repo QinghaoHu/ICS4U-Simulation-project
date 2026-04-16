@@ -47,8 +47,8 @@ public class MyWorld extends World {
         state = s;
         setUpWorld();
     }
-    
-    public String getState(){
-		return //I am stupid state;
-    }
+
+	public String getWorld() {
+		return state;
+	}
 }
