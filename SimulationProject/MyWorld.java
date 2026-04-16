@@ -48,6 +48,5 @@ public class MyWorld extends World {
     
     public String getState(){
         return state; 
->>>>>>> Stashed changes
     }
 }
