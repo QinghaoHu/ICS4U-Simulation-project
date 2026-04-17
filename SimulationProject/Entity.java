@@ -1,0 +1,41 @@
+public abstract class Entity extends SmoothMover{
+    protected boolean isAlive;
+    protected Team team;
+
+    public Entity(){
+        isAlive = true;
+    }
+
+    public Entity(Team team){
+        this();
+        setTeam(team);
+    }
+
+    public boolean isAlive(){
+        return isAlive;
+    }
+
+    public Team getTeam(){
+        return team;
+    }
+
+    public int getTeamId() {
+        if (team == null) {
+            return -1;
+        }
+
+        return team.getTeamId();
+    }
+
+    public void setTeam(Team team) {
+        this.team = team;
+    }
+
+    public boolean isOpponent(Entity other) {
+        if (other == null || getTeam() == null || other.getTeam() == null) {
+            return false;
+        }
+
+        return getTeamId() != other.getTeamId();
+    }
+}
