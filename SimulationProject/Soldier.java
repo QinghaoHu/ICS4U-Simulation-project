@@ -24,6 +24,5 @@ public class Soldier extends People
      */
     public void act()
     {
-        // Add your action code here.
     }
 }
