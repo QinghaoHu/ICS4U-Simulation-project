@@ -15,5 +15,6 @@ public class SoldierBullet extends Projectile
     public void act()
     {
         super.act();
+        
     }
 }

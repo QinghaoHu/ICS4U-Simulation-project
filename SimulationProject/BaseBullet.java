@@ -15,5 +15,6 @@ public class BaseBullet extends Projectile
     public void act()
     {
         super.act();
+        
     }
 }
