@@ -27,4 +27,24 @@ public abstract class Buildings extends Entity
     {
         // Add your action code here.
     }
+
+    public People addPeople(String type){
+        if (getWorld() == null || team == null) {
+            return null;
+        }
+
+        People newPerson = null;
+
+        if ("Worker".equals(type)) {
+            newPerson = new Worker(team);
+        } else if ("Soldier".equals(type)) {
+            newPerson = new Soldier(team);
+        }
+
+        if (newPerson != null) {
+            getWorld().addObject(newPerson, getX(), getY());
+        }
+
+        return newPerson;
+    }
 }
