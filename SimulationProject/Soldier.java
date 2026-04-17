@@ -9,7 +9,14 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Soldier extends People
 {
     public Soldier(){
+        super();
+    }
 
+    public Soldier(Team team) {
+        super(team);
+        if (team != null) {
+            team.addUnit(this);
+        }
     }
     /**
      * Act - do whatever the Soldier wants to do. This method is called whenever
