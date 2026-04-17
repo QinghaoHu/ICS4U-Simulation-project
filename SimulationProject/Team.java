@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.List;
 
-public class Team {
+public abstract class Team {
     public static final int RED = 0;
     public static final int BLUE = 1;
 
