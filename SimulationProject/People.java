@@ -12,6 +12,6 @@ public abstract class People extends Entity{
     }
 
     public void act(){
-
+        move(speed);
     }
 }

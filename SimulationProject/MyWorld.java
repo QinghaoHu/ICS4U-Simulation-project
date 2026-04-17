@@ -35,7 +35,8 @@ public class MyWorld extends World {
     private void setUpWorld() {
         removeObjects(getObjects(null));
 
-        background = new GreenfootImage(currentState + ".png");
+//        background = new GreenfootImage(currentState + ".png");
+        background = new GreenfootImage("Background.png");
         setBackground(background);
 
         Runnable stateHandler = stateHandlers.get(currentState);
