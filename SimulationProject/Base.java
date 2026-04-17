@@ -12,7 +12,8 @@ public class Base extends Buildings
     
     public Base(Team team){
         super(team);
-        setImage();
+        setupImage();
+        setImage(img);
     }
     
     /**
@@ -24,7 +25,7 @@ public class Base extends Buildings
 
     }
     
-    private void setImage(){
+    private void setupImage(){
         if (team == null) {
             return;
         }
