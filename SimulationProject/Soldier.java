@@ -1,5 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.lang.Math;
 /**
  * Write a description of class Soldier here.
  * 
@@ -24,5 +24,16 @@ public class Soldier extends People
      */
     public void act()
     {
+        
+    }
+    
+    public double shootAngle(Entity e){
+        double xDiff = getX() - e.getX(); // gets the difference in x between soldier and entity
+        double yDiff = getY() - e.getY(); // gets the difference in y between soldier and entity
+        
+        double angleRad = Math.atan2(yDiff, xDiff); // gets the angle of soldier and entity in radians
+        double angleDeg = Math.toDegrees(angleRad); // converts angle from rad to degrees
+        
+        return angleDeg; 
     }
 }
