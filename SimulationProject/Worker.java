@@ -20,6 +20,7 @@ public class Worker extends People{
 
     public void act(){
         super.act();
+        mineResources();
     }
 
     private void mineResources(){
