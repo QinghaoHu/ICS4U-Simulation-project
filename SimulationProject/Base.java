@@ -10,9 +10,9 @@ public class Base extends Buildings
 {
     private GreenfootImage img;
     
-    public Base (int team){
-        setImage(team);
-        
+    public Base(Team team){
+        super(team);
+        setImage();
     }
     
     /**
@@ -21,22 +21,42 @@ public class Base extends Buildings
      */
     public void act()
     {
-        // Add your action code here.
+
     }
     
-    private void setImage(int team){
-        if(team == Team.RED){
+    private void setImage(){
+        if (team == null) {
+            return;
+        }
+
+        if (team.getTeamId() == Team.RED) {
             img = new GreenfootImage("RedHomeBase.png");
-        }else if( team == Team.BLUE){
+        } else if (team.getTeamId() == Team.BLUE) {
             img = new GreenfootImage("BlueHomeBase.png");
         }
+
+        if (img != null) {
+            setImage(img);
+        }
     }
     
-    public void addPeople(String type){
-        if(type.equals("Worker")){
-            getWorld().addObject(new Worker(), getX(), getY());
-        } else if (type.equals("Soldier")){
-            getWorld().addObject(new Soldier(), getX(), getY());
+    public People addPeople(String type){
+        if (getWorld() == null || team == null) {
+            return null;
         }
+
+        People newPerson = null;
+
+        if ("Worker".equals(type)) {
+            newPerson = new Worker(team);
+        } else if ("Soldier".equals(type)) {
+            newPerson = new Soldier(team);
+        }
+
+        if (newPerson != null) {
+            getWorld().addObject(newPerson, getX(), getY());
+        }
+
+        return newPerson;
     }
 }
