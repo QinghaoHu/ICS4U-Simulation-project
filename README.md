@@ -8,6 +8,28 @@
 
 Follow this workflow every time you start working on the project. It keeps your local branch up to date and reduces merge conflicts.
 
+### Branch Naming Rule
+
+Do not name branches after people's names, and do not reuse the same personal branch again and again. Each branch should describe the intention of the work you want to do.
+
+Good branch names:
+
+```text
+fix-the-mining-function-bug
+add-player-health-system
+update-start-screen-ui
+```
+
+Bad branch names:
+
+```text
+john
+mary-branch
+my-work
+```
+
+After the branch is merged, create a new branch for the next task.
+
 ### Before You Start Development: Rebase Your Branch
 
 #### Bash Method
