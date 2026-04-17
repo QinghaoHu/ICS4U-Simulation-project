@@ -1,6 +1,9 @@
 import greenfoot.*;
+import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.ArrayList;
+import greenfoot.*;
 
 /**
  * Main simulation world.
@@ -68,5 +71,36 @@ public class MyWorld extends World {
 
     public String getWorld() {
         return currentState;
+    }
+
+    public Entity findClosestOpponent(Entity source) {
+
+        ArrayList<Entity> allEntities = (ArrayList) getObjects(Entity.class);
+
+        Entity closest = null;
+        double closestDist = Double.MAX_VALUE;
+
+        for (Entity e : allEntities) {
+
+            // skip self
+            if (e == source) continue;
+
+            // must be alive
+            if (!e.isAlive()) continue;
+
+            // must be enemy
+            if (!source.isOpponent(e)) continue;
+
+            double dx = source.getX() - e.getX();
+            double dy = source.getY() - e.getY();
+            double distSquared = dx * dx + dy * dy;
+
+            if (distSquared < closestDist) {
+                closestDist = distSquared;
+                closest = e;
+            }
+        }
+
+        return closest;
     }
 }
