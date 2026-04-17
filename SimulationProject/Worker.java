@@ -35,4 +35,9 @@ public class Worker extends People{
         getWorld().removeObject(resource);
         carryAmount++;
     }
+
+    public void buildBarrack() {
+        Barrack bar = new Barrack(super.team);
+        getWorld().addObject(bar, getX(), getY());
+    }
 }
