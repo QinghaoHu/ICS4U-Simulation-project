@@ -13,4 +13,8 @@ public class Worker extends People{
     public void act(){
 
     }
+
+    private void mineResources(){
+
+    }
 }
