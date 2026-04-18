@@ -1,9 +1,11 @@
 import greenfoot.*;
+
 import java.util.List;
+
 /**
  * Write a description of class Projectile here.
- * 
- * @author (your name) 
+ *
+ * @author (your name)
  * @version (a version number or a date)
  */
 public class Worker extends People {
@@ -95,8 +97,8 @@ public class Worker extends People {
         moveTowards(targetResource.getX(), targetResource.getY());
 
         double dist = Math.hypot(
-            getX() - targetResource.getX(),
-            getY() - targetResource.getY()
+                getX() - targetResource.getX(),
+                getY() - targetResource.getY()
         );
 
         if (dist < 30) { //this is for hitbox as worker hitbox is originally too big
@@ -114,8 +116,8 @@ public class Worker extends People {
         moveTowards(homeBase.getX(), homeBase.getY());
 
         double dist = Math.hypot(
-            getX() - homeBase.getX(),
-            getY() - homeBase.getY()
+                getX() - homeBase.getX(),
+                getY() - homeBase.getY()
         );
 
         if (dist < 45) { //THIS IS FOR HITBOX AS WORKER HITBOX IS ORIGINALLY TOO BIG
