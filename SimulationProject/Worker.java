@@ -41,7 +41,7 @@ public class Worker extends People {
         }
 
         carryAmount = 0;
-        maxCarry = 10;
+        maxCarry = 15;
         minRate = 5;
 
         setupImage(); //forgot to add before
