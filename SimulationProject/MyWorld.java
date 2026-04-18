@@ -86,14 +86,14 @@ public class MyWorld extends World {
         addObject(new Resources(), 1140, 220);
 
 
-        /** addObject(new Worker(), 170, 620);
-         addObject(new Worker(), 235, 660);
+        addObject(new Worker(redTeam, redBase), 170, 620);
+        /* addObject(new Worker(), 235, 660);
          addObject(new Soldier(), 265, 570);
 
          addObject(new Worker(), 1030, 180);
          addObject(new Worker(), 965, 140);
          addObject(new Soldier(), 935, 230);
-         **/
+         */
     }
 
     private void setTitleState() {

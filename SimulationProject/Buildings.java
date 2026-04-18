@@ -35,12 +35,12 @@ public abstract class Buildings extends Entity
 
         People newPerson = null;
 
-        if ("Worker".equals(type)) {
-            newPerson = new Worker(team);
+        /*if ("Worker".equals(type)) {
+            newPerson = new Worker(team, this);
         } else if ("Soldier".equals(type)) {
             newPerson = new Soldier(team);
         }
-
+        */
         if (newPerson != null) {
             getWorld().addObject(newPerson, getX(), getY());
         }

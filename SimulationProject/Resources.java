@@ -21,4 +21,6 @@ public class Resources extends SmoothMover {
         img.scale(60, 60);
     }
 
+    
+    
 }
