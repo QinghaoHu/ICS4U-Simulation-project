@@ -86,12 +86,12 @@ public class Worker extends People {
         }
 
         if (emptyImg != null) {
-            emptyImg.scale(40, 40);
+            emptyImg.scale(50, 50);
             setImage(img);
         }
         
         if (miningImg != null) {
-            miningImg.scale(40, 40);
+            miningImg.scale(50, 50);
             setImage(img);
         }
         
