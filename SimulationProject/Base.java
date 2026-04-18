@@ -35,10 +35,11 @@ public class Base extends Buildings
         } else if (team.getTeamId() == Team.BLUE) {
             img = new GreenfootImage("BlueHomeBase.png");
         }
+        img.scale(110, 110);
 
         if (img != null) {
             setImage(img);
-        }
+        } 
     }
     
     public People addPeople(){

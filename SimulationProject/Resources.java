@@ -13,11 +13,12 @@ public class Resources extends SmoothMover{
     }
 
     public void setupImage(){
-        if(Math.random()*2 == 0){
+        if((int)(Math.random()*2) == 0){
             img = new GreenfootImage("Resources1.png");
         }else{
             img = new GreenfootImage("Resources2.png");
         }
+        img.scale(60, 60);
     }
 
 }
