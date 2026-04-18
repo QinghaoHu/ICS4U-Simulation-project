@@ -67,33 +67,36 @@ public class MyWorld extends World {
         removeObjects(getObjects(null));
 
         Base redBase = new Base(redTeam);
-        addObject(redBase, 150, 490);
+        addObject(redBase, 200, 490);
         Base blueBase = new Base(blueTeam);
-        addObject(blueBase, 1050, 165);
+        addObject(blueBase, 990, 165);
 
         // resources near red base (left side)
         //top left resource
-        addObject(new Resources(), 50, 400);
+        addObject(new Resources(Team.RED), 50, 400);
         //mid left resource
-        addObject(new Resources(), 30, 475);
+        addObject(new Resources(Team.RED), 30, 475);
         //bottom left resource
-        addObject(new Resources(), 50, 550);
+        addObject(new Resources(Team.RED), 50, 550);
 
         // resources near blue base (right side)
         //top right resource
-        addObject(new Resources(), 1140, 70);
-        addObject(new Resources(), 1160, 145);
-        addObject(new Resources(), 1140, 220);
+        addObject(new Resources(Team.BLUE), 1140, 70);
+        //middle right resource
+        addObject(new Resources(Team.BLUE), 1160, 145);
+        //bottom right resource
+        addObject(new Resources(Team.BLUE), 1140, 220);
 
 
-        addObject(new Worker(redTeam, redBase), 170, 620);
-        /* addObject(new Worker(), 235, 660);
-         addObject(new Soldier(), 265, 570);
-
-         addObject(new Worker(), 1030, 180);
-         addObject(new Worker(), 965, 140);
-         addObject(new Soldier(), 935, 230);
-         */
+        addObject(new Worker(redTeam, redBase), 170, 475);
+        addObject(new Worker(redTeam, redBase), 170, 475);
+        addObject(new Worker(redTeam, redBase), 170, 475); 
+        
+        addObject(new Worker(blueTeam, blueBase), 1020, 145);
+        addObject(new Worker(blueTeam, blueBase), 1020, 145);
+        addObject(new Worker(blueTeam, blueBase), 1020, 145);
+        
+         
     }
 
     private void setTitleState() {

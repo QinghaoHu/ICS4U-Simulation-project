@@ -14,13 +14,21 @@ public class Worker extends People {
     protected int minRate;
 
     private GreenfootImage img;
+    private GreenfootImage emptyImg;
+    private GreenfootImage miningImg;
     private Resources targetResource;
+    private Resources assignedResource;
     private Base homeBase;
 
     private String state = "toResource";
     private int mineTimer = 0;
     private int depositTimer = 0;
     private int speed = 2;//set to 2, may change speed to even slower in the future
+    
+    
+    //sets the side in which resources it goes to
+    private static int redIndex = 0;
+    private static int blueIndex = 0;
 
     public Worker(Team team, Base base) {
         super(team);
@@ -51,6 +59,8 @@ public class Worker extends People {
         } else if (state.equals("depositing")) {
             deposit();
         }
+        
+        updateImage();
     }
 
     private void mine() {
@@ -68,29 +78,55 @@ public class Worker extends People {
         }
 
         if (team.getTeamId() == Team.RED) {
-            img = new GreenfootImage("RedWorkerRegular.png");
+            emptyImg = new GreenfootImage("RedWorkerRegular.png");
+            miningImg = new GreenfootImage("RedWorkerMining.png");
         } else if (team.getTeamId() == Team.BLUE) {
-            img = new GreenfootImage("BlueWorkerRegular.png");
+            emptyImg = new GreenfootImage("BlueWorkerRegular.png");
+            miningImg = new GreenfootImage("BlueWorkerMining.png");
         }
 
-        if (img != null) {
-            img.scale(40, 40);
+        if (emptyImg != null) {
+            emptyImg.scale(40, 40);
             setImage(img);
         }
+        
+        if (miningImg != null) {
+            miningImg.scale(40, 40);
+            setImage(img);
+        }
+        
+        setImage(emptyImg);
     }
 
     private void goToResource() {
         if (getWorld() == null) return;
 
-        if (targetResource == null || targetResource.getWorld() == null) {
-            List<Resources> resources = getWorld().getObjects(Resources.class);
+        if (assignedResource == null) {
+            List<Resources> allResources = getWorld().getObjects(Resources.class);
+            List<Resources> validResources = new java.util.ArrayList<>();
 
-            if (!resources.isEmpty()) {
-                targetResource = resources.get(0);
+            // filters the resouces of the team so that it doesnt grab from the other team
+            for (Resources r : allResources) {
+                if (r.getTeamSide() == team.getTeamId()) {
+                    validResources.add(r);
+                }
+            }
+            
+            // cycle through only valid resources
+            if (!validResources.isEmpty()) {
+                if (team.getTeamId() == Team.RED) {
+                    assignedResource = validResources.get(redIndex % validResources.size());
+                    redIndex++;
+                } else {
+                    assignedResource = validResources.get(blueIndex % validResources.size());
+                    blueIndex++;
+                }
             } else {
                 return;
             }
         }
+
+        targetResource = assignedResource;
 
         if (targetResource == null) return;
 
@@ -120,7 +156,7 @@ public class Worker extends People {
                 getY() - homeBase.getY()
         );
 
-        if (dist < 45) { //THIS IS FOR HITBOX AS WORKER HITBOX IS ORIGINALLY TOO BIG
+        if (dist < 55) { //THIS IS FOR HITBOX AS WORKER HITBOX IS ORIGINALLY TOO BIG
             state = "depositing";
             depositTimer = 120;
         }
@@ -134,7 +170,6 @@ public class Worker extends People {
             carryAmount = 0;
 
             state = "toResource";
-            targetResource = null;
         }
     }
 
@@ -143,16 +178,33 @@ public class Worker extends People {
         int dy = y - getY();
 
         double dist = Math.sqrt(dx * dx + dy * dy);
+        
+        updateDirection(dx, dy);
+        
+        if (dist < speed) {
+            setLocation(x, y);
+            return;
+        }
 
         if (dist > 0) {
             double vx = (dx / dist) * speed;
             double vy = (dy / dist) * speed;
 
             setLocation(getX() + (int) vx, getY() + (int) vy);
-
-            if (img != null) {
-                setRotation((int) Math.toDegrees(Math.atan2(dy, dx)));
-            }
+        }
+    }
+    
+    private void updateDirection(int dx, int dy) {
+        if (dx != 0 || dy != 0) {
+            setRotation((int) Math.toDegrees(Math.atan2(dy, dx)));
+        }
+    }
+    
+    private void updateImage(){
+        if(carryAmount > 0){
+            setImage(miningImg);
+        } else{
+            setImage(emptyImg);
         }
     }
 }
