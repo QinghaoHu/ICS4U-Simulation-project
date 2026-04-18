@@ -4,6 +4,11 @@
 > This project is developed with [Greenfoot](https://www.greenfoot.org/door)  
 > I suggest using [IntelliJ IDEA](https://www.jetbrains.com/idea/) as the main IDE for this project. From my experience, it is better to use IntelliJ IDEA when the project gets bigger. You will appreciate its LSP server and autocomplete.
 
+## Remainder for this project:
+RaphaelLau08 has set up the world, please press SPACE button to start the
+simulation. Please make sure you follow the **Development Git Workflow** in this
+file.  
+
 ## Development Git Workflow
 
 Follow this workflow every time you start working on the project. It keeps your local branch up to date and reduces merge conflicts.
