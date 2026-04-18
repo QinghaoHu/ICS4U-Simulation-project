@@ -1,6 +1,11 @@
 import java.util.ArrayList;
 import java.util.List;
-
+/**
+ * Write a description of class Projectile here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
 public class Team {
     public static final int RED = 0;
     public static final int BLUE = 1;
