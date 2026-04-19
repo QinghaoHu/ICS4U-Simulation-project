@@ -1,3 +1,5 @@
+import greenfoot.*;
+
 public abstract class Entity extends SmoothMover{
     protected boolean isAlive;
     protected Team team;
@@ -6,6 +8,32 @@ public abstract class Entity extends SmoothMover{
         isAlive = true;
     }
 
+    
+    
+    public Entity findTarget()
+    {
+        Entity closest = null;
+        double closestDist = 200;
+    
+        for (Object obj : getObjectsInRange(200, Actor.class)) {
+            if (!(obj instanceof Entity)) continue;
+    
+            Entity e = (Entity) obj;
+    
+            if (isOpponent(e)) {
+    
+                double dist = Math.hypot(e.getX() - getX(), e.getY() - getY());
+    
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = e;
+                }
+            }
+        }
+    
+        return closest;
+    }
+    
     public Entity(Team team){
         this();
         setTeam(team);

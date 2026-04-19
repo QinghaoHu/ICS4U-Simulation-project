@@ -3,7 +3,7 @@ import greenfoot.*;
 public class Barrack extends Buildings{
     private GreenfootImage img;
     public Barrack (Team team){
-        super(team);
+        super(team, 500);
         setupImage();
         setImage(img);
     }

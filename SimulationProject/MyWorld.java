@@ -99,6 +99,9 @@ public class MyWorld extends World {
         addObject(new Worker(blueTeam, blueBase), 1020, 145);
         addObject(new Worker(blueTeam, blueBase), 1020, 145);
         
+        //testing soldiers
+        //addObject(new Soldier(blueTeam), 600, 200);
+        
          
     }
 

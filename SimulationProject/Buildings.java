@@ -8,12 +8,14 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public abstract class Buildings extends Entity
 {
-    public Buildings() {
-        super();
-    }
+    protected int health;
+    protected int maxHealth;
 
-    public Buildings(Team team) {
+    public Buildings(Team team, int maxHealth) {
         super(team);
+        this.maxHealth = maxHealth;
+        this.health = maxHealth;
+        
         if (team != null) {
             team.addBuilding(this);
         }
@@ -25,7 +27,23 @@ public abstract class Buildings extends Entity
      */
     public void act()
     {
-        // Add your action code here.
+        if (health <= 0 && getWorld() != null) {
+            die();
+            return;
+        }
+    }
+
+    protected void addedToWorld(World world) {
+        if (world != null) {
+            world.addObject(new HealthBar(this, - 65), getX(), getY());
+        }
+    }
+
+    protected void die() {
+        World world = getWorld();
+        if (world != null) {
+            world.removeObject(this);
+        }
     }
 
     public People addPeople(String type){
@@ -46,5 +64,26 @@ public abstract class Buildings extends Entity
         }
 
         return newPerson;
+    }
+    
+    public void takeDamage(int amount) {
+        if (amount <= 0) return;
+        setHealth(health - amount);
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+    
+    public void setHealth(int value) {
+        health = Math.max(0, Math.min(value, maxHealth));
+    }
+
+    public boolean isDead() {
+        return health <= 0;
     }
 }
