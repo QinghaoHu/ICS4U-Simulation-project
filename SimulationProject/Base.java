@@ -10,7 +10,7 @@ public class Base extends Buildings {
     private GreenfootImage img;
 
     public Base(Team team) {
-        super(team);
+        super(team, 1000);
         setupImage();
         setImage(img);
     }

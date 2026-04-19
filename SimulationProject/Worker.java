@@ -31,7 +31,7 @@ public class Worker extends People {
     private static int blueIndex = 0;
 
     public Worker(Team team, Base base) {
-        super(team);
+        super(team, 30);
         health = 100;
 
         this.homeBase = base;

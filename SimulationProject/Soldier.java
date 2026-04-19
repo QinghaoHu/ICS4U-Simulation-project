@@ -8,12 +8,8 @@ import java.lang.Math;
  */
 public class Soldier extends People
 {
-    public Soldier(){
-        super();
-    }
-
     public Soldier(Team team) {
-        super(team);
+        super(team, 30);
         if (team != null) {
             team.addUnit(this);
         }
