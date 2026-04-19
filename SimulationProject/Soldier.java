@@ -8,19 +8,60 @@ import java.lang.Math;
  */
 public class Soldier extends People
 {
+    private GreenfootImage img;
+    private GreenfootImage emptyImg;
+    private GreenfootImage shootingImg;
+    
     public Soldier(Team team) {
         super(team, 30);
         if (team != null) {
             team.addUnit(this);
         }
+        setupImage();
     }
     /**
      * Act - do whatever the Soldier wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    public void act()
-    {
+    public void act(){
+        Entity target = findTarget();
+    
+        if (target != null) {
+            turnTowards(target.getX(), target.getY());
+    
+            if (target instanceof Buildings) {
+                ((Buildings) target).takeDamage(damage);
+            }
+            else if (target instanceof People) {
+                ((People) target).setHealth(((People) target).getHealth() - damage);
+            }
+        }
+    }
+    
+    private void setupImage() {
+        if (team == null) {
+            return;
+        }
+
+        if (team.getTeamId() == Team.RED) {
+            emptyImg = new GreenfootImage("RedMarine.png");
+            shootingImg = new GreenfootImage("RedMarineRecoil.png");
+        } else if (team.getTeamId() == Team.BLUE) {
+            emptyImg = new GreenfootImage("BlueMarine.png");
+            shootingImg = new GreenfootImage("BlueMarineRecoil.png");
+        }
+
+        if (emptyImg != null) {
+            emptyImg.scale(50, 50);
+            setImage(img);
+        }
         
+        if (shootingImg != null) {
+            shootingImg.scale(50, 50);
+            setImage(img);
+        }
+        
+        setImage(emptyImg);
     }
     
     public double shootAngle(Entity e){
