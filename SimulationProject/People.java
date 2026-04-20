@@ -10,7 +10,7 @@ public abstract class People extends Entity{
         super(team);
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        this.damage = 10;
+        this.damage = 1;
     }
 
     public void act(){
@@ -57,5 +57,9 @@ public abstract class People extends Entity{
 
     public void setDamage(int damage) {
         this.damage = damage;
+    }
+    
+    public int getDamage(){
+        return damage;
     }
 }

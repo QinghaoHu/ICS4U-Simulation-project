@@ -6,36 +6,20 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public abstract class Projectile extends SmoothMover
+public abstract class Projectile extends SuperSmoothMover
 {
     /**
      * Act - do whatever the Projectile wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
+    
+    private Entity e;
+    
     public void act()
     {
-        move(20);
-        if(checkEdge()){
+        e = (Entity)getOneIntersectingObject(Entity.class);
+        if(isAtEdge() || e != null){
             getWorld().removeObject(this);
         }
-    }
-    protected boolean checkEdge() {
-        // Check horizontal bounderies 
-        if (getX() > getWorld().getWidth() + 50){
-            return true;
-        }
-        else if (getX() < (- 50)){
-            return true;
-        }
-        
-        // Check vertical bounderies 
-        if (getY() > getWorld().getHeight() + 50){
-            return true;
-        }
-        else if (getY() < (-50)){
-            return true;
-        }
-        
-        return false;
     }
 }
