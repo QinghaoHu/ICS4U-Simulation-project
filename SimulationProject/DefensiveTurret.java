@@ -13,6 +13,7 @@ public class DefensiveTurret extends Buildings
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     private GreenfootImage img;
+    private int damage = 10;
 
     public DefensiveTurret(Team team) {
         super(team, 1000);

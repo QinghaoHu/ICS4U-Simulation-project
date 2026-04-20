@@ -33,8 +33,8 @@ public class MyWorld extends World {
 
         String redTeamStrategy = "ECO";
         String blueTeamStrategy = "ECO";
-        redTeam = new Team(Team.RED, "Red", 150, redTeamStrategy);
-        blueTeam = new Team(Team.BLUE, "Blue", 150, blueTeamStrategy);
+        redTeam = new Team(Team.RED, "Red", 150, redTeamStrategy, this);
+        blueTeam = new Team(Team.BLUE, "Blue", 150, blueTeamStrategy, this);
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
@@ -68,8 +68,11 @@ public class MyWorld extends World {
 
         Base redBase = new Base(redTeam);
         addObject(redBase, 200, 490);
+        redTeam.setBase(redBase);
+
         Base blueBase = new Base(blueTeam);
         addObject(blueBase, 990, 165);
+        blueTeam.setBase(blueBase);
         //adds ui to the world
         addObject(new UI(), 600, 400);
         
@@ -93,14 +96,8 @@ public class MyWorld extends World {
         addObject(new ResourceCounter(blueTeam), 1020, 670);
 
 
-        //Adds workers to the left
-        addObject(new Worker(redTeam, redBase), 170, 475);
-        addObject(new Worker(redTeam, redBase), 170, 475);
-        addObject(new Worker(redTeam, redBase), 170, 475); 
-        //Adds workers to the right
-        addObject(new Worker(blueTeam, blueBase), 1020, 145);
-        addObject(new Worker(blueTeam, blueBase), 1020, 145);
-        addObject(new Worker(blueTeam, blueBase), 1020, 145);
+        redTeam.setUpWorld();
+        blueTeam.setUpWorld();
         
         //testing soldiers
         //addObject(new Soldier(blueTeam), 600, 200);

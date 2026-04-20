@@ -1,3 +1,6 @@
+import greenfoot.Greenfoot;
+import greenfoot.*;
+
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -6,7 +9,7 @@ import java.util.List;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Team {
+public class Team extends Actor {
     public static final int RED = 0;
     public static final int BLUE = 1;
 
@@ -18,15 +21,50 @@ public class Team {
     private String strategy;
     private String[] strateges = {"ECO", "ATK", "DEF"};
     private int strategyCoolDown = 0;
+    private int maxStrategyCoolDown = 300;
 
+    private World w;
 
-    public Team(int teamId, String name, int startingMoney, String strategy) {
+    private Base base;
+
+    public Team(int teamId, String name, int startingMoney, String strategy, World w) {
         this.teamId = teamId;
         this.name = name;
         this.resources = startingMoney;
         this.units = new ArrayList<People>();
         this.buildings = new ArrayList<Buildings>();
         this.strategy = strategy;
+        strategyCoolDown = 300;
+        this.w = w;
+    }
+
+    public void act() {
+        if (strategyCoolDown > 0) {
+            strategyCoolDown--;
+            return;
+        } else {
+            strategyCoolDown = maxStrategyCoolDown;
+            strategy = strateges[Greenfoot.getRandomNumber(2)];
+        }
+    }
+
+    public void setUpWorld() {
+        // When strategy is Equal
+        if (strategy.equals("ECO")) {
+            if (teamId == 0) {
+                for (int i = 0; i < 3; i++) {
+                    w.addObject(new Worker(this, base),170, 475);
+                }
+            } else {
+                for (int i = 0; i < 3; i++) {
+                    w.addObject(new Worker(this, base),1020, 145);
+                }
+            }
+        } else if (strategy.equals("ATK")) {
+
+        } else {
+            
+        }
     }
 
     public int getTeamId() {
@@ -64,6 +102,10 @@ public class Team {
         if (building != null && !buildings.contains(building)) {
             buildings.add(building);
         }
+    }
+
+    public void setBase(Base base) {
+        this.base = base;
     }
 
     public String getStrategy() {
