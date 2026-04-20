@@ -153,4 +153,16 @@ public class MyWorld extends World {
 
         return closest;
     }
+
+    public static double getDistance(Actor a, Actor b) {
+        double dx = a.getX() - b.getX();
+        double dy = a.getY() - b.getY();
+        return Math.sqrt(dx * dx + dy * dy);
+    }
+
+    public static double getDistance(Actor a, int targetX, int targetY) {
+        double dx = a.getX() - targetX;
+        double dy = a.getY() - targetY;
+        return Math.sqrt(dx * dx + dy * dy);
+    }
 }
