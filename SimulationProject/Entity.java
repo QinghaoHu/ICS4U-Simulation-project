@@ -34,6 +34,29 @@ public abstract class Entity extends SmoothMover{
         return closest;
     }
     
+    public Entity findTarget(int range)
+    {
+        Entity closest = null;
+        double closestDist = range;
+    
+        for (Object obj : getObjectsInRange(range, Actor.class)) {
+            if (!(obj instanceof Entity)) continue;
+    
+            Entity e = (Entity) obj;
+    
+            if (isOpponent(e)) {
+
+                double dist = Math.hypot(e.getX() - getX(), e.getY() - getY());
+                if (dist < closestDist) {
+                    closestDist = dist;
+                    closest = e;
+                }
+            }
+        }
+
+        return closest;
+    }
+    
     public Entity(Team team){
         this();
         setTeam(team);
