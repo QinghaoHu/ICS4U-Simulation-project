@@ -15,13 +15,18 @@ public class Team {
     private int money;
     private final ArrayList<People> units;
     private final ArrayList<Buildings> buildings;
+    private String strategy;
+    private String[] strateges = {"ECO", "ATK", "DEF"};
+    private int strategyCoolDown = 0;
 
-    public Team(int teamId, String name, int startingMoney) {
+
+    public Team(int teamId, String name, int startingMoney, String strategy) {
         this.teamId = teamId;
         this.name = name;
         this.money = startingMoney;
         this.units = new ArrayList<People>();
         this.buildings = new ArrayList<Buildings>();
+        this.strategy = strategy;
     }
 
     public int getTeamId() {
@@ -59,6 +64,14 @@ public class Team {
         if (building != null && !buildings.contains(building)) {
             buildings.add(building);
         }
+    }
+
+    public String getStrategy() {
+        return strategy;
+    }
+
+    public void setStrategy(String Strategy) {
+        this.strategy = strategy;
     }
 
     public List<People> getUnits() {
