@@ -1,13 +1,15 @@
 import greenfoot.*;
+
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
+
 import greenfoot.*;
 
 /**
  * Main simulation world.
- *
+ * <p>
  * This version intentionally changes most of the world setup code so it can be
  * used as a merge-conflict demonstration branch.
  */
@@ -23,8 +25,14 @@ public class MyWorld extends World {
     private String currentState = TITLE_STATE;
     private GreenfootImage background;
 
+    private Team redTeam;
+    private Team blueTeam;
+
     public MyWorld() {
         super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
+
+        redTeam = new Team(Team.RED, "Red", 150);
+        blueTeam = new Team(Team.BLUE, "Blue", 150);
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
@@ -32,10 +40,17 @@ public class MyWorld extends World {
         setUpWorld();
     }
 
+    //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
+    public void act() {
+        if (Greenfoot.isKeyDown("space")) {
+            changeState(GAME_STATE);
+        }
+    }
+
     private void setUpWorld() {
         removeObjects(getObjects(null));
-
-        background = new GreenfootImage(currentState + ".png");
+        //background = new GreenfootImage(currentState + ".png");
+        background = new GreenfootImage("Background.png");
         setBackground(background);
 
         Runnable stateHandler = stateHandlers.get(currentState);
@@ -47,21 +62,56 @@ public class MyWorld extends World {
     }
 
     private void setGameState() {
-        addObject(new Worker(), 170, 620);
-        addObject(new Worker(), 235, 660);
-        addObject(new Soldier(), 265, 570);
+        removeObjects(getObjects(null));
 
-        addObject(new Worker(), 1030, 180);
-        addObject(new Worker(), 965, 140);
-        addObject(new Soldier(), 935, 230);
+        Base redBase = new Base(redTeam);
+        addObject(redBase, 200, 490);
+        Base blueBase = new Base(blueTeam);
+        addObject(blueBase, 990, 165);
+        //adds ui to the world
+        addObject(new UI(), 600, 400);
+        
+        // resources near red base (left side)
+        //top left resource
+        addObject(new Resources(Team.RED), 50, 400);
+        //mid left resource
+        addObject(new Resources(Team.RED), 30, 475);
+        //bottom left resource
+        addObject(new Resources(Team.RED), 50, 550);
+
+        // resources near blue base (right side)
+        //top right resource
+        addObject(new Resources(Team.BLUE), 1140, 70);
+        //middle right resource
+        addObject(new Resources(Team.BLUE), 1160, 145);
+        //bottom right resource
+        addObject(new Resources(Team.BLUE), 1140, 220);
+        //adds Resource counters to the world
+        addObject(new ResourceCounter(redTeam), 110, 670);
+        addObject(new ResourceCounter(blueTeam), 1020, 670);
+        
+        //Adds workers to the left
+        addObject(new Worker(redTeam, redBase), 170, 475);
+        addObject(new Worker(redTeam, redBase), 170, 475);
+        addObject(new Worker(redTeam, redBase), 170, 475); 
+        //Adds workers to the right
+        addObject(new Worker(blueTeam, blueBase), 1020, 145);
+        addObject(new Worker(blueTeam, blueBase), 1020, 145);
+        addObject(new Worker(blueTeam, blueBase), 1020, 145);
+        
+        //testing soldiers
+        //addObject(new Soldier(blueTeam), 600, 200);
+        
+         
     }
 
     private void setTitleState() {
-        GreenfootImage titleText = new GreenfootImage("Merge Conflict Demo", 54, Color.WHITE, new Color(0, 0, 0, 0));
-        background.drawImage(titleText, 325, 315);
+        /**GreenfootImage titleText = new GreenfootImage("Merge Conflict Demo", 54, Color.WHITE, new Color(0, 0, 0, 0));
+         background.drawImage(titleText, 325, 315);
 
-        GreenfootImage subtitleText = new GreenfootImage("Edit this world on two branches, then merge.", 28, Color.LIGHT_GRAY, new Color(0, 0, 0, 0));
-        background.drawImage(subtitleText, 345, 385);
+         GreenfootImage subtitleText = new GreenfootImage("Edit this world on two branches, then merge.", 28, Color.LIGHT_GRAY, new Color(0, 0, 0, 0));
+         background.drawImage(subtitleText, 345, 385);
+         **/
     }
 
     public void changeState(String nextState) {
