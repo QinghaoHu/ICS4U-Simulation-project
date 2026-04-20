@@ -1,6 +1,6 @@
 import greenfoot.*;
 
-public abstract class Entity extends SmoothMover{
+public abstract class Entity extends SuperSmoothMover{
     protected boolean isAlive;
     protected Team team;
 

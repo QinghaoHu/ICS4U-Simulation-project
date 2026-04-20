@@ -1,6 +1,6 @@
 import greenfoot.*;
 
-public class Resources extends SmoothMover {
+public class Resources extends SuperSmoothMover {
     protected int maxAmount;
     protected int currentAmount;
     protected GreenfootImage img;
