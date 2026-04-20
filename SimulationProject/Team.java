@@ -1,6 +1,7 @@
 import greenfoot.Greenfoot;
 import greenfoot.*;
 
+import javax.sound.sampled.SourceDataLine;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -22,6 +23,9 @@ public class Team extends Actor {
     private String[] strateges = {"ECO", "ATK", "DEF"};
     private int strategyCoolDown = 0;
     private int maxStrategyCoolDown = 300;
+
+    private int workerCoolDown = 0;
+    private int maxWorkerCoolDown = 90;
 
     private World w;
 
@@ -53,19 +57,44 @@ public class Team extends Actor {
         if (strategy.equals("ECO")) {
             if (teamId == 0) {
                 for (int i = 0; i < 3; i++) {
-                    w.addObject(new Worker(this, base),170, 475);
+                    Worker worker = new Worker(this, base);
+                    addUnit(worker);
+                    w.addObject(worker,170, 475);
                 }
             } else {
                 for (int i = 0; i < 3; i++) {
-                    w.addObject(new Worker(this, base),1020, 145);
+                    Worker worker = new Worker(this, base);
+                    addUnit(worker);
+                    w.addObject(worker,1020, 145);
                 }
             }
         } else if (strategy.equals("ATK")) {
             Barrack addBarrack = new Barrack(this);
-            w.addObject(addBarrack, 30, 20);
-            for (int i = 0; i < 3; i++) {
-                w.addObject(new Soldier(this), addBarrack.getX(), addBarrack.getY());
+            if (teamId == 0) {
+                w.addObject(addBarrack, 30, 20);
+            } else {
+                w.addObject(addBarrack, 1000, 600);
             }
+
+            for (int i = 0; i < 3; i++) {
+                Soldier solider = new Soldier(this);
+                addUnit(solider);
+                w.addObject(solider, addBarrack.getX(), addBarrack.getY());
+            }
+        } else {
+            
+        }
+    }
+
+    private void spawn() {
+        if (strategy.equals("ECO")) {
+            if (workerCoolDown == 0) {
+                Worker worker = new Worker(this, base);
+                addUnit(worker);
+                w.addObject(worker,1020, 145);
+            }
+        } else if (strategy.equals("ATK")) {
+
         } else {
             
         }
