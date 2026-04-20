@@ -31,8 +31,10 @@ public class MyWorld extends World {
     public MyWorld() {
         super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
 
-        redTeam = new Team(Team.RED, "Red", 150);
-        blueTeam = new Team(Team.BLUE, "Blue", 150);
+        String redTeamStrategy = "ECO";
+        String blueTeamStrategy = "ECO";
+        redTeam = new Team(Team.RED, "Red", 150, redTeamStrategy);
+        blueTeam = new Team(Team.BLUE, "Blue", 150, blueTeamStrategy);
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
@@ -89,7 +91,8 @@ public class MyWorld extends World {
         //adds Resource counters to the world
         addObject(new ResourceCounter(redTeam), 110, 670);
         addObject(new ResourceCounter(blueTeam), 1020, 670);
-        
+
+
         //Adds workers to the left
         addObject(new Worker(redTeam, redBase), 170, 475);
         addObject(new Worker(redTeam, redBase), 170, 475);
