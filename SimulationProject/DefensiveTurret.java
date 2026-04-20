@@ -40,14 +40,5 @@ public class DefensiveTurret extends Buildings
     public void act()
     {
         Entity target = findTarget();
-        if (target != null) {
-            turnTowards(target.getX(), target.getY());
-            if (target instanceof Buildings) {
-                ((Buildings) target).takeDamage(damage);
-            }
-            else if (target instanceof People) {
-                ((People) target).setHealth(((People) target).getHealth() - damage);
-            }
-        }
     }
 }
