@@ -31,7 +31,7 @@ public class MyWorld extends World {
     public MyWorld() {
         super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
 
-        String redTeamStrategy = "ECO";
+        String redTeamStrategy = "ATK";
         String blueTeamStrategy = "ECO";
         redTeam = new Team(Team.RED, "Red", 150, redTeamStrategy, this);
         blueTeam = new Team(Team.BLUE, "Blue", 150, blueTeamStrategy, this);

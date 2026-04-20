@@ -61,10 +61,18 @@ public class Team extends Actor {
                 }
             }
         } else if (strategy.equals("ATK")) {
-
+            Barrack addBarrack = new Barrack(this);
+            w.addObject(addBarrack, 30, 20);
+            for (int i = 0; i < 3; i++) {
+                w.addObject(new Soldier(this), addBarrack.getX(), addBarrack.getY());
+            }
         } else {
             
         }
+    }
+
+    public void addMoney(int money) {
+        resources += money;
     }
 
     public int getTeamId() {
@@ -73,6 +81,10 @@ public class Team extends Actor {
 
     public String getName() {
         return name;
+    }
+
+    public int getMoney() {
+        return resources;
     }
 
     public int getResources() {
