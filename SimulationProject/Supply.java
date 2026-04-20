@@ -2,7 +2,7 @@ import greenfoot.*;
 
 import java.util.List;
 
-public class Supply extends SmoothMover {
+public class Supply extends SuperSmoothMover {
     private static final int MIN_DROP_SPEED = 3;
     private static final int MAX_DROP_SPEED = 8;
     private static final int MULTIPLY_RESOURCES_BUFF = 0;

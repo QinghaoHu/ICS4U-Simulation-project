@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public abstract class Projectile extends SmoothMover
+public abstract class Projectile extends SuperSmoothMover
 {
     /**
      * Act - do whatever the Projectile wants to do. This method is called whenever
