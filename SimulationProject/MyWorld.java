@@ -52,7 +52,7 @@ public class MyWorld extends World {
         if (Greenfoot.isKeyDown("space")) {
             changeState(GAME_STATE);
         }
-        spwanSupply();
+        spawnSupply();
     }
 
     private void setUpWorld() {
@@ -106,12 +106,12 @@ public class MyWorld extends World {
         blueTeam.setUpWorld();
         
         //testing soldiers
-        addObject(new Marine(blueTeam), 600, 200);
-        addObject(new Officer(redTeam), 500, 300);
+        //addObject(new Marine(blueTeam), 600, 200);
+        //addObject(new Officer(redTeam), 500, 300);
         
         //testing defensive turret
-        addObject(new DefensiveTurret(blueTeam), 600, 200);
-
+        //addObject(new DefensiveTurret(blueTeam), 600, 200);
+        addObject(new Barrack(redTeam), 200, 200);
     }
 
     private void setTitleState() {
@@ -128,7 +128,7 @@ public class MyWorld extends World {
         setUpWorld();
     }
 
-    private void spwanSupply(){
+    private void spawnSupply(){
         if (supplySpwanTimer <= 0) {
             // spawn supply
             addObject(new Supply(), Greenfoot.getRandomNumber(MAX_SUPPLY_DROP_RANGE - MIN_SUPPLY_DROP_RANGE + 1) + MIN_SUPPLY_DROP_RANGE, SUPPLY_SPWAN_Y_OFFSET);
