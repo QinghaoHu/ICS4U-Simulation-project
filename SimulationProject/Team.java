@@ -77,9 +77,9 @@ public class Team extends Actor {
             }
 
             for (int i = 0; i < 3; i++) {
-                Soldier solider = new Soldier(this);
-                addUnit(solider);
-                w.addObject(solider, addBarrack.getX(), addBarrack.getY());
+                Marine marine = new Marine(this);
+                addUnit(marine);
+                w.addObject(marine, addBarrack.getX(), addBarrack.getY());
             }
         } else {
             

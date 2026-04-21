@@ -31,7 +31,7 @@ public class Worker extends People {
     private static int blueIndex = 0;
 
     public Worker(Team team, Base base) {
-        super(team, 30);
+        super(team, 30, 2);
         health = 100;
 
         this.homeBase = base;
@@ -48,8 +48,6 @@ public class Worker extends People {
     }
 
     public void act() {
-        super.act();
-
         if (state.equals("toResource")) {
             goToResource();
         } else if (state.equals("mining")) {
@@ -61,6 +59,7 @@ public class Worker extends People {
         }
         
         updateImage();
+        super.act();
     }
 
     private void mine() {
@@ -149,6 +148,9 @@ public class Worker extends People {
     }
 
     private void goToBase() {
+        if (homeBase.getWorld() == null){
+            return;
+        }
         moveTowards(homeBase.getX(), homeBase.getY());
 
         double dist = Math.hypot(
@@ -170,33 +172,6 @@ public class Worker extends People {
             carryAmount = 0;
 
             state = "toResource";
-        }
-    }
-
-    private void moveTowards(int x, int y) {
-        int dx = x - getX();
-        int dy = y - getY();
-
-        double dist = Math.sqrt(dx * dx + dy * dy);
-        
-        updateDirection(dx, dy);
-        
-        if (dist < speed) {
-            setLocation(x, y);
-            return;
-        }
-
-        if (dist > 0) {
-            double vx = (dx / dist) * speed;
-            double vy = (dy / dist) * speed;
-
-            setLocation(getX() + (int) vx, getY() + (int) vy);
-        }
-    }
-    
-    private void updateDirection(int dx, int dy) {
-        if (dx != 0 || dy != 0) {
-            setRotation((int) Math.toDegrees(Math.atan2(dy, dx)));
         }
     }
     

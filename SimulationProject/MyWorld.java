@@ -20,7 +20,7 @@ public class MyWorld extends World {
     private static final String TITLE_STATE = "title";
 
     private final Map<String, Runnable> stateHandlers = new HashMap<>();
-    private String currentState = TITLE_STATE;
+    private String currentState = GAME_STATE;
     private GreenfootImage background;
 
     private Team redTeam;
@@ -98,8 +98,8 @@ public class MyWorld extends World {
         blueTeam.setUpWorld();
         
         //testing soldiers
-        addObject(new Soldier(blueTeam), 600, 200);
-        addObject(new Soldier(redTeam), 500, 300);
+        addObject(new Marine(blueTeam), 600, 200);
+        addObject(new Officer(redTeam), 500, 300);
     }
 
     private void setTitleState() {

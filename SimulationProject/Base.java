@@ -20,7 +20,7 @@ public class Base extends Buildings {
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() {
-
+        super.act();
     }
 
     private void setupImage() {

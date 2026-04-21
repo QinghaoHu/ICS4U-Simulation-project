@@ -13,14 +13,13 @@ public class SoldierBullet extends Projectile
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     
-    private Entity target, shooter;
+    private Entity shooter;
     private int damage;
     private double angle;
     private GreenfootImage bulletImage;
     private double speed;
     
-    public SoldierBullet(Entity e, Entity s, double angle) {
-        target = e;
+    public SoldierBullet(Entity s, double angle) {
         shooter = s;
         
         this.angle = angle;
@@ -30,8 +29,22 @@ public class SoldierBullet extends Projectile
         setImage(bulletImage);
         super.turn(angle);
 
-        speed = -2.5;
-        damage = 1;
+        this.speed = 2.5;
+        this.damage = 1;
+    }
+    
+    public SoldierBullet(Entity s, double angle, double speed, int damage) {
+        shooter = s;
+        
+        this.angle = angle;
+        
+        bulletImage = new GreenfootImage("soldierBullet.png");
+        bulletImage.scale(10,10);
+        setImage(bulletImage);
+        super.turn(angle);
+
+        this.speed = speed; // not sure why but bullets are aims backwards, so we go backwards so that we are aimed at the right way
+        this.damage = damage;
     }
     
     public void act()
@@ -44,12 +57,7 @@ public class SoldierBullet extends Projectile
         
         Entity targetHit = (Entity)getOneIntersectingObject(Entity.class);
         if (targetHit != null&& !targetHit.getTeam().equals(shooter.getTeam())) {
-            if (targetHit instanceof Buildings) {
-                ((Buildings) targetHit).takeDamage(damage);
-            }
-            else if (targetHit instanceof People) {
-                ((People) targetHit).setHealth(((People) targetHit).getHealth() - damage);
-            }
+            ((Entity)targetHit).damage(damage); // damages entity if hit
             getWorld().removeObject(this);
             return;
         }

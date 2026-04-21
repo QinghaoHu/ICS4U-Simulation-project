@@ -8,8 +8,6 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public abstract class Buildings extends Entity
 {
-    protected int health;
-    protected int maxHealth;
 
     public Buildings(Team team, int maxHealth) {
         super(team);
@@ -27,22 +25,12 @@ public abstract class Buildings extends Entity
      */
     public void act()
     {
-        if (health <= 0 && getWorld() != null) {
-            die();
-            return;
-        }
+        super.act();
     }
 
     protected void addedToWorld(World world) {
         if (world != null) {
             world.addObject(new HealthBar(this, - 65), getX(), getY());
-        }
-    }
-
-    protected void die() {
-        World world = getWorld();
-        if (world != null) {
-            world.removeObject(this);
         }
     }
 
@@ -64,11 +52,6 @@ public abstract class Buildings extends Entity
         }
 
         return newPerson;
-    }
-    
-    public void takeDamage(int amount) {
-        if (amount <= 0) return;
-        setHealth(health - amount);
     }
 
     public int getHealth() {

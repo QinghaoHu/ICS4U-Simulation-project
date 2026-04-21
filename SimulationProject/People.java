@@ -1,41 +1,26 @@
 import greenfoot.*;
 
 public abstract class People extends Entity{
-    protected int health;
-    protected int maxHealth;
-    protected int damage;
     protected int speed;
 
-    public People(Team team, int maxHealth) {
+    public People(Team team, int maxHealth, int speed) {
         super(team);
         this.maxHealth = maxHealth;
         this.health = maxHealth;
-        this.damage = 10;
+        this.speed = speed;
     }
 
     public void act(){
-        move(speed);
-
         if (isAtEdge()) {
             getWorld().removeObject(this);
             return;
         }
-
-        if (health <= 0 && getWorld() != null) {
-            decrease();
-            return;
-        }
+        super.act();
     }
 
     protected void addedToWorld(World world) {
         if (world != null) {
             world.addObject(new HealthBar(this, -35), getX(), getY());
-        }
-    }
-
-    private void decrease() {
-        if (getWorld() != null) {
-            getWorld().removeObject(this);
         }
     }
 
@@ -54,8 +39,31 @@ public abstract class People extends Entity{
     public void setHealth(int health) {
         this.health = Math.max(0, Math.min(health, maxHealth));
     }
+    
+    protected void moveTowards(int x, int y) {
+        int dx = x - getX();
+        int dy = y - getY();
 
-    public void setDamage(int damage) {
-        this.damage = damage;
+        double dist = Math.sqrt(dx * dx + dy * dy);
+        
+        updateDirection(dx, dy);
+        
+        if (dist < speed) {
+            setLocation(x, y);
+            return;
+        }
+
+        if (dist > 0) {
+            double vx = (dx / dist) * speed;
+            double vy = (dy / dist) * speed;
+
+            setLocation(getX() + (int) vx, getY() + (int) vy);
+        }
+    }
+    
+    protected void updateDirection(int dx, int dy) {
+        if (dx != 0 || dy != 0) {
+            setRotation((int) Math.toDegrees(Math.atan2(dy, dx)));
+        }
     }
 }
