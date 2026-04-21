@@ -40,6 +40,7 @@ public class DefensiveTurret extends Buildings
     
     public void act()
     {
-        Entity target = findTarget();
+        Entity target = findTarget(200);
+        super.act();
     }
 }

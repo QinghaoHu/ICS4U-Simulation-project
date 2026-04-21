@@ -1,0 +1,33 @@
+import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+
+/**
+ * Write a description of class Marine here.
+ * 
+ * @author (your name) 
+ * @version (a version number or a date)
+ */
+public class Marine extends Soldier
+{
+    /**
+     * Act - do whatever the Marine wants to do. This method is called whenever
+     * the 'Act' or 'Run' button 
+     * gets pressed in the environment.
+     */
+    
+    public Marine(Team team) {
+        super(team);
+        if (team != null) {
+            team.addUnit(this);
+        }
+    }
+    
+    public void act()
+    {
+        super.act();
+        // Add your action code here.
+    }
+    
+    protected void shoot(Entity target){
+        getWorld().addObject(new SoldierBullet(this, shootAngle(target), 2.5, 3), getX(), getY()); // adds bullet
+    }
+}

@@ -9,7 +9,7 @@ public class Barrack extends Buildings{
     }
 
     public void act(){
-
+        super.act();
     }
 
     public People addPeople(){

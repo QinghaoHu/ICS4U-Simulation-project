@@ -1,14 +1,31 @@
 import greenfoot.*;
 
 public abstract class Entity extends SuperSmoothMover{
-    protected boolean isAlive;
     protected Team team;
+    protected int health;
+    protected int maxHealth;
 
     public Entity(){
-        isAlive = true;
+        
     }
-
     
+    public void act(){
+        if (health <= 0 && getWorld() != null) {
+            die();
+            return;
+        }
+    }
+    
+    protected void die() {
+        World world = getWorld();
+        if (world != null) {
+            world.removeObject(this);
+        }
+    }
+    
+    public void damage(int d){
+        health -= d; 
+    }
     
     public Entity findTarget()
     {
@@ -63,7 +80,7 @@ public abstract class Entity extends SuperSmoothMover{
     }
 
     public boolean isAlive(){
-        return isAlive;
+        return health > 0;
     }
 
     public Team getTeam(){

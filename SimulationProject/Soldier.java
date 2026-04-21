@@ -6,16 +6,24 @@ import java.lang.Math;
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class Soldier extends People
+public abstract class Soldier extends People
 {
-    private GreenfootImage img;
+    private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
-    private GreenfootImage shootingImg;
-    private int counter;
-    private Entity target;
+    private GreenfootImage shootingImg; // image when shooting
+    private int shootCounter; // delay the time it takes to shoot for each soldier
+    private int moveCounter; // delay the time to move to a different location for each soldier
+    private Entity target; // the target that the soldier is trying to shoot
+    private String state = idle; // handles what state it is, which can help with handling firing / behaviour
+    private static final String idle = "idle";
+    private static final String chase = "chase";
+    private static final String attack = "attack";
+    private int[] targetPosition = new int[] {-1, -1};
+    private static final int attackRange = 200;
+    private static final int detectionRange = 600;
     
     public Soldier(Team team) {
-        super(team, 30);
+        super(team, 30, 2);
         if (team != null) {
             team.addUnit(this);
         }
@@ -26,18 +34,43 @@ public class Soldier extends People
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act(){
-        counter++;
-        target = findTarget();
+        shootCounter++;
+        target = findTarget(attackRange); // first check is to see if you can fire your bullet at them
     
-        if (target != null && counter % 30 == 0) {
-            turnTowards(target.getX(), target.getY());
-            getWorld().addObject(new SoldierBullet(target, this, shootAngle(target)), getX(), getY());
+        if (target != null) {
+            state = attack;
+        }else{
+            target = findTarget(detectionRange); // second check is to see if enemy is in detection range
+            if (target != null) {
+                state = chase;
+            }else{
+                if (state != idle || closeEnough()){ // if it is close enough or it wasn't idle before then it sets a location to walk towards
+                    int xLocation = 1000;
+                    int yLocation = 100; // place holder values i just want them to walk towards the enemy's base 
+                    targetPosition = new int[]{xLocation, yLocation};
+                }
+                state = idle;
+            }
         }
         
-        if (health <= 0) {
-            getWorld().removeObject(this);
-            return;
+        if (state.equals(idle)){
+            moveTowards(targetPosition[0], targetPosition[1]); // goes to a random position if no enemies are near enough
+        }else if (state.equals(chase)){
+            moveTowards(target.getX(), target.getY()); // walks towards enemies 
+        }else{
+            if (shootCounter % 30 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
+                turnTowards(target.getX(), target.getY());
+                shoot(target);
+                setImage(shootingImg);
+            }
         }
+        super.act();
+    }
+    
+    protected abstract void shoot(Entity target); 
+    
+    private boolean closeEnough(){
+        return (getX()-targetPosition[0]) + (getY()-targetPosition[1]) < this.speed*2; // checks if the guy is basically on the location he wants to be
     }
     
     private void setupImage() {
@@ -46,11 +79,11 @@ public class Soldier extends People
         }
 
         if (team.getTeamId() == Team.RED) {
-            emptyImg = new GreenfootImage("RedMarine.png");
-            shootingImg = new GreenfootImage("RedMarineRecoil.png");
+            emptyImg = new GreenfootImage("Red" + getClass().getName() + ".png");
+            shootingImg = new GreenfootImage("Red" + getClass().getName() + "Recoil.png");
         } else if (team.getTeamId() == Team.BLUE) {
-            emptyImg = new GreenfootImage("BlueMarine.png");
-            shootingImg = new GreenfootImage("BlueMarineRecoil.png");
+            emptyImg = new GreenfootImage("Blue" + getClass().getName() + ".png");
+            shootingImg = new GreenfootImage("Blue" + getClass().getName() + "Recoil.png");
         }
 
         if (emptyImg != null) {
@@ -70,7 +103,7 @@ public class Soldier extends People
         double xDiff = getX() - e.getX(); // gets the difference in x between soldier and entity
         double yDiff = getY() - e.getY(); // gets the difference in y between soldier and entity
         
-        double angleRad = Math.atan2(yDiff, xDiff); // gets the angle of soldier and entity in radians
+        double angleRad = Math.atan2(-yDiff, -xDiff); // gets the angle of soldier and entity in radians and correct for the grid system
         double angleDeg = Math.toDegrees(angleRad); // converts angle from rad to degrees
         
         return angleDeg; 
