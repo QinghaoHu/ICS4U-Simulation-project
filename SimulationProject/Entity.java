@@ -4,6 +4,8 @@ public abstract class Entity extends SuperSmoothMover{
     protected Team team;
     protected int health;
     protected int maxHealth;
+    protected int cost; 
+    protected int[] targetPosition = new int[]{0, 0};
 
     public Entity(){
         
@@ -73,7 +75,7 @@ public abstract class Entity extends SuperSmoothMover{
     }
     
     public int getMaxHealth() {
-        return maxHealth();
+        return maxHealth;
     }
 
     public int getTeamId() {

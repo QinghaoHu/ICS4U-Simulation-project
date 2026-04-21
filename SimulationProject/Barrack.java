@@ -6,6 +6,7 @@ public class Barrack extends Buildings{
         super(team, 500);
         setupImage();
         setImage(img);
+        this.cost = 150; 
     }
 
     public void act(){

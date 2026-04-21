@@ -19,6 +19,7 @@ public class Marine extends Soldier
         if (team != null) {
             team.addUnit(this);
         }
+        this.cost = 75;
     }
     
     public void act()
