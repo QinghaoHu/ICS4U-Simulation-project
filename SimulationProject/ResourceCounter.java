@@ -11,7 +11,7 @@ public class ResourceCounter extends Actor {
 
     public void act() {
         if (team != null) {
-            updateImage(team.getMoney());
+            updateImage(team.getResources());
         }
     }
 
