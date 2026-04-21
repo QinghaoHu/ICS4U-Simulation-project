@@ -11,6 +11,8 @@ public class Soldier extends People
     private GreenfootImage img;
     private GreenfootImage emptyImg;
     private GreenfootImage shootingImg;
+    private int counter;
+    private Entity target;
     
     public Soldier(Team team) {
         super(team, 30);
@@ -24,17 +26,17 @@ public class Soldier extends People
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act(){
-        Entity target = findTarget();
+        counter++;
+        target = findTarget();
     
-        if (target != null) {
+        if (target != null && counter % 30 == 0) {
             turnTowards(target.getX(), target.getY());
-    
-            if (target instanceof Buildings) {
-                ((Buildings) target).takeDamage(damage);
-            }
-            else if (target instanceof People) {
-                ((People) target).setHealth(((People) target).getHealth() - damage);
-            }
+            getWorld().addObject(new SoldierBullet(target, this, shootAngle(target)), getX(), getY());
+        }
+        
+        if (health <= 0) {
+            getWorld().removeObject(this);
+            return;
         }
     }
     
