@@ -16,6 +16,11 @@ public class MyWorld extends World {
     private static final int WORLD_HEIGHT = 800;
     private static final int CELL_SIZE = 1;
 
+    private static final int MIN_SUPPLY_DROP_RANGE = 500;
+    private static final int MAX_SUPPLY_DROP_RANGE = 700;
+    private static final int SUPPLY_SPWAN_Y_OFFSET = -60;
+    private int supplySpwanTimer;
+
     private static final String GAME_STATE = "game";
     private static final String TITLE_STATE = "title";
 
@@ -37,6 +42,8 @@ public class MyWorld extends World {
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
 
+        supplySpwanTimer = 0;
+
         setUpWorld();
     }
 
@@ -45,6 +52,7 @@ public class MyWorld extends World {
         if (Greenfoot.isKeyDown("space")) {
             changeState(GAME_STATE);
         }
+        spwanSupply();
     }
 
     private void setUpWorld() {
@@ -114,6 +122,18 @@ public class MyWorld extends World {
     public void changeState(String nextState) {
         currentState = nextState;
         setUpWorld();
+    }
+
+    private void spwanSupply(){
+        if (supplySpwanTimer <= 0) {
+            // spawn supply
+            addObject(new Supply(), Greenfoot.getRandomNumber(MAX_SUPPLY_DROP_RANGE - MIN_SUPPLY_DROP_RANGE + 1) + MIN_SUPPLY_DROP_RANGE, SUPPLY_SPWAN_Y_OFFSET);
+
+            // Reset timer to random value between 250 (5s) and 500 (10s)
+            supplySpwanTimer = 250 + Greenfoot.getRandomNumber(251);
+        } else {
+            supplySpwanTimer--;
+        }
     }
 
     public String getWorld() {
