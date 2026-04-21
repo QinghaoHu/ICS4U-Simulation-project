@@ -11,13 +11,16 @@ public abstract class Soldier extends People
     private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
     private GreenfootImage shootingImg; // image when shooting
+   
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private int moveCounter; // delay the time to move to a different location for each soldier
     private Entity target; // the target that the soldier is trying to shoot
     private String state = idle; // handles what state it is, which can help with handling firing / behaviour
+    
     private static final String idle = "idle";
     private static final String chase = "chase";
     private static final String attack = "attack";
+    
     private int[] targetPosition = new int[] {-1, -1};
     private static final int attackRange = 200;
     private static final int detectionRange = 600;
