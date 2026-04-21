@@ -19,13 +19,19 @@ public class Team extends Actor {
     private int resources;
     private final ArrayList<People> units;
     private final ArrayList<Buildings> buildings;
+    private ArrayList<Barrack> barracks;
+    private ArrayList<DefensiveTurret> defensiveTurrets;
+
     private String strategy;
     private String[] strateges = {"ECO", "ATK", "DEF"};
     private int strategyCoolDown = 0;
     private int maxStrategyCoolDown = 300;
 
     private int workerCoolDown = 0;
-    private int maxWorkerCoolDown = 90;
+    private int maxWorkerCoolDown = 420;
+
+    private int marineCoolDown = 0;
+    private int maxMarineCoolDown = 600;
 
     private World w;
 
@@ -38,17 +44,24 @@ public class Team extends Actor {
         this.units = new ArrayList<People>();
         this.buildings = new ArrayList<Buildings>();
         this.strategy = strategy;
-        strategyCoolDown = 300;
+        strategyCoolDown = 900;
         this.w = w;
     }
 
     public void act() {
         if (strategyCoolDown > 0) {
             strategyCoolDown--;
-            return;
         } else {
             strategyCoolDown = maxStrategyCoolDown;
             strategy = strateges[Greenfoot.getRandomNumber(2)];
+//            spawn();
+        }
+
+        if (workerCoolDown > 0) {
+            workerCoolDown--;
+        }
+        if (marineCoolDown > 0) {
+            marineCoolDown--;
         }
     }
 
@@ -56,15 +69,13 @@ public class Team extends Actor {
         // When strategy is Equal
         if (strategy.equals("ECO")) {
             if (teamId == 0) {
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 5; i++) {
                     Worker worker = new Worker(this, base);
-                    addUnit(worker);
                     w.addObject(worker,170, 475);
                 }
             } else {
-                for (int i = 0; i < 3; i++) {
+                for (int i = 0; i < 5; i++) {
                     Worker worker = new Worker(this, base);
-                    addUnit(worker);
                     w.addObject(worker,1020, 145);
                 }
             }
@@ -76,27 +87,52 @@ public class Team extends Actor {
                 w.addObject(addBarrack, 1000, 600);
             }
 
-            for (int i = 0; i < 3; i++) {
+            for (int i = 0; i < 1; i++) {
                 Marine marine = new Marine(this);
-                addUnit(marine);
                 w.addObject(marine, addBarrack.getX(), addBarrack.getY());
             }
         } else {
-            
+            DefensiveTurret defenseTower = new DefensiveTurret(this);
+            if (teamId == 0) {
+                w.addObject(defenseTower, Greenfoot.getRandomNumber(1200), Greenfoot.getRandomNumber(800));
+            } else {
+                w.addObject(defenseTower, Greenfoot.getRandomNumber(1200), Greenfoot.getRandomNumber(800));
+            }
+            Worker worker = new Worker(this, base);
+            addUnit(worker);
+            w.addObject(worker, base.getX(), base.getY());
         }
+    }
+
+    private Boolean isBarrackExist() {
+        ArrayList<Barrack> existBarracks = (ArrayList<Barrack>) w.getObjects(Barrack.class);
+        for (Barrack bar : existBarracks) {
+            if (bar.team == this) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void spawn() {
         if (strategy.equals("ECO")) {
             if (workerCoolDown == 0) {
                 Worker worker = new Worker(this, base);
-                addUnit(worker);
-                w.addObject(worker,1020, 145);
+                w.addObject(worker,base.getX(), base.getY());
+                workerCoolDown = maxWorkerCoolDown;
             }
         } else if (strategy.equals("ATK")) {
-
+            if (!isBarrackExist()) {
+                Barrack newBarrack = new Barrack(this);
+                w.addObject(newBarrack, 100 + Greenfoot.getRandomNumber(1000), 100 + Greenfoot.getRandomNumber(600));
+            } else {
+                if (workerCoolDown == 0) {
+                    w.addObject(new Worker(this, base), base.getX(), base.getY());
+                    workerCoolDown = maxWorkerCoolDown;
+                }
+            }
         } else {
-            
+            // Add defense Tower
         }
     }
 
@@ -143,6 +179,7 @@ public class Team extends Actor {
         if (building != null && !buildings.contains(building)) {
             buildings.add(building);
         }
+
     }
 
     public void setBase(Base base) {
