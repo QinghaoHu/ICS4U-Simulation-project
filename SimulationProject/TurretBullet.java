@@ -1,25 +1,30 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class SoldierBullet here.
+ * Write a description of class BaseBullet here.
  * 
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class SoldierBullet extends Projectile
+public class TurretBullet extends Projectile
 {
     /**
-     * Act - do whatever the SoldierBullet wants to do. This method is called whenever
+     * Act - do whatever the BaseBullet wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
+    private Entity shooter;
+    private int damage;
+    private double angle;
+    private GreenfootImage bulletImage;
+    private double speed;
     
-    public SoldierBullet(Entity s, double angle) {
+    public TurretBullet(Entity s, double angle) {
         shooter = s;
         
         this.angle = angle;
         
         bulletImage = new GreenfootImage("soldierBullet.png");
-        bulletImage.scale(10,10);
+        bulletImage.scale(15,15);
         setImage(bulletImage);
         super.turn(angle);
 
@@ -27,13 +32,13 @@ public class SoldierBullet extends Projectile
         this.damage = 1;
     }
     
-    public SoldierBullet(Entity s, double angle, double speed, int damage) {
+    public TurretBullet(Entity s, double angle, double speed, int damage) {
         shooter = s;
         
         this.angle = angle;
         
         bulletImage = new GreenfootImage("soldierBullet.png");
-        bulletImage.scale(10,10);
+        bulletImage.scale(15,15);
         setImage(bulletImage);
         super.turn(angle);
 

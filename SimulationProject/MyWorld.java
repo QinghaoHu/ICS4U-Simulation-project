@@ -100,6 +100,10 @@ public class MyWorld extends World {
         //testing soldiers
         addObject(new Marine(blueTeam), 600, 200);
         addObject(new Officer(redTeam), 500, 300);
+        
+        //testing defensive turret
+        addObject(new DefensiveTurret(blueTeam), 600, 200);
+
     }
 
     private void setTitleState() {
