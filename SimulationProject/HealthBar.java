@@ -7,13 +7,13 @@ import greenfoot.*;
  */
 public class HealthBar extends Actor
 {
-    private Actor target;
+    private Entity target;
     private int width = 50;
     private int height = 6;
     private int yOffset = 30;
 
     //yOffset is for making sure the healthabr doesnt clip into the people/buildings
-    public HealthBar(Actor target, int yOffset) {
+    public HealthBar(Entity target, int yOffset) {
         this.target = target;
         this.yOffset = yOffset;
         updateImage();
@@ -34,19 +34,8 @@ public class HealthBar extends Actor
     }
     //used gpt for this, so that it could be able to work on both buildings and people
     private void updateImage() {
-        int health = 0;
-        int max = 1;
-    
-        if (target instanceof Buildings) {
-            Buildings b = (Buildings) target;
-            health = b.getHealth();
-            max = b.getMaxHealth();
-        } 
-        else if (target instanceof People) {
-            People p = (People) target;
-            health = p.getHealth();
-            max = p.getMaxHealth();
-        }
+        int health = target.getHealth();
+        int max = target.getMaxHealth();
     
         int barWidth = (int)((health / (double)max) * width);
     
