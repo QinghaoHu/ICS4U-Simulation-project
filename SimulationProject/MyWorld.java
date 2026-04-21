@@ -5,8 +5,6 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.ArrayList;
 
-import greenfoot.*;
-
 /**
  * Main simulation world.
  * <p>
@@ -100,9 +98,8 @@ public class MyWorld extends World {
         blueTeam.setUpWorld();
         
         //testing soldiers
-        //addObject(new Soldier(blueTeam), 600, 200);
-        
-         
+        addObject(new Soldier(blueTeam), 600, 200);
+        addObject(new Soldier(redTeam), 500, 300);
     }
 
     private void setTitleState() {

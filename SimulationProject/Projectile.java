@@ -14,28 +14,9 @@ public abstract class Projectile extends SuperSmoothMover
      */
     public void act()
     {
-        move(20);
-        if(checkEdge()){
+        if(isAtEdge()){
             getWorld().removeObject(this);
+            return;
         }
-    }
-    protected boolean checkEdge() {
-        // Check horizontal bounderies 
-        if (getX() > getWorld().getWidth() + 50){
-            return true;
-        }
-        else if (getX() < (- 50)){
-            return true;
-        }
-        
-        // Check vertical bounderies 
-        if (getY() > getWorld().getHeight() + 50){
-            return true;
-        }
-        else if (getY() < (-50)){
-            return true;
-        }
-        
-        return false;
     }
 }
