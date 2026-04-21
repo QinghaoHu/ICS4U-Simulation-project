@@ -164,4 +164,18 @@ public class Team extends Actor {
     public List<Buildings> getBuildings() {
         return buildings;
     }
+
+    public boolean hasBuilding(Class<? extends Buildings> buildingType) {
+        if (buildingType == null) {
+            return false;
+        }
+
+        for (Buildings building : buildings) {
+            if (building != null && buildingType.isInstance(building) && building.getWorld() != null) {
+                return true;
+            }
+        }
+
+        return false;
+    }
 }

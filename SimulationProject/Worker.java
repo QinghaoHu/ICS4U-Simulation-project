@@ -168,7 +168,7 @@ public class Worker extends People {
         depositTimer--;
 
         if (depositTimer <= 0) {
-            team.addMoney(carryAmount);
+            team.addResources(carryAmount);
             carryAmount = 0;
 
             state = "toResource";
