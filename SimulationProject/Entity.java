@@ -1,4 +1,5 @@
 import greenfoot.*;
+import java.util.ArrayList;
 
 public abstract class Entity extends SuperSmoothMover{
     protected Team team;
@@ -6,6 +7,8 @@ public abstract class Entity extends SuperSmoothMover{
     protected int maxHealth;
     protected int cost; 
     protected int[] targetPosition = new int[]{0, 0};
+    
+    private ArrayList<Entity> enemies;
 
     public Entity(){
         
@@ -52,9 +55,21 @@ public abstract class Entity extends SuperSmoothMover{
         return closest;
     }
     
-    public Entity findTarget()
-    {
-        return findTarget(200);
+    public Entity findTarget() {
+        enemies = (ArrayList<Entity>)getWorld().getObjects(Entity.class);
+        Entity closest = null;
+        double shortestDist = 0;
+        for (Entity e : enemies) {
+            if (!e.getTeam().equals(this.getTeam())) {
+                double distX = e.getX() - this.getX();
+                double distY = e.getY() - this.getY();
+                double distance = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));
+                if (shortestDist < distance) {
+                    closest = e;
+                }
+            }
+        }
+        return closest;
     }
     
     public Entity(Team team){

@@ -54,7 +54,7 @@ public class Team extends Actor {
         } else {
             strategyCoolDown = maxStrategyCoolDown;
             strategy = strateges[Greenfoot.getRandomNumber(2)];
-//            spawn();
+            //spawn();
         }
 
         if (workerCoolDown > 0) {
