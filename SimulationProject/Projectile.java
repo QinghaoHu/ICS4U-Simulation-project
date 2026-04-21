@@ -17,7 +17,15 @@ public abstract class Projectile extends SuperSmoothMover
     protected double angle;
     protected GreenfootImage bulletImage;
     protected double speed;
-    
+    public Projectile(Entity s, double angle, double speed, int damage){
+        shooter = s;
+        
+        this.angle = angle;
+        super.turn(angle);
+
+        this.speed = speed; // not sure why but bullets are aims backwards, so we go backwards so that we are aimed at the right way
+        this.damage = damage;
+    }
     public void act()
     {
         if(isAtEdge()){
