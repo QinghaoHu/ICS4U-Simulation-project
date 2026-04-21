@@ -1,38 +1,29 @@
 import greenfoot.*;
-
 import java.util.List;
 
-/**
- * Write a description of class Projectile here.
- *
- * @author (your name)
- * @version (a version number or a date)
- */
 public class Worker extends People {
+
     protected int carryAmount;
     protected int maxCarry;
     protected int minRate;
 
-    private GreenfootImage img;
     private GreenfootImage emptyImg;
     private GreenfootImage miningImg;
+
     private Resources targetResource;
     private Resources assignedResource;
     private Base homeBase;
 
-    private String state = "toResource";
-    private int mineTimer = 0;
-    private int depositTimer = 0;
-    private int speed = 2;//set to 2, may change speed to even slower in the future
-    
-    
-    //sets the side in which resources it goes to
+    private String state = "move";
+    private String nextState = "mining";
+
+    private int timer = 0;
+
     private static int redIndex = 0;
     private static int blueIndex = 0;
 
     public Worker(Team team, Base base) {
         super(team, 30, 2);
-        health = 100;
 
         this.homeBase = base;
 
@@ -40,41 +31,106 @@ public class Worker extends People {
             team.addUnit(this);
         }
 
+        this.cost = 50;
+
         carryAmount = 0;
         maxCarry = 15;
         minRate = 5;
 
-        setupImage(); //forgot to add before
+        setupImage();
+    }
+
+    public void addedToWorld(World w) {
+        targetPosition = resourceLocation();
     }
 
     public void act() {
-        if (state.equals("toResource")) {
-            goToResource();
+        if (state.equals("move")) {
+            move();
         } else if (state.equals("mining")) {
             mine();
-        } else if (state.equals("toBase")) {
-            goToBase();
         } else if (state.equals("depositing")) {
             deposit();
+        } else if (state.equals("building")) {
+            build();
         }
-        
+
         updateImage();
         super.act();
     }
 
     private void mine() {
-        mineTimer--;
+        timer--;
 
-        if (mineTimer <= 0) {
+        if (timer <= 0) {
             carryAmount = maxCarry;
-            state = "toBase";
+            state = "move";
+            targetPosition = goToBase();
+            nextState = "depositing";
         }
     }
 
-    private void setupImage() {
-        if (team == null) {
-            return;
+    private void build() {
+        if (timer <= 0){
+            getWorld().addObject(new DefensiveTurret(team), getX(), getY());
         }
+    }
+
+    private void move() {
+        moveTowards(targetPosition[0], targetPosition[1]);
+
+        double dist = Math.hypot(
+                getX() - targetPosition[0],
+                getY() - targetPosition[1]
+        );
+
+        if (dist < 55) {
+            timer = 120;
+            if (state.equals("build")){
+                timer = 1200;
+            }
+
+            state = nextState;
+            nextState = "move"; 
+        }
+    }
+    
+    public boolean isAreaFree(int x, int y, List<Buildings> buildings) {
+        int size = 50;
+
+        for (Buildings b : buildings) {
+            int bx = b.getX();
+            int by = b.getY();
+
+            if (Math.abs(x - bx) < size &&
+                Math.abs(y - by) < size) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    public int[] findValidLocation(World world) {
+        int width = world.getWidth();
+        int height = world.getHeight();
+
+        List<Buildings> buildings = world.getObjects(Buildings.class);
+
+        for (int i = 0; i < 1000; i++) {
+            int x = Greenfoot.getRandomNumber(width) - 25;
+            int y = Greenfoot.getRandomNumber(height);
+
+            if (isAreaFree(x, y, buildings)) {
+                return new int[]{x, y};
+            }
+        }
+
+        return new int[]{-1, -1}; // no space found
+    }
+
+    private void setupImage() {
+        if (team == null) return;
 
         if (team.getTeamId() == Team.RED) {
             emptyImg = new GreenfootImage("RedWorkerRegular.png");
@@ -84,101 +140,64 @@ public class Worker extends People {
             miningImg = new GreenfootImage("BlueWorkerMining.png");
         }
 
-        if (emptyImg != null) {
-            emptyImg.scale(50, 50);
-            setImage(img);
-        }
-        
-        if (miningImg != null) {
-            miningImg.scale(50, 50);
-            setImage(img);
-        }
-        
-        setImage(emptyImg);
+        if (emptyImg != null) emptyImg.scale(50, 50);
+        if (miningImg != null) miningImg.scale(50, 50);
     }
 
-    private void goToResource() {
-        if (getWorld() == null) return;
+    private int[] resourceLocation() {
+        if (getWorld() == null) return new int[]{-1, -1};
 
         if (assignedResource == null) {
-            List<Resources> allResources = getWorld().getObjects(Resources.class);
-            List<Resources> validResources = new java.util.ArrayList<>();
+            List<Resources> all = getWorld().getObjects(Resources.class);
+            List<Resources> valid = new java.util.ArrayList<>();
 
-            // filters the resouces of the team so that it doesnt grab from the other team
-            for (Resources r : allResources) {
+            for (Resources r : all) {
                 if (r.getTeamSide() == team.getTeamId()) {
-                    validResources.add(r);
+                    valid.add(r);
                 }
             }
-            
-            // cycle through only valid resources
-            if (!validResources.isEmpty()) {
-                if (team.getTeamId() == Team.RED) {
-                    assignedResource = validResources.get(redIndex % validResources.size());
-                    redIndex++;
-                } else {
-                    assignedResource = validResources.get(blueIndex % validResources.size());
-                    blueIndex++;
-                }
+
+            if (valid.isEmpty()) return new int[]{-1, -1};
+
+            if (team.getTeamId() == Team.RED) {
+                assignedResource = valid.get(redIndex % valid.size());
+                redIndex++;
             } else {
-                return;
+                assignedResource = valid.get(blueIndex % valid.size());
+                blueIndex++;
             }
         }
 
         targetResource = assignedResource;
 
-        if (targetResource == null) return;
+        if (targetResource == null) return new int[]{-1, -1};
 
-        moveTowards(targetResource.getX(), targetResource.getY());
-
-        double dist = Math.hypot(
-                getX() - targetResource.getX(),
-                getY() - targetResource.getY()
-        );
-
-        if (dist < 30) { //this is for hitbox as worker hitbox is originally too big
-            state = "mining";
-            mineTimer = 120;
-        }
+        return new int[]{targetResource.getX(), targetResource.getY()};
     }
 
-    public void buildBarrack() {
-        Barrack bar = new Barrack(super.team);
-        getWorld().addObject(bar, getX(), getY());
-    }
-
-    private void goToBase() {
-        if (homeBase.getWorld() == null){
-            return;
+    private int[] goToBase() {
+        if (homeBase == null || homeBase.getWorld() == null) {
+            return new int[]{-1, -1};
         }
-        moveTowards(homeBase.getX(), homeBase.getY());
-
-        double dist = Math.hypot(
-                getX() - homeBase.getX(),
-                getY() - homeBase.getY()
-        );
-
-        if (dist < 55) { //THIS IS FOR HITBOX AS WORKER HITBOX IS ORIGINALLY TOO BIG
-            state = "depositing";
-            depositTimer = 120;
-        }
+        return new int[]{homeBase.getX(), homeBase.getY()};
     }
 
     private void deposit() {
-        depositTimer--;
+        timer--;
 
-        if (depositTimer <= 0) {
-            team.addResources(carryAmount);
+        if (timer <= 0) {
+            team.addMoney(carryAmount);
             carryAmount = 0;
 
-            state = "toResource";
+            state = "move";
+            targetPosition = resourceLocation();
         }
     }
-    
-    private void updateImage(){
-        if(carryAmount > 0){
+
+    private void updateImage() {
+        if (carryAmount > 0) {
             setImage(miningImg);
-        } else{
+        } else {
             setImage(emptyImg);
         }
     }

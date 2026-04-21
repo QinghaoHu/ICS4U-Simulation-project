@@ -22,6 +22,7 @@ public class DefensiveTurret extends Buildings
             team.addBuilding(this);
         }
         setupImage();
+        this.cost = 175;
     }
     public void act()
     {

@@ -111,8 +111,8 @@ public class Supply extends SuperSmoothMover {
         }
 
         for (int i = 0; i < marineCount; i++) {
-            Soldier soldier = new Soldier(team);
-            world.addObject(soldier, barrack.getX(), barrack.getY());
+            Marine marine = new Marine(team);
+            world.addObject(marine, barrack.getX(), barrack.getY());
         }
     }
 
