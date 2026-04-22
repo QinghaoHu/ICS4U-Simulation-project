@@ -16,15 +16,8 @@ public abstract class Entity extends SuperSmoothMover{
     
     public void act(){
         if (health <= 0 && getWorld() != null) {
-            die();
+            getWorld().removeObject(this);
             return;
-        }
-    }
-    
-    protected void die() {
-        World world = getWorld();
-        if (world != null) {
-            world.removeObject(this);
         }
     }
     
