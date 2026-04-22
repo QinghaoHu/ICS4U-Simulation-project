@@ -43,6 +43,8 @@ public abstract class Buildings extends Entity
 
         if ("Officer".equals(type)) {
             newPerson = new Officer(team);
+        } else if ("Marine".equals(type)) {
+            newPerson = new Marine(team);
         }
 
         if (newPerson != null) {

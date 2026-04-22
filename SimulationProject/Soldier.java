@@ -8,6 +8,11 @@ import java.lang.Math;
  */
 public abstract class Soldier extends People
 {
+    private static final int RED_RALLY_X = 1000;
+    private static final int RED_RALLY_Y = 165;
+    private static final int BLUE_RALLY_X = 200;
+    private static final int BLUE_RALLY_Y = 490;
+
     private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
     private GreenfootImage shootingImg; // image when shooting
@@ -47,10 +52,8 @@ public abstract class Soldier extends People
             if (target != null) {
                 state = chase;
             }else{
-                if (state != idle || closeEnough()){ // if it is close enough or it wasn't idle before then it sets a location to walk towards
-                    int xLocation = 1000;
-                    int yLocation = 100; // place holder values i just want them to walk towards the enemy's base 
-                    targetPosition = new int[]{xLocation, yLocation};
+                if (!state.equals(idle) || !hasTargetPosition() || closeEnough()){ // if it is close enough or it wasn't idle before then it sets a location to walk towards
+                    targetPosition = enemyBasePosition();
                 }
                 state = idle;
             }
@@ -73,7 +76,29 @@ public abstract class Soldier extends People
     protected abstract void shoot(Entity target); 
     
     private boolean closeEnough(){
-        return (getX()-targetPosition[0]) + (getY()-targetPosition[1]) < this.speed*2; // checks if the guy is basically on the location he wants to be
+        return Math.hypot(getX() - targetPosition[0], getY() - targetPosition[1]) < this.speed * 2; // checks if the guy is basically on the location he wants to be
+    }
+
+    private boolean hasTargetPosition() {
+        return targetPosition[0] >= 0 && targetPosition[1] >= 0;
+    }
+
+    private int[] enemyBasePosition() {
+        World world = getWorld();
+
+        if (world != null) {
+            for (Base base : world.getObjects(Base.class)) {
+                if (isOpponent(base)) {
+                    return new int[]{base.getX(), base.getY()};
+                }
+            }
+        }
+
+        if (team != null && team.getTeamId() == Team.BLUE) {
+            return new int[]{BLUE_RALLY_X, BLUE_RALLY_Y};
+        }
+
+        return new int[]{RED_RALLY_X, RED_RALLY_Y};
     }
     
     private void setupImage() {
@@ -85,8 +110,8 @@ public abstract class Soldier extends People
             emptyImg = new GreenfootImage("Red" + getClass().getName() + ".png");
             shootingImg = new GreenfootImage("Red" + getClass().getName() + "Recoil.png");
         } else if (team.getTeamId() == Team.BLUE) {
-            emptyImg = new GreenfootImage("Red" + getClass().getName() + ".png");
-            shootingImg = new GreenfootImage("Red" + getClass().getName() + "Recoil.png");
+            emptyImg = new GreenfootImage("Blue" + getClass().getName() + ".png");
+            shootingImg = new GreenfootImage("Blue" + getClass().getName() + "Recoil.png");
         }
 
         if (emptyImg != null) {

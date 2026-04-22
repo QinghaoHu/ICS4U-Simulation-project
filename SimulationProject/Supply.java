@@ -14,6 +14,7 @@ public class Supply extends SuperSmoothMover {
     private static final int RARE_WORKER_DROP = 2;
     private static final int ULTRA_RARE_WORKER_DROP = 3;
     private static final int ULTRA_RARE_MARINE_DROP = 1;
+    private static final int MIN_LANDING_Y = 300;
 
     private int targetX;
     private int targetY;
@@ -37,7 +38,13 @@ public class Supply extends SuperSmoothMover {
 
     protected void addedToWorld(World world) {
         targetX = getX();
-        targetY = (int) (Math.random()*500) + 300;
+        int imageHalfHeight = getImage().getHeight() / 2;
+        int maxLandingY = UI.PLAY_AREA_BOTTOM_Y - imageHalfHeight;
+        if (maxLandingY <= MIN_LANDING_Y) {
+            targetY = maxLandingY;
+        } else {
+            targetY = MIN_LANDING_Y + Greenfoot.getRandomNumber(maxLandingY - MIN_LANDING_Y + 1);
+        }
     }
 
     private void moveToTargetPosition() {

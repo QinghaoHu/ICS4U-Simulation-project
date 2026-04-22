@@ -71,8 +71,16 @@ public class Worker extends People {
     }
 
     private void build() {
+        timer--;
+
         if (timer <= 0){
-            getWorld().addObject(new DefensiveTurret(team), getX(), getY());
+            if (team != null) {
+                team.placeBuilding(new DefensiveTurret(team), getX(), getY());
+            }
+
+            state = "move";
+            targetPosition = resourceLocation();
+            nextState = "mining";
         }
     }
 
@@ -191,6 +199,7 @@ public class Worker extends People {
 
             state = "move";
             targetPosition = resourceLocation();
+            nextState = "mining";
         }
     }
 
