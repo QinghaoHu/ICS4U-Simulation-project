@@ -15,7 +15,7 @@ public abstract class Projectile extends SuperSmoothMover
     protected Entity shooter;
     protected int damage;
     protected double angle;
-    protected GreenfootImage bulletImage;
+    protected GreenfootImage img;
     protected double speed;
     public Projectile(Entity s, double angle, double speed, int damage){
         shooter = s;
@@ -23,8 +23,12 @@ public abstract class Projectile extends SuperSmoothMover
         this.angle = angle;
         super.turn(angle);
 
-        this.speed = speed; // not sure why but bullets are aims backwards, so we go backwards so that we are aimed at the right way
+        this.speed = speed; 
         this.damage = damage;
+        
+        img = new GreenfootImage(getClass().getName() + ".png");
+        img.scale(10, 10);
+        setImage(img);
     }
     public void act()
     {

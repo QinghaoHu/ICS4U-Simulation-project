@@ -29,12 +29,8 @@ public class Barrack extends Buildings{
         if (team == null) {
             return;
         }
-
-        if (team.getTeamId() == Team.RED) {
-            img = new GreenfootImage("RedBarracks.png");
-        } else if (team.getTeamId() == Team.BLUE) {
-            img = new GreenfootImage("BlueBarracks.png");
-        }
+        
+        img = new GreenfootImage(team.getName() + getClass().getName() +  ".png");
         
         img.scale(100, 100);
 

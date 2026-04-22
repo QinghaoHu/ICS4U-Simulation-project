@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  * @author (your name) 
  * @version (a version number or a date)
  */
-public class DefensiveTurret extends Buildings
+public class Turret extends Buildings
 {
     private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
@@ -16,7 +16,7 @@ public class DefensiveTurret extends Buildings
     private static final int attackRange = 225;
 
 
-    public DefensiveTurret(Team team) {
+    public Turret(Team team) {
         super(team, 700);
         if (team != null) {
             team.addBuilding(this);
@@ -31,7 +31,7 @@ public class DefensiveTurret extends Buildings
         if(target != null){
             if (shootCounter % 30 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
-                getWorld().addObject(new TurretBullet(this, shootAngle(target), 2.5, 3), getX(), getY()); // adds bullet
+                getWorld().addObject(new SoldierBullet(this, shootAngle(target), 2.5, 3, 15), getX(), getY()); // adds bullet
             }
         }
         super.act();
@@ -41,11 +41,8 @@ public class DefensiveTurret extends Buildings
             return;
         }
 
-        if (team.getTeamId() == Team.RED) {
-            img = new GreenfootImage("RedTurret.png");            
-        } else if (team.getTeamId() == Team.BLUE) {
-            img = new GreenfootImage("BlueTurret.png");
-        }
+        img = new GreenfootImage(team.getName() + getClass().getName() +  ".png");
+        
         img.scale(150, 150);
         setImage(img);
         

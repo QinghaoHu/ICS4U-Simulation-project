@@ -22,8 +22,8 @@ public class TurretBullet extends Projectile
     public TurretBullet(Entity s, double angle, double speed, int damage) {
         super(s, angle, speed, damage);
         
-        bulletImage = new GreenfootImage("soldierBullet.png");
-        bulletImage.scale(15,15);
+        bulletImage = new GreenfootImage(getClass().getName() + ".png");
+        bulletImage.scale(10, 10);
         setImage(bulletImage);
     }
     

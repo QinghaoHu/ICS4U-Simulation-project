@@ -20,7 +20,7 @@ public class Team extends Actor {
     private final ArrayList<People> units;
     private final ArrayList<Buildings> buildings;
     private ArrayList<Barrack> barracks;
-    private ArrayList<DefensiveTurret> defensiveTurrets;
+    private ArrayList<Turret> defensiveTurrets;
 
     private String strategy;
     private String[] strateges = {"ECO", "ATK", "DEF"};
@@ -45,7 +45,7 @@ public class Team extends Actor {
         this.buildings = new ArrayList<Buildings>();
 
         this.barracks = new ArrayList<Barrack>();
-        this.defensiveTurrets = new ArrayList<DefensiveTurret>();
+        this.defensiveTurrets = new ArrayList<Turret>();
 
         this.strategy = strategy;
         this.w = w;
@@ -57,7 +57,7 @@ public class Team extends Actor {
         } else {
             strategyCoolDown = maxStrategyCoolDown;
             strategy = strateges[Greenfoot.getRandomNumber(strateges.length)];
-            System.out.println(strategy);
+            //System.out.println(strategy); don't print anything out on the push
             spawn();
         }
 
@@ -82,7 +82,7 @@ public class Team extends Actor {
             w.addObject(addBarrack, 100 + Greenfoot.getRandomNumber(1001), 100 + Greenfoot.getRandomNumber(601));
             addBarrack.addPeople();
         } else {
-            DefensiveTurret defenseTower = new DefensiveTurret(this);
+            Turret defenseTower = new Turret(this);
 //            defensiveTurrets.add(defenseTower);
             w.addObject(defenseTower, 100 + Greenfoot.getRandomNumber(1001), 100 + Greenfoot.getRandomNumber(601));
             base.addPeople();
@@ -121,7 +121,7 @@ public class Team extends Actor {
                 }
             }
         } else {
-            DefensiveTurret defenseTower = new DefensiveTurret(this);
+            Turret defenseTower = new Turret(this);
 
             w.addObject(defenseTower, 100 + Greenfoot.getRandomNumber(1001), 100 + Greenfoot.getRandomNumber(601));
             base.addPeople();

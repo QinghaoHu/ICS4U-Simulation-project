@@ -72,7 +72,7 @@ public class Worker extends People {
 
     private void build() {
         if (timer <= 0){
-            getWorld().addObject(new DefensiveTurret(team), getX(), getY());
+            getWorld().addObject(new Turret(team), getX(), getY());
         }
     }
 

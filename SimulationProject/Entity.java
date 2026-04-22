@@ -10,6 +10,11 @@ public abstract class Entity extends SuperSmoothMover{
     
     private ArrayList<Entity> enemies;
 
+    public Entity(Team team){
+        //this(); im not sure what this does
+        setTeam(team);
+    }
+    
     public Entity(){
         
     }
@@ -43,7 +48,6 @@ public abstract class Entity extends SuperSmoothMover{
             Entity e = (Entity) obj;
     
             if (isOpponent(e)) {
-
                 double dist = Math.hypot(e.getX() - getX(), e.getY() - getY());
                 if (dist < closestDist) {
                     closestDist = dist;
@@ -71,11 +75,7 @@ public abstract class Entity extends SuperSmoothMover{
         }
         return closest;
     }
-    
-    public Entity(Team team){
-        this();
-        setTeam(team);
-    }
+
 
     public boolean isAlive(){
         return health > 0;
