@@ -11,7 +11,7 @@ public class DefensiveTurret extends Buildings
     private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
     private GreenfootImage shootingImg; // image when shooting
-    
+    private int centerDist = 70;
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private static final int attackRange = 225;
 
@@ -31,8 +31,13 @@ public class DefensiveTurret extends Buildings
         if(target != null){
             if (shootCounter % 30 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
-                getWorld().addObject(new TurretBullet(this, shootAngle(target), 2.5, 3), getX(), getY()); // adds bullet
+                double angle = shootAngle(target);
+                int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
+                int Y = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
+                getWorld().addObject(new TurretBullet(this, angle, 2.5, 3), X, Y); // adds bullet
             }
+            
+            
         }
         super.act();
     }
