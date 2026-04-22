@@ -22,7 +22,7 @@ public class Barrack extends Buildings{
     }
 
     public People addPeople(){
-        return super.addPeople("Soldier");
+        return super.addPeople("Officer");
     }
 
     private void setupImage(){

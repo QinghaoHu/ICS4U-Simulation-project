@@ -25,7 +25,7 @@ public class Team extends Actor {
     private String strategy;
     private String[] strateges = {"ECO", "ATK", "DEF"};
     private int strategyCoolDown = 0;
-    private int maxStrategyCoolDown = 300;
+    private int maxStrategyCoolDown = 120;
 
     private int workerCoolDown = 0;
     private int maxWorkerCoolDown = 420;
@@ -43,8 +43,11 @@ public class Team extends Actor {
         this.resources = startingMoney;
         this.units = new ArrayList<People>();
         this.buildings = new ArrayList<Buildings>();
+
+        this.barracks = new ArrayList<Barrack>();
+        this.defensiveTurrets = new ArrayList<DefensiveTurret>();
+
         this.strategy = strategy;
-        strategyCoolDown = 900;
         this.w = w;
     }
 
@@ -53,8 +56,9 @@ public class Team extends Actor {
             strategyCoolDown--;
         } else {
             strategyCoolDown = maxStrategyCoolDown;
-            strategy = strateges[Greenfoot.getRandomNumber(2)];
-            //spawn();
+            strategy = strateges[Greenfoot.getRandomNumber(strateges.length)];
+            System.out.println(strategy);
+            spawn();
         }
 
         if (workerCoolDown > 0) {
@@ -68,71 +72,59 @@ public class Team extends Actor {
     public void setUpWorld() {
         // When strategy is Equal
         if (strategy.equals("ECO")) {
-            if (teamId == 0) {
-                for (int i = 0; i < 5; i++) {
-                    Worker worker = new Worker(this, base);
-                    w.addObject(worker,170, 475);
-                }
-            } else {
-                for (int i = 0; i < 5; i++) {
-                    Worker worker = new Worker(this, base);
-                    w.addObject(worker,1020, 145);
-                }
+            for (int i = 0; i < 5; i++) {
+                base.addPeople();
             }
+            workerCoolDown = maxWorkerCoolDown;
         } else if (strategy.equals("ATK")) {
             Barrack addBarrack = new Barrack(this);
-            if (teamId == 0) {
-                w.addObject(addBarrack, 30, 20);
-            } else {
-                w.addObject(addBarrack, 1000, 600);
-            }
-
-            for (int i = 0; i < 1; i++) {
-                Marine marine = new Marine(this);
-                w.addObject(marine, addBarrack.getX(), addBarrack.getY());
-            }
+            barracks.add(addBarrack);
+            w.addObject(addBarrack, 100 + Greenfoot.getRandomNumber(1001), 100 + Greenfoot.getRandomNumber(601));
+            addBarrack.addPeople();
         } else {
             DefensiveTurret defenseTower = new DefensiveTurret(this);
-            if (teamId == 0) {
-                w.addObject(defenseTower, Greenfoot.getRandomNumber(1200), Greenfoot.getRandomNumber(800));
-            } else {
-                w.addObject(defenseTower, Greenfoot.getRandomNumber(1200), Greenfoot.getRandomNumber(800));
-            }
-            Worker worker = new Worker(this, base);
-            addUnit(worker);
-            w.addObject(worker, base.getX(), base.getY());
+//            defensiveTurrets.add(defenseTower);
+            w.addObject(defenseTower, 100 + Greenfoot.getRandomNumber(1001), 100 + Greenfoot.getRandomNumber(601));
+            base.addPeople();
         }
     }
 
     private Boolean isBarrackExist() {
-        ArrayList<Barrack> existBarracks = (ArrayList<Barrack>) w.getObjects(Barrack.class);
-        for (Barrack bar : existBarracks) {
-            if (bar.team == this) {
-                return true;
+        Boolean isThereBarrack = false;
+        for (int i = 0; i < barracks.size(); i++) {
+            if (barracks.get(i) == null || barracks.get(i).getWorld() == null) {
+                barracks.remove(i);
+                i--;
+                continue;
             }
+            isThereBarrack = true;
         }
-        return false;
+        return isThereBarrack;
     }
 
     private void spawn() {
         if (strategy.equals("ECO")) {
             if (workerCoolDown == 0) {
-                Worker worker = new Worker(this, base);
-                w.addObject(worker,base.getX(), base.getY());
+                base.addPeople();
                 workerCoolDown = maxWorkerCoolDown;
             }
         } else if (strategy.equals("ATK")) {
             if (!isBarrackExist()) {
                 Barrack newBarrack = new Barrack(this);
-                w.addObject(newBarrack, 100 + Greenfoot.getRandomNumber(1000), 100 + Greenfoot.getRandomNumber(600));
+                w.addObject(newBarrack, 100 + Greenfoot.getRandomNumber(1001), 100 + Greenfoot.getRandomNumber(601));
+                barracks.add(newBarrack);
             } else {
-                if (workerCoolDown == 0) {
-                    w.addObject(new Worker(this, base), base.getX(), base.getY());
-                    workerCoolDown = maxWorkerCoolDown;
+                base.addPeople();
+                workerCoolDown = maxWorkerCoolDown;
+                for (int i = 0; i < 4; i++) {
+                    barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
                 }
             }
         } else {
-            // Add defense Tower
+            DefensiveTurret defenseTower = new DefensiveTurret(this);
+
+            w.addObject(defenseTower, 100 + Greenfoot.getRandomNumber(1001), 100 + Greenfoot.getRandomNumber(601));
+            base.addPeople();
         }
     }
 

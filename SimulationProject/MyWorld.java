@@ -79,6 +79,9 @@ public class MyWorld extends World {
         Base blueBase = new Base(blueTeam);
         addObject(blueBase, 990, 165);
         blueTeam.setBase(blueBase);
+        
+        addObject(redTeam, 0, 0);
+        addObject(blueTeam, 0, 0);
         //adds ui to the world
         addObject(new UI(), 600, 400);
         
@@ -111,7 +114,7 @@ public class MyWorld extends World {
         
         //testing defensive turret
         //addObject(new DefensiveTurret(blueTeam), 600, 200);
-        addObject(new Barrack(redTeam), 200, 200);
+//        addObject(new Barrack(redTeam), 200, 200);
     }
 
     private void setTitleState() {

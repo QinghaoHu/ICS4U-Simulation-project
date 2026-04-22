@@ -40,7 +40,8 @@ public class Base extends Buildings {
         }
     }
 
-    public People addPeople() {
-        return super.addPeople("Worker");
+    public void addPeople() {
+        Worker worker = new Worker(team, this);
+        getWorld().addObject(worker, getX(), getY());
     }
 }
