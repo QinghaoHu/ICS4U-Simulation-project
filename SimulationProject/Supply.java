@@ -3,8 +3,8 @@ import greenfoot.*;
 import java.util.List;
 
 public class Supply extends SuperSmoothMover {
-    private static final int MIN_DROP_SPEED = 3;
-    private static final int MAX_DROP_SPEED = 8;
+    private static final int MIN_DROP_SPEED = 1;
+    private static final int MAX_DROP_SPEED = 3;
     private static final int COMMON_CHANCE = 70;
     private static final int RARE_CHANCE = 25;
     private static final int COMMON_RESOURCE_DROP = 75;
