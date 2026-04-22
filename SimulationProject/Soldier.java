@@ -66,6 +66,7 @@ public abstract class Soldier extends People
         }else{
             if (shootCounter % 30 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
+                
                 shoot(target);
                 setImage(shootingImg);
             }

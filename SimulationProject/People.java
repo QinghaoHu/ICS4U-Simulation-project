@@ -2,7 +2,7 @@ import greenfoot.*;
 
 public abstract class People extends Entity{
     protected int speed;
-
+    protected int centerDist = 20;
     public People(Team team, int maxHealth, int speed) {
         super(team);
         this.maxHealth = maxHealth;

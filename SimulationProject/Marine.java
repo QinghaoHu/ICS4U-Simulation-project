@@ -29,6 +29,10 @@ public class Marine extends Soldier
     }
     
     protected void shoot(Entity target){
-        getWorld().addObject(new SoldierBullet(this, shootAngle(target), 2.5, 3), getX(), getY()); // adds bullet
+        turnTowards(target.getX(), target.getY());
+        double angle = shootAngle(target);
+        int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
+        int Y = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
+        getWorld().addObject(new TurretBullet(this, angle, 2.5, 3), X, Y); // adds bullet
     }
 }
