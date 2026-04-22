@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 public class SupplyBot extends People{
     private static int MAX_HEALTH = 35;
-    private static int SPEED = 5;
+    private static int SPEED = 3;
 
     private Supply targetSupply;
 
