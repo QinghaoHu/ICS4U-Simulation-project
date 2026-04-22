@@ -48,7 +48,7 @@ public class Supply extends SuperSmoothMover {
             return;
         }
 
-        setLocation(targetX, getY()-dropSpeed);
+        setLocation(targetX, getY()+dropSpeed);
     }
 
     private void checkForPickup() {
