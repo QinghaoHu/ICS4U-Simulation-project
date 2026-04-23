@@ -66,7 +66,6 @@ public class Team extends Actor {
         this.defensiveTurrets = new ArrayList<Turret>();
 
         this.strategy = strategy;
-        this.strategy = "DEF";
         this.w = w;
 
         workerNeeded = 0;
@@ -125,7 +124,7 @@ public class Team extends Actor {
         if (currentTurretAmount < turretNeeded) {
             if (resources >= turretCost) {
                 Turret turret = new Turret(this);
-                if (placeBuilding(turret)) {
+                if (canPlaceTurret(turret)) {
                     defensiveTurrets.add(turret);
                     currentTurretAmount++;
                     resources -= turretCost;
@@ -151,10 +150,6 @@ public class Team extends Actor {
             marineNeeded = 1;
             currentWorkerAmount = 0;
         } else {
-            Turret defenseTower = new Turret(this);
-            if (canPlaceTurret(defenseTower)) {
-                defensiveTurrets.add(defenseTower);
-            }
             currentTurretAmount = 0;
             turretNeeded = 1;
 
@@ -222,9 +217,6 @@ public class Team extends Actor {
             currentTurretAmount = 0;
             turretNeeded = 1;
 
-            if (canPlaceTurret(defenseTower)) {
-                defensiveTurrets.add(defenseTower);
-            }
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
