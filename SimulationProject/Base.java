@@ -41,6 +41,9 @@ public class Base extends Buildings {
     }
 
     public void addPeople() {
+        if (getWorld() == null) {
+            return;
+        }
         Worker worker = new Worker(team, this);
         getWorld().addObject(worker, getX(), getY());
     }
