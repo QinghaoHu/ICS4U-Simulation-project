@@ -132,12 +132,12 @@ public class MyWorld extends World {
     }
 
     private void spawnSupply(){
-        if (supplySpwanTimer <= 0) {
+        if (supplySpwanTimer <= 0 && getObjects(Supply.class).size() < 5) {
             // spawn supply
             addObject(new Supply(), Greenfoot.getRandomNumber(MAX_SUPPLY_DROP_RANGE - MIN_SUPPLY_DROP_RANGE + 1) + MIN_SUPPLY_DROP_RANGE, SUPPLY_SPWAN_Y_OFFSET);
 
-            // Reset timer to random value between 250 (5s) and 500 (10s)
-            supplySpwanTimer = 250 + Greenfoot.getRandomNumber(251);
+            // Reset timer to random value between 300 (5s) and 900 (15s)
+            supplySpwanTimer = 300 + Greenfoot.getRandomNumber(601);
         } else {
             supplySpwanTimer--;
         }
