@@ -34,8 +34,8 @@ public class MyWorld extends World {
     public MyWorld() {
         super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
 
-        String redTeamStrategy = "ATK";
-        String blueTeamStrategy = "ECO";
+        String redTeamStrategy = Team.getRandomStrategy();
+        String blueTeamStrategy = Team.getRandomStrategy();
         redTeam = new Team(Team.RED, "Red", 150, redTeamStrategy, this);
         blueTeam = new Team(Team.BLUE, "Blue", 150, blueTeamStrategy, this);
 

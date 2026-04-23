@@ -26,15 +26,19 @@ public class Team extends Actor {
     private ArrayList<DefensiveTurret> defensiveTurrets;
 
     private String strategy;
-    private String[] strateges = {"ECO", "ATK", "DEF"};
-    private int strategyCoolDown = 0;
-    private int maxStrategyCoolDown = 120;
+    private static String[] strateges = {"ECO", "ATK", "DEF"};
 
     private int workerCoolDown = 0;
     private int maxWorkerCoolDown = 420;
 
     private int marineCoolDown = 0;
     private int maxMarineCoolDown = 600;
+
+    private int workerNeeded;
+    private int currentWorkerAmount;
+
+    private int marineNeeded;
+    private int currentMarinedAmount;
 
     private World w;
 
@@ -52,17 +56,16 @@ public class Team extends Actor {
 
         this.strategy = strategy;
         this.w = w;
+
+        workerNeeded = 0;
+        currentWorkerAmount = 0;
+
+        marineNeeded = 0;
+        currentWorkerAmount = 0;
     }
 
     public void act() {
-        if (strategyCoolDown > 0) {
-            strategyCoolDown--;
-        } else {
-            strategyCoolDown = maxStrategyCoolDown;
-            strategy = strateges[Greenfoot.getRandomNumber(strateges.length)];
-            System.out.println(strategy);
-            spawn();
-        }
+        isBarrackExist();
 
         if (workerCoolDown > 0) {
             workerCoolDown--;
@@ -70,27 +73,49 @@ public class Team extends Actor {
         if (marineCoolDown > 0) {
             marineCoolDown--;
         }
+
+        if (currentWorkerAmount < workerNeeded) {
+            if (workerCoolDown == 0) {
+                base.addPeople();
+                currentWorkerAmount++;
+                workerCoolDown = maxWorkerCoolDown;
+            }
+        }
+
+        if (currentMarinedAmount < marineNeeded) {
+            if (marineCoolDown == 0) {
+                currentMarinedAmount++;
+                barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
+                marineCoolDown = maxMarineCoolDown;
+            }
+        }
+
+        if (currentMarinedAmount == marineNeeded && currentWorkerAmount == workerNeeded) {
+            strategy = strateges[Greenfoot.getRandomNumber(3)];
+            System.out.println(teamId + ": " + strategy);
+            spawn();
+        }
     }
 
     public void setUpWorld() {
         // When strategy is Equal
         if (strategy.equals("ECO")) {
-            for (int i = 0; i < 5; i++) {
-                base.addPeople();
-            }
-            workerCoolDown = maxWorkerCoolDown;
+            currentWorkerAmount = 0;
+            workerNeeded = 5;
         } else if (strategy.equals("ATK")) {
             Barrack addBarrack = new Barrack(this);
             if (placeBuilding(addBarrack)) {
                 barracks.add(addBarrack);
-                addBarrack.addPeople();
             }
+            marineNeeded = 1;
+            currentWorkerAmount = 0;
         } else {
             DefensiveTurret defenseTower = new DefensiveTurret(this);
             if (placeBuilding(defenseTower)) {
                 defensiveTurrets.add(defenseTower);
             }
-            base.addPeople();
+            workerNeeded = 1;
+            currentWorkerAmount = 0;
         }
     }
 
@@ -109,22 +134,21 @@ public class Team extends Actor {
 
     private void spawn() {
         if (strategy.equals("ECO")) {
-            if (workerCoolDown == 0) {
-                base.addPeople();
-                workerCoolDown = maxWorkerCoolDown;
-            }
+            currentWorkerAmount = 0;
+            workerNeeded = 5;
         } else if (strategy.equals("ATK")) {
             if (!isBarrackExist()) {
                 Barrack newBarrack = new Barrack(this);
                 if (placeBuilding(newBarrack)) {
                     barracks.add(newBarrack);
                 }
+                marineNeeded = 1;
+                currentMarinedAmount = 0;
             } else {
-                base.addPeople();
-                workerCoolDown = maxWorkerCoolDown;
-                for (int i = 0; i < 4; i++) {
-                    barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
-                }
+                workerNeeded = 1;
+                currentWorkerAmount = 0;
+                marineNeeded = 4;
+                currentMarinedAmount = 0;
             }
         } else {
             DefensiveTurret defenseTower = new DefensiveTurret(this);
@@ -132,7 +156,8 @@ public class Team extends Actor {
             if (placeBuilding(defenseTower)) {
                 defensiveTurrets.add(defenseTower);
             }
-            base.addPeople();
+            workerNeeded = 1;
+            currentWorkerAmount = 0;
         }
     }
 
@@ -337,5 +362,9 @@ public class Team extends Actor {
         }
 
         return false;
+    }
+
+    public static String getRandomStrategy() {
+        return strateges[Greenfoot.getRandomNumber(3)];
     }
 }
