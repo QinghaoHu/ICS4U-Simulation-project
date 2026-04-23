@@ -75,7 +75,7 @@ public class Worker extends People {
 
         if (timer <= 0){
             if (team != null) {
-                team.placeBuilding(new DefensiveTurret(team), getX(), getY());
+                team.placeBuilding(new Turret(team), getX(), getY());
             }
 
             state = "move";

@@ -110,7 +110,7 @@ public class Team extends Actor {
             marineNeeded = 1;
             currentWorkerAmount = 0;
         } else {
-            DefensiveTurret defenseTower = new DefensiveTurret(this);
+            Turret defenseTower = new Turret(this);
             if (placeBuilding(defenseTower)) {
                 defensiveTurrets.add(defenseTower);
             }
