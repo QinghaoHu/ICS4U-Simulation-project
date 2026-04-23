@@ -66,6 +66,7 @@ public class Team extends Actor {
         this.defensiveTurrets = new ArrayList<Turret>();
 
         this.strategy = strategy;
+        this.strategy = "DEF";
         this.w = w;
 
         workerNeeded = 0;
@@ -150,12 +151,41 @@ public class Team extends Actor {
             marineNeeded = 1;
             currentWorkerAmount = 0;
         } else {
+            Turret defenseTower = new Turret(this);
+            if (canPlaceTurret(defenseTower)) {
+                defensiveTurrets.add(defenseTower);
+            }
             currentTurretAmount = 0;
             turretNeeded = 1;
 
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
+    }
+    
+    private Boolean canPlaceTurret(Turret t) {
+        int counter = 0;
+        Boolean canPlaceTurret = false;
+        int [] location = null;
+        
+        while (true) {
+            counter++;
+            location = findValidBuildingLocation(t);
+            if (location[0] < 600 && location[1] > 300 && teamId == RED) {
+                canPlaceTurret = true;
+                placeBuilding(t, location[0], location[1]);
+                break;
+            } else if (location[0] > 600 && location[1] < 400 && teamId == BLUE) {
+                canPlaceTurret = true;
+                placeBuilding(t, location[0], location[1]);
+                break;
+            }
+            if (counter == 60) {
+                break;
+            }
+        }
+        
+        return canPlaceTurret;
     }
 
     private Boolean isBarrackExist() {
@@ -192,6 +222,9 @@ public class Team extends Actor {
             currentTurretAmount = 0;
             turretNeeded = 1;
 
+            if (canPlaceTurret(defenseTower)) {
+                defensiveTurrets.add(defenseTower);
+            }
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
