@@ -65,8 +65,6 @@ public class Team extends Actor {
     }
 
     public void act() {
-        isBarrackExist();
-
         if (workerCoolDown > 0) {
             workerCoolDown--;
         }
@@ -82,17 +80,18 @@ public class Team extends Actor {
             }
         }
 
-        if (currentMarinedAmount < marineNeeded) {
-            if (marineCoolDown == 0) {
-                currentMarinedAmount++;
-                barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
-                marineCoolDown = maxMarineCoolDown;
+        if (isBarrackExist()) {
+            if (currentMarinedAmount < marineNeeded) {
+                if (marineCoolDown == 0) {
+                    currentMarinedAmount++;
+                    barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
+                    marineCoolDown = maxMarineCoolDown;
+                }
             }
         }
 
         if (currentMarinedAmount == marineNeeded && currentWorkerAmount == workerNeeded) {
             strategy = strateges[Greenfoot.getRandomNumber(3)];
-            System.out.println(teamId + ": " + strategy);
             spawn();
         }
     }
