@@ -28,11 +28,7 @@ public class Base extends Buildings {
             return;
         }
 
-        if (team.getTeamId() == Team.RED) {
-            img = new GreenfootImage("RedHomeBase.png");
-        } else if (team.getTeamId() == Team.BLUE) {
-            img = new GreenfootImage("BlueHomeBase.png");
-        }
+        img = new GreenfootImage(team.getName() + getClass().getName() +  ".png");
         img.scale(110, 110);
 
         if (img != null) {

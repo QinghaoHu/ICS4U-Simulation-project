@@ -15,18 +15,17 @@ public class SoldierBullet extends Projectile
     
     public SoldierBullet(Entity s, double angle) {
         super(s, angle, 2.5, 1);
-        
-        bulletImage = new GreenfootImage("soldierBullet.png");
-        bulletImage.scale(10,10);
-        setImage(bulletImage);
     }
     
     public SoldierBullet(Entity s, double angle, double speed, int damage){
         super(s, angle, speed, damage);
+    }
+    
+    public SoldierBullet(Entity s, double angle, double speed, int damage, int size){
+        super(s, angle, speed, damage);
         
-        bulletImage = new GreenfootImage("soldierBullet.png");
-        bulletImage.scale(10,10);
-        setImage(bulletImage);
+        this.img.scale(size,size);
+        setImage(this.img);
     }
     
     public void act()

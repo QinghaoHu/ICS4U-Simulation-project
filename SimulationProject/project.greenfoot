@@ -1,7 +1,5 @@
 #Greenfoot project file
-class.DefensiveTurret.image=bananas.png
-class.SoldierBullet.image=apple1.png
-class.TurretBullet.image=bananas.png
+class.SoldierBullet.image=SoldierBullet.png
 dependency1.from=MyWorld
 dependency1.to=Team
 dependency1.type=UsesDependency
@@ -14,6 +12,7 @@ dependency11.type=UsesDependency
 dependency12.from=Buildings
 dependency12.to=Officer
 dependency12.type=UsesDependency
+<<<<<<< HEAD
 dependency13.from=Buildings
 dependency13.to=Marine
 dependency13.type=UsesDependency
@@ -34,12 +33,39 @@ dependency18.to=Entity
 dependency18.type=UsesDependency
 dependency19.from=DefensiveTurret
 dependency19.to=TurretBullet
+=======
+dependency13.from=Turret
+dependency13.to=Team
+dependency13.type=UsesDependency
+dependency14.from=Turret
+dependency14.to=Entity
+dependency14.type=UsesDependency
+dependency15.from=Turret
+dependency15.to=SoldierBullet
+dependency15.type=UsesDependency
+dependency16.from=Base
+dependency16.to=Team
+dependency16.type=UsesDependency
+dependency17.from=Base
+dependency17.to=Worker
+dependency17.type=UsesDependency
+dependency18.from=Barrack
+dependency18.to=Team
+dependency18.type=UsesDependency
+dependency19.from=Barrack
+dependency19.to=Marine
+>>>>>>> origin/factor-CODE
 dependency19.type=UsesDependency
 dependency2.from=MyWorld
 dependency2.to=Base
 dependency2.type=UsesDependency
+<<<<<<< HEAD
 dependency20.from=Base
 dependency20.to=Team
+=======
+dependency20.from=Barrack
+dependency20.to=People
+>>>>>>> origin/factor-CODE
 dependency20.type=UsesDependency
 dependency21.from=Base
 dependency21.to=Worker
@@ -84,7 +110,11 @@ dependency33.from=Worker
 dependency33.to=Resources
 dependency33.type=UsesDependency
 dependency34.from=Worker
+<<<<<<< HEAD
 dependency34.to=Base
+=======
+dependency34.to=Turret
+>>>>>>> origin/factor-CODE
 dependency34.type=UsesDependency
 dependency35.from=Worker
 dependency35.to=Team
@@ -128,15 +158,24 @@ dependency46.type=UsesDependency
 dependency47.from=Supply
 dependency47.to=UI
 dependency47.type=UsesDependency
+<<<<<<< HEAD
 dependency48.from=Supply
 dependency48.to=MyWorld
 dependency48.type=UsesDependency
 dependency49.from=Projectile
 dependency49.to=Entity
+=======
+dependency48.from=ResourceCounter
+dependency48.to=Team
+dependency48.type=UsesDependency
+dependency49.from=Team
+dependency49.to=People
+>>>>>>> origin/factor-CODE
 dependency49.type=UsesDependency
 dependency5.from=MyWorld
 dependency5.to=ResourceCounter
 dependency5.type=UsesDependency
+<<<<<<< HEAD
 dependency50.from=TurretBullet
 dependency50.to=Entity
 dependency50.type=UsesDependency
@@ -148,6 +187,19 @@ dependency52.to=Entity
 dependency52.type=UsesDependency
 dependency53.from=Team
 dependency53.to=People
+=======
+dependency50.from=Team
+dependency50.to=Buildings
+dependency50.type=UsesDependency
+dependency51.from=Team
+dependency51.to=Barrack
+dependency51.type=UsesDependency
+dependency52.from=Team
+dependency52.to=Turret
+dependency52.type=UsesDependency
+dependency53.from=Team
+dependency53.to=Base
+>>>>>>> origin/factor-CODE
 dependency53.type=UsesDependency
 dependency54.from=Team
 dependency54.to=Buildings
@@ -179,6 +231,7 @@ dependency8.type=UsesDependency
 dependency9.from=Buildings
 dependency9.to=Team
 dependency9.type=UsesDependency
+<<<<<<< HEAD
 editor.fx.0.height=2100
 editor.fx.0.width=1918
 editor.fx.0.x=5121
@@ -186,6 +239,15 @@ editor.fx.0.y=27
 height=2100
 package.numDependencies=59
 package.numTargets=26
+=======
+editor.fx.0.height=1048
+editor.fx.0.width=1936
+editor.fx.0.x=-8
+editor.fx.0.y=-8
+height=1048
+package.numDependencies=53
+package.numTargets=23
+>>>>>>> origin/factor-CODE
 project.charset=UTF-8
 publish.hasSource=false
 publish.locked=true
@@ -199,7 +261,11 @@ readme.name=@README
 readme.width=49
 readme.x=10
 readme.y=10
+<<<<<<< HEAD
 simulation.speed=51
+=======
+simulation.speed=48
+>>>>>>> origin/factor-CODE
 target1.height=70
 target1.name=Entity
 target1.showInterface=false
@@ -208,72 +274,88 @@ target1.width=120
 target1.x=0
 target1.y=0
 target10.height=70
-target10.name=TurretBullet
+target10.name=Worker
 target10.showInterface=false
 target10.type=ClassTarget
 target10.width=120
 target10.x=0
 target10.y=0
 target11.height=70
-target11.name=Worker
+target11.name=Team
 target11.showInterface=false
 target11.type=ClassTarget
 target11.width=120
 target11.x=0
 target11.y=0
 target12.height=70
-target12.name=Team
+target12.name=SoldierBullet
 target12.showInterface=false
 target12.type=ClassTarget
 target12.width=120
 target12.x=0
 target12.y=0
 target13.height=70
-target13.name=SoldierBullet
+target13.name=MyWorld
 target13.showInterface=false
 target13.type=ClassTarget
 target13.width=120
 target13.x=0
 target13.y=0
 target14.height=70
-target14.name=MyWorld
+target14.name=Mineral
 target14.showInterface=false
 target14.type=ClassTarget
 target14.width=120
 target14.x=0
 target14.y=0
 target15.height=70
-target15.name=Mineral
+target15.name=Buildings
 target15.showInterface=false
-target15.type=ClassTarget
+target15.type=AbstractTarget
 target15.width=120
 target15.x=0
 target15.y=0
 target16.height=70
+<<<<<<< HEAD
 target16.name=SupplyBot
+=======
+target16.name=People
+>>>>>>> origin/factor-CODE
 target16.showInterface=false
 target16.type=ClassTarget
 target16.width=120
 target16.x=0
 target16.y=0
 target17.height=70
+<<<<<<< HEAD
 target17.name=Buildings
+=======
+target17.name=ResourceCounter
+>>>>>>> origin/factor-CODE
 target17.showInterface=false
 target17.type=AbstractTarget
 target17.width=120
 target17.x=0
 target17.y=0
 target18.height=70
+<<<<<<< HEAD
 target18.name=DefensiveTurret
+=======
+target18.name=Turret
+>>>>>>> origin/factor-CODE
 target18.showInterface=false
 target18.type=ClassTarget
 target18.width=120
 target18.x=0
 target18.y=0
 target19.height=70
+<<<<<<< HEAD
 target19.name=SmoothMover
+=======
+target19.name=Base
+>>>>>>> origin/factor-CODE
 target19.showInterface=false
-target19.type=AbstractTarget
+target19.type=ClassTarget
 target19.width=120
 target19.x=0
 target19.y=0
@@ -285,33 +367,50 @@ target2.width=130
 target2.x=0
 target2.y=0
 target20.height=70
+<<<<<<< HEAD
 target20.name=People
+=======
+target20.name=Projectile
+>>>>>>> origin/factor-CODE
 target20.showInterface=false
 target20.type=AbstractTarget
 target20.width=120
 target20.x=0
 target20.y=0
 target21.height=70
+<<<<<<< HEAD
 target21.name=ResourceCounter
+=======
+target21.name=Animation
+>>>>>>> origin/factor-CODE
 target21.showInterface=false
 target21.type=ClassTarget
 target21.width=120
 target21.x=0
 target21.y=0
 target22.height=70
+<<<<<<< HEAD
 target22.name=Base
+=======
+target22.name=Resources
+>>>>>>> origin/factor-CODE
 target22.showInterface=false
 target22.type=ClassTarget
 target22.width=120
 target22.x=0
 target22.y=0
 target23.height=70
+<<<<<<< HEAD
 target23.name=Projectile
+=======
+target23.name=Officer
+>>>>>>> origin/factor-CODE
 target23.showInterface=false
 target23.type=AbstractTarget
 target23.width=120
 target23.x=0
 target23.y=0
+<<<<<<< HEAD
 target24.height=70
 target24.name=Animation
 target24.showInterface=false
@@ -333,6 +432,8 @@ target26.type=ClassTarget
 target26.width=120
 target26.x=0
 target26.y=0
+=======
+>>>>>>> origin/factor-CODE
 target3.height=70
 target3.name=HealthBar
 target3.showInterface=false
@@ -348,42 +449,46 @@ target4.width=120
 target4.x=0
 target4.y=0
 target5.height=70
-target5.name=BaseBullet
+target5.name=Soldier
 target5.showInterface=false
-target5.type=ClassTarget
+target5.type=AbstractTarget
 target5.width=120
 target5.x=0
 target5.y=0
 target6.height=70
-target6.name=Soldier
+target6.name=Marine
 target6.showInterface=false
-target6.type=AbstractTarget
+target6.type=ClassTarget
 target6.width=120
 target6.x=0
 target6.y=0
 target7.height=70
-target7.name=Marine
+target7.name=UI
 target7.showInterface=false
 target7.type=ClassTarget
 target7.width=120
 target7.x=0
 target7.y=0
 target8.height=70
-target8.name=UI
+target8.name=Barrack
 target8.showInterface=false
 target8.type=ClassTarget
 target8.width=120
 target8.x=0
 target8.y=0
 target9.height=70
-target9.name=Barrack
+target9.name=TurretBullet
 target9.showInterface=false
 target9.type=ClassTarget
 target9.width=120
 target9.x=0
 target9.y=0
 version=3.1.0
+<<<<<<< HEAD
 width=1918
+=======
+width=1936
+>>>>>>> origin/factor-CODE
 world.lastInstantiated=MyWorld
-xPosition=3201
-yPosition=27
+xPosition=0
+yPosition=0

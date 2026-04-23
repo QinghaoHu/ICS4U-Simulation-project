@@ -23,7 +23,7 @@ public class Team extends Actor {
     private final ArrayList<People> units;
     private final ArrayList<Buildings> buildings;
     private ArrayList<Barrack> barracks;
-    private ArrayList<DefensiveTurret> defensiveTurrets;
+    private ArrayList<Turret> defensiveTurrets;
 
     private String strategy;
     private static String[] strateges = {"ECO", "ATK", "DEF"};
@@ -52,7 +52,7 @@ public class Team extends Actor {
         this.buildings = new ArrayList<Buildings>();
 
         this.barracks = new ArrayList<Barrack>();
-        this.defensiveTurrets = new ArrayList<DefensiveTurret>();
+        this.defensiveTurrets = new ArrayList<Turret>();
 
         this.strategy = strategy;
         this.w = w;
@@ -151,7 +151,7 @@ public class Team extends Actor {
                 currentMarinedAmount = 0;
             }
         } else {
-            DefensiveTurret defenseTower = new DefensiveTurret(this);
+            Turret defenseTower = new Turret(this);
 
             if (placeBuilding(defenseTower)) {
                 defensiveTurrets.add(defenseTower);
