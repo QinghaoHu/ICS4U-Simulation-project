@@ -1,5 +1,8 @@
 import greenfoot.*;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -193,5 +196,19 @@ public class MyWorld extends World {
      */
     private void prepare()
     {
+    }
+
+    public static String loadCustomFont(String file) {
+        try {
+            File fontFile = new File(file);
+            java.awt.Font customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(customFont);
+            return customFont.getFontName();
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+            return "Arial";
+        }
     }
 }

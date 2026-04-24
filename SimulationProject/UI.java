@@ -20,7 +20,7 @@ public class UI extends Actor {
     public UI() {
         baseImage = new GreenfootImage("Ui.png");
         setImage(baseImage);
-        fontName = loadCustomFont();
+        fontName = MyWorld.loadCustomFont("fonts/StarJediRounded-jW3R.ttf");
     }
 
     protected void addedToWorld(World world) {
@@ -70,19 +70,5 @@ public class UI extends Actor {
 
     private int getResourcesFor(Team team) {
         return team == null ? 0 : team.getResources();
-    }
-
-    public String loadCustomFont() {
-        try {
-            File fontFile = new File("fonts/StarJediRounded-jW3R.ttf");
-            java.awt.Font customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
-
-            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
-            ge.registerFont(customFont);
-            return customFont.getFontName();
-        } catch (IOException | FontFormatException e) {
-            e.printStackTrace();
-            return "Arial";
-        }
     }
 }
