@@ -3,20 +3,33 @@ import greenfoot.*;
 public class Barrack extends Buildings{
     
     private GreenfootImage img;
+    private final int cost = 100; 
     
     public Barrack (Team team){
         super(team, 500);
         setupImage();
         setImage(img);
-        this.cost = 150; 
     }
 
     public void act(){
         super.act();
     }
+    
+    public int getCost(){
+        return 100; 
+    }
 
-    public People addPeople(){
-        return super.addPeople("Marine");
+    public boolean addPeople() {
+        if (getWorld() == null) {
+            return false;
+        }
+        Marine marine = new Marine(team);
+        if (!team.spendMoney(marine.getCost())){
+            return false;
+        }
+        
+        getWorld().addObject(marine, getX(), getY());
+        return true;
     }
 
     private void setupImage(){

@@ -22,6 +22,7 @@ public class Team extends Actor {
     private final ArrayList<Buildings> buildings;
     private ArrayList<Barrack> barracks;
     private ArrayList<Turret> defensiveTurrets;
+    private ArrayList <Worker> workers;
 
     private String strategy;
     private static String[] strateges = {"ECO", "ATK", "DEF"};
@@ -38,6 +39,7 @@ public class Team extends Actor {
     private int marineNeeded;
     private int currentMarinedAmount;
 
+    private World world;
     private int currentBarrackAmount;
     private int barrackNeeded;
 
@@ -61,12 +63,13 @@ public class Team extends Actor {
         this.resources = startingMoney;
         this.units = new ArrayList<People>();
         this.buildings = new ArrayList<Buildings>();
+        this.workers = new ArrayList<>();
 
         this.barracks = new ArrayList<Barrack>();
         this.defensiveTurrets = new ArrayList<Turret>();
 
         this.strategy = strategy;
-        this.w = w;
+        this.world = w;
 
         workerNeeded = 0;
         currentWorkerAmount = 0;
@@ -91,6 +94,19 @@ public class Team extends Actor {
         }
 
         if (currentWorkerAmount < workerNeeded) {
+            if (workerCoolDown == 0) {
+                if (base.addPeople()){
+                    currentWorkerAmount++;
+                    workerCoolDown = maxWorkerCoolDown;
+                }// adds workers
+            }
+        }
+
+        if (!barracks.isEmpty() && currentMarinedAmount < marineNeeded) {
+            if (marineCoolDown == 0) {
+                if (barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople()){
+                    currentMarinedAmount++; // adds marines
+                    marineCoolDown = maxMarineCoolDown;
             if (workerCoolDown == 0 && resources >= workerCost) {
                 base.addPeople();
                 resources -= workerCost;
@@ -215,6 +231,13 @@ public class Team extends Actor {
             currentWorkerAmount = 0;
             workerNeeded = 5;
         } else if (strategy.equals("ATK")) {
+            Barrack addBarrack = new Barrack(this);
+            placeBuilding(addBarrack);
+            marineNeeded = 1;
+            currentWorkerAmount = 0;
+        } else {
+            Turret defenseTower = new Turret(this);
+            placeBuilding(defenseTower);
             currentBarrackAmount = 0;
             barrackNeeded = 1;
 
@@ -248,6 +271,8 @@ public class Team extends Actor {
             workerNeeded = 5;
         } else if (strategy.equals("ATK")) {
             if (!isBarrackExist()) {
+                Barrack newBarrack = new Barrack(this);
+                workerPlaceBuilding(newBarrack);
                 currentBarrackAmount = 0;
                 barrackNeeded = 1;
                 marineNeeded = 1;
@@ -262,8 +287,18 @@ public class Team extends Actor {
             currentTurretAmount = 0;
             turretNeeded = 1;
 
+
+            workerPlaceBuilding(defenseTower);
             workerNeeded = 1;
             currentWorkerAmount = 0;
+        }
+    }
+    
+    public void correctBuildingList(Buildings building){
+        if (building instanceof Turret){
+            defensiveTurrets.add((Turret)building);
+        }else if (building instanceof Barrack){
+            barracks.add((Barrack)building); 
         }
     }
 
@@ -349,5 +384,9 @@ public class Team extends Actor {
 
     public static String getRandomStrategy() {
         return strateges[Greenfoot.getRandomNumber(3)];
+    }
+    
+    public void addWorker(Worker w){
+        workers.add(w); 
     }
 }
