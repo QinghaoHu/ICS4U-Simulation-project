@@ -26,7 +26,7 @@ public class Worker extends People {
 
     private static int redIndex = 0;
     private static int blueIndex = 0;
-    private static final int cost = 50; 
+    private static final int cost = 75; 
 
     public Worker(Team team, Base base) {
         super(team, 30, 2);
