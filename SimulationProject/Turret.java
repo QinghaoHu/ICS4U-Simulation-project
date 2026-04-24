@@ -48,7 +48,6 @@ public class Turret extends Buildings
                 double angle = shootAngle(target);
                 int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
                 int Y = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
- 
                 // getWorld().addObject(new TurretBullet(this, angle, 2.5, 3), X, Y); // adds bullet
                 getWorld().addObject(new SoldierBullet(this, shootAngle(target), 2.5, 13, 15), getX(), getY()); // adds bullet
             }
