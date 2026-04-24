@@ -50,7 +50,7 @@ public class Team extends Actor {
     private int workerCost = 75;
     private int marineCost = 50;
     private int barrackCost = 125;
-    private int turretCost = 175;
+    private int turretCost = 150;
 
     private World w;
 
