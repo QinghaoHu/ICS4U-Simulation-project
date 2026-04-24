@@ -24,7 +24,6 @@ public class Barrack extends Buildings{
             return false;
         }
         Marine marine = new Marine(team);
-        System.out.println(marine.getCost()); 
         if (!team.spendMoney(marine.getCost())){
             return false;
         }
