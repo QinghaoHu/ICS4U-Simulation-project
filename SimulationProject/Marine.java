@@ -14,12 +14,17 @@ public class Marine extends Soldier
      * gets pressed in the environment.
      */
     
+    private static final int cost = 100;
+    
     public Marine(Team team) {
         super(team);
         if (team != null) {
             team.addUnit(this);
         }
-        this.cost = 75;
+    }
+    
+    public int getCost(){
+        return 100; 
     }
     
     public void act()

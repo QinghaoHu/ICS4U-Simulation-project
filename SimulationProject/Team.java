@@ -24,6 +24,7 @@ public class Team extends Actor {
     private final ArrayList<Buildings> buildings;
     private ArrayList<Barrack> barracks;
     private ArrayList<Turret> defensiveTurrets;
+    private ArrayList <Worker> workers;
 
     private String strategy;
     private static String[] strateges = {"ECO", "ATK", "DEF"};
@@ -40,7 +41,7 @@ public class Team extends Actor {
     private int marineNeeded;
     private int currentMarinedAmount;
 
-    private World w;
+    private World world;
 
     private Base base;
 
@@ -50,12 +51,13 @@ public class Team extends Actor {
         this.resources = startingMoney;
         this.units = new ArrayList<People>();
         this.buildings = new ArrayList<Buildings>();
+        this.workers = new ArrayList<>();
 
         this.barracks = new ArrayList<Barrack>();
         this.defensiveTurrets = new ArrayList<Turret>();
 
         this.strategy = strategy;
-        this.w = w;
+        this.world = w;
 
         workerNeeded = 0;
         currentWorkerAmount = 0;
@@ -76,23 +78,24 @@ public class Team extends Actor {
 
         if (currentWorkerAmount < workerNeeded) {
             if (workerCoolDown == 0) {
-                base.addPeople();
-                currentWorkerAmount++;
-                workerCoolDown = maxWorkerCoolDown;
+                if (base.addPeople()){
+                    currentWorkerAmount++;
+                    workerCoolDown = maxWorkerCoolDown;
+                }// adds workers
             }
         }
 
-        if (currentMarinedAmount < marineNeeded) {
+        if (!barracks.isEmpty() && currentMarinedAmount < marineNeeded) {
             if (marineCoolDown == 0) {
-                currentMarinedAmount++;
-                barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
-                marineCoolDown = maxMarineCoolDown;
+                if (barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople()){
+                    currentMarinedAmount++; // adds marines
+                    marineCoolDown = maxMarineCoolDown;
+                }
             }
         }
 
         if (currentMarinedAmount == marineNeeded && currentWorkerAmount == workerNeeded) {
             strategy = strateges[Greenfoot.getRandomNumber(3)];
-            System.out.println(teamId + ": " + strategy);
             spawn();
         }
     }
@@ -104,16 +107,12 @@ public class Team extends Actor {
             workerNeeded = 5;
         } else if (strategy.equals("ATK")) {
             Barrack addBarrack = new Barrack(this);
-            if (placeBuilding(addBarrack)) {
-                barracks.add(addBarrack);
-            }
+            placeBuilding(addBarrack);
             marineNeeded = 1;
             currentWorkerAmount = 0;
         } else {
             Turret defenseTower = new Turret(this);
-            if (placeBuilding(defenseTower)) {
-                defensiveTurrets.add(defenseTower);
-            }
+            placeBuilding(defenseTower);
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
@@ -139,9 +138,7 @@ public class Team extends Actor {
         } else if (strategy.equals("ATK")) {
             if (!isBarrackExist()) {
                 Barrack newBarrack = new Barrack(this);
-                if (placeBuilding(newBarrack)) {
-                    barracks.add(newBarrack);
-                }
+                workerPlaceBuilding(newBarrack);
                 marineNeeded = 1;
                 currentMarinedAmount = 0;
             } else {
@@ -153,11 +150,17 @@ public class Team extends Actor {
         } else {
             Turret defenseTower = new Turret(this);
 
-            if (placeBuilding(defenseTower)) {
-                defensiveTurrets.add(defenseTower);
-            }
+            workerPlaceBuilding(defenseTower);
             workerNeeded = 1;
             currentWorkerAmount = 0;
+        }
+    }
+    
+    public void correctBuildingList(Buildings building){
+        if (building instanceof Turret){
+            defensiveTurrets.add((Turret)building);
+        }else if (building instanceof Barrack){
+            barracks.add((Barrack)building); 
         }
     }
 
@@ -171,9 +174,9 @@ public class Team extends Actor {
 
         return placeBuilding(building, location[0], location[1]);
     }
-
+    
     public boolean placeBuilding(Buildings building, int x, int y) {
-        if (w == null || building == null || building.getImage() == null) {
+        if (world == null || building == null || building.getImage() == null) {
             buildings.remove(building);
             return false;
         }
@@ -183,12 +186,55 @@ public class Team extends Actor {
             return false;
         }
 
-        w.addObject(building, x, y);
+        world.addObject(building, x, y);
         return true;
+    }
+    
+    public boolean workerPlaceBuilding(Buildings building) {
+        int[] location = findValidBuildingLocation(building);
+
+        if (location == null) {
+            buildings.remove(building);
+            return false;
+        }
+
+        return workerPlaceBuilding(building, location[0], location[1]) && spendMoney(building.getCost());
+    }
+    
+    public boolean workerPlaceBuilding(Buildings building, int x, int y) {
+        if (world == null || building == null || building.getImage() == null) {
+            buildings.remove(building);
+            return false;
+        }
+
+        if (!canPlaceBuildingAt(building, x, y)) {
+            buildings.remove(building);
+            return false;
+        }
+        
+        Worker worker = leastBusyWorker();
+        if (worker == null){
+            return false;
+        }
+        worker.prepBuild(building, x, y); 
+        
+        return true;
+    }
+    
+    public Worker leastBusyWorker(){
+        Worker worker = null;
+        int least = Integer.MAX_VALUE; 
+        for (Worker w: workers){
+            if (w.available() < least){
+                least = w.available();
+                worker = w; 
+            }
+        }
+        return worker;
     }
 
     private int[] findValidBuildingLocation(Buildings building) {
-        if (w == null || building == null || building.getImage() == null) {
+        if (world == null || building == null || building.getImage() == null) {
             return null;
         }
 
@@ -196,11 +242,11 @@ public class Team extends Actor {
         int height = building.getImage().getHeight();
         int halfWidth = width / 2;
         int halfHeight = height / 2;
-        int redAreaRightX = w.getWidth() / 3;
-        int blueAreaLeftX = w.getWidth() * 2 / 3;
+        int redAreaRightX = world.getWidth() / 3;
+        int blueAreaLeftX = world.getWidth() * 2 / 3;
 
         int minX = halfWidth;
-        int maxX = w.getWidth() - halfWidth;
+        int maxX = world.getWidth() - halfWidth;
         if (teamId == RED) {
             maxX = Math.min(maxX, redAreaRightX - halfWidth);
         } else if (teamId == BLUE) {
@@ -208,7 +254,7 @@ public class Team extends Actor {
         }
 
         int minY = halfHeight;
-        int maxY = Math.min(w.getHeight() - halfHeight, UI.PLAY_AREA_BOTTOM_Y - halfHeight);
+        int maxY = Math.min(world.getHeight() - halfHeight, UI.PLAY_AREA_BOTTOM_Y - halfHeight);
         if (minX > maxX || minY > maxY) {
             return null;
         }
@@ -242,7 +288,7 @@ public class Team extends Actor {
             return false;
         }
 
-        for (Buildings other : w.getObjects(Buildings.class)) {
+        for (Buildings other : world.getObjects(Buildings.class)) {
             if (other != null && other.getImage() != null && overlapsBuilding(building, x, y, other)) {
                 return false;
             }
@@ -258,10 +304,10 @@ public class Team extends Actor {
         int right = x + halfWidth;
         int top = y - halfHeight;
         int bottom = y + halfHeight;
-        int redAreaRightX = w.getWidth() / 3;
-        int blueAreaLeftX = w.getWidth() * 2 / 3;
+        int redAreaRightX = world.getWidth() / 3;
+        int blueAreaLeftX = world.getWidth() * 2 / 3;
 
-        if (left < 0 || right > w.getWidth() || top < 0 || bottom > UI.PLAY_AREA_BOTTOM_Y) {
+        if (left < 0 || right > world.getWidth() || top < 0 || bottom > UI.PLAY_AREA_BOTTOM_Y) {
             return false;
         }
 
@@ -366,5 +412,9 @@ public class Team extends Actor {
 
     public static String getRandomStrategy() {
         return strateges[Greenfoot.getRandomNumber(3)];
+    }
+    
+    public void addWorker(Worker w){
+        workers.add(w); 
     }
 }
