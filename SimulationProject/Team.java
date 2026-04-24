@@ -203,7 +203,7 @@ public class Team extends Actor {
         return false;
     }
 
-    private Boolean placingTurret(Buildings building) {
+    private Boolean placeTurret(Buildings building) {
         building.setStatBarEnabled(false);
         if (teamId == 0) {
             int x1 = 300, x2 = 600;
