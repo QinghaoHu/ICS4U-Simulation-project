@@ -42,6 +42,18 @@ public class Team extends Actor {
     private int currentMarinedAmount;
 
     private World world;
+    private int currentBarrackAmount;
+    private int barrackNeeded;
+
+    private int currentTurretAmount;
+    private int turretNeeded;
+
+    private int workerCost = 50;
+    private int marineCost = 75;
+    private int barrackCost = 150;
+    private int turretCost = 175;
+
+    private World w;
 
     private Base base;
 
@@ -64,11 +76,16 @@ public class Team extends Actor {
 
         marineNeeded = 0;
         currentWorkerAmount = 0;
+
+        currentBarrackAmount = 0;
+        currentTurretAmount = 0;
+
+        barrackNeeded = 0;
+        currentBarrackAmount = 0;
+
     }
 
     public void act() {
-        isBarrackExist();
-
         if (workerCoolDown > 0) {
             workerCoolDown--;
         }
@@ -90,11 +107,48 @@ public class Team extends Actor {
                 if (barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople()){
                     currentMarinedAmount++; // adds marines
                     marineCoolDown = maxMarineCoolDown;
+            if (workerCoolDown == 0 && resources >= workerCost) {
+                base.addPeople();
+                resources -= workerCost;
+                currentWorkerAmount++;
+                workerCoolDown = maxWorkerCoolDown;
+            }
+        }
+
+        if (currentBarrackAmount < barrackNeeded) {
+            if (resources >= barrackCost) {
+                Barrack barrack = new Barrack(this);
+                if (placeBuilding(barrack)) {
+                    barracks.add(barrack);
+                    currentBarrackAmount++;
+                    resources -= barrackCost;
                 }
             }
         }
 
-        if (currentMarinedAmount == marineNeeded && currentWorkerAmount == workerNeeded) {
+        if (isBarrackExist()) {
+            if (currentMarinedAmount < marineNeeded) {
+                if (marineCoolDown == 0 && resources >= marineCost) {
+                    currentMarinedAmount++;
+                    barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
+                    marineCoolDown = maxMarineCoolDown;
+                    resources -= marineCost;
+                }
+            }
+        }
+
+        if (currentTurretAmount < turretNeeded) {
+            if (resources >= turretCost) {
+                Turret turret = new Turret(this);
+                if (canPlaceTurret(turret)) {
+                    defensiveTurrets.add(turret);
+                    currentTurretAmount++;
+                    resources -= turretCost;
+                }
+            }
+        }
+
+        if (currentMarinedAmount == marineNeeded && currentWorkerAmount == workerNeeded && currentBarrackAmount == barrackNeeded && currentTurretAmount == turretNeeded) {
             strategy = strateges[Greenfoot.getRandomNumber(3)];
             spawn();
         }
@@ -113,9 +167,43 @@ public class Team extends Actor {
         } else {
             Turret defenseTower = new Turret(this);
             placeBuilding(defenseTower);
+            currentBarrackAmount = 0;
+            barrackNeeded = 1;
+
+            marineNeeded = 1;
+            currentWorkerAmount = 0;
+        } else {
+            currentTurretAmount = 0;
+            turretNeeded = 1;
+
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
+    }
+    
+    private Boolean canPlaceTurret(Turret t) {
+        int counter = 0;
+        Boolean canPlaceTurret = false;
+        int [] location = null;
+        
+        while (true) {
+            counter++;
+            location = findValidBuildingLocation(t);
+            if (location[0] < 600 && location[1] > 300 && teamId == RED) {
+                canPlaceTurret = true;
+                placeBuilding(t, location[0], location[1]);
+                break;
+            } else if (location[0] > 600 && location[1] < 400 && teamId == BLUE) {
+                canPlaceTurret = true;
+                placeBuilding(t, location[0], location[1]);
+                break;
+            }
+            if (counter == 60) {
+                break;
+            }
+        }
+        
+        return canPlaceTurret;
     }
 
     private Boolean isBarrackExist() {
@@ -139,6 +227,9 @@ public class Team extends Actor {
             if (!isBarrackExist()) {
                 Barrack newBarrack = new Barrack(this);
                 workerPlaceBuilding(newBarrack);
+                currentBarrackAmount = 0;
+                barrackNeeded = 1;
+                barrackNeeded = 1;
                 marineNeeded = 1;
                 currentMarinedAmount = 0;
             } else {
@@ -148,7 +239,9 @@ public class Team extends Actor {
                 currentMarinedAmount = 0;
             }
         } else {
-            Turret defenseTower = new Turret(this);
+            currentTurretAmount = 0;
+            turretNeeded = 1;
+
 
             workerPlaceBuilding(defenseTower);
             workerNeeded = 1;
