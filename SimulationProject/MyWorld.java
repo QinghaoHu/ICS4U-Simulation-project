@@ -41,10 +41,11 @@ public class MyWorld extends World {
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
-
+        
         supplySpwanTimer = 0;
 
         setUpWorld();
+        setPaintOrder(EndScreen.class, UI.class);
         prepare();
     }
 
@@ -111,7 +112,7 @@ public class MyWorld extends World {
 
         //testing defensive turret
         //addObject(new DefensiveTurret(blueTeam), 600, 200);
-        //        addObject(new Barrack(redTeam), 200, 200);
+        //addObject(new Barrack(redTeam), 200, 200);
     }
 
     private void setTitleState() {
