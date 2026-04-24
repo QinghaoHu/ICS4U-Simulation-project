@@ -31,7 +31,7 @@ public class Team extends Actor {
     private int maxWorkerCoolDown = 480;
 
     private int marineCoolDown = 0;
-    private int maxMarineCoolDown = 480;
+    private int maxMarineCoolDown = 240;
 
     private int workerNeeded;
     private int currentWorkerAmount;
