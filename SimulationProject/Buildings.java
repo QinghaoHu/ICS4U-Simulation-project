@@ -10,6 +10,8 @@ import java.util.ArrayList;
  */
 public abstract class Buildings extends Entity
 {
+    private boolean hasStatBar;
+    private boolean statBarEnabled = true;
 
     public Buildings(Team team, int maxHealth) {
         super(team);
@@ -31,8 +33,17 @@ public abstract class Buildings extends Entity
     }
 
     protected void addedToWorld(World world) {
-        if (world != null) {
-            world.addObject(new HealthBar(this, - 65), getX(), getY());
+        addStatBar(world);
+    }
+
+    public void setStatBarEnabled(boolean statBarEnabled) {
+        this.statBarEnabled = statBarEnabled;
+    }
+
+    public void addStatBar(World world) {
+        if (world != null && statBarEnabled && !hasStatBar) {
+            world.addObject(new SuperStatBar(maxHealth, health, this, 50, 6, -65), getX(), getY());
+            hasStatBar = true;
         }
     }
 

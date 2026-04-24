@@ -3,6 +3,7 @@ import greenfoot.*;
 public abstract class People extends Entity{
     protected int speed;
     protected int centerDist = 20;
+    private boolean hasStatBar;
     public People(Team team, int maxHealth, int speed) {
         super(team);
         this.maxHealth = maxHealth;
@@ -19,8 +20,9 @@ public abstract class People extends Entity{
     }
 
     protected void addedToWorld(World world) {
-        if (world != null) {
-            world.addObject(new HealthBar(this, -35), getX(), getY());
+        if (world != null && !hasStatBar) {
+            world.addObject(new SuperStatBar(maxHealth, health, this, 50, 6, -35), getX(), getY());
+            hasStatBar = true;
         }
     }
 
