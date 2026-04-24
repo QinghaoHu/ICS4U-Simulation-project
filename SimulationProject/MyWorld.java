@@ -41,16 +41,17 @@ public class MyWorld extends World {
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
-
+        
         supplySpwanTimer = 0;
 
         setUpWorld();
+        setPaintOrder(EndScreen.class, UI.class);
         prepare();
     }
 
     //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
     public void act() {
-        if (Greenfoot.isKeyDown("space")) {
+        if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
             changeState(GAME_STATE);
         }
         spawnSupply();
@@ -111,7 +112,7 @@ public class MyWorld extends World {
 
         //testing defensive turret
         //addObject(new DefensiveTurret(blueTeam), 600, 200);
-        //        addObject(new Barrack(redTeam), 200, 200);
+        //addObject(new Barrack(redTeam), 200, 200);
     }
 
     private void setTitleState() {
