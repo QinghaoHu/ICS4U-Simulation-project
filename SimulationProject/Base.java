@@ -21,7 +21,9 @@ public class Base extends Buildings {
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() {
-        super.act();
+        if(health <= 0 && getWorld() != null){
+            getWorld().addObject(new EndScreen(team.getTeamId()), 600, 400);
+        }
     }
 
     private void setupImage() {
