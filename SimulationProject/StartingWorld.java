@@ -13,6 +13,7 @@ public class StartingWorld extends World{
     private static final int TITLE_Y = 150;
     private static final int TITLE_FONT_SIZE = 52;
 
+    private Button startButton;
     private String fontName;
     private GreenfootSound bgm;
     private GreenfootImage background;
@@ -38,7 +39,18 @@ public class StartingWorld extends World{
     }
 
     private void setupButtons(){
+        startButton = new Button("start", 150);
 
+        addObject(startButton, START_BUTTON_X, BUTTON_Y_POSITION);
+    }
+
+    private void checkClickButton(){
+        if (Greenfoot.mouseClicked(startButton)) {
+            Greenfoot.setWorld(new MyWorld());
+            if (bgm != null) {
+                bgm.stop();
+            }
+        }
     }
 
     /**
