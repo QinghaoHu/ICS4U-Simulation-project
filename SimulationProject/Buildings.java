@@ -1,5 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
+import java.util.ArrayList;
+
 /**
  * Write a description of class Buildings here.
  * 
@@ -70,5 +72,16 @@ public abstract class Buildings extends Entity
 
     public boolean isDead() {
         return health <= 0;
+    }
+
+    public boolean ifTouchingOthers() {
+        ArrayList<Buildings> intersectingBuilding = (ArrayList<Buildings>) getIntersectingObjects(Buildings.class);
+        ArrayList<Resources> intersectingResources = (ArrayList<Resources>) getIntersectingObjects(Resources.class);
+        ArrayList<People> intersectingPeoples = (ArrayList<People>) getIntersectingObjects(People.class);
+
+        if (intersectingBuilding.isEmpty() && intersectingResources.isEmpty() && intersectingPeoples.isEmpty()) {
+            return false;
+        }
+        return true;
     }
 }
