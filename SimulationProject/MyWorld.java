@@ -114,7 +114,7 @@ public class MyWorld extends World {
         
         //testing defensive turret
         //addObject(new DefensiveTurret(blueTeam), 600, 200);
-//        addObject(new Barrack(redTeam), 200, 200);
+        //addObject(new Barrack(redTeam), 200, 200);
     }
 
     private void setTitleState() {
