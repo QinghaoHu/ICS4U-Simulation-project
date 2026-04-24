@@ -8,9 +8,10 @@ import java.io.IOException;
 public class UI extends Actor {
     public static final int PLAY_AREA_BOTTOM_Y = 640;
 
-    private static final int RED_TEXT_X = 40;
-    private static final int BLUE_TEXT_X = 960;
+    private static final int RED_TEXT_X = 20;
+    private static final int BLUE_TEXT_X = 940;
     private static final int TEXT_Y = 680;
+    private static final int FONT_SIZE = 20;
 
     private Team redTeam;
     private Team blueTeam;
@@ -55,7 +56,7 @@ public class UI extends Actor {
     private void updateImage() {
         GreenfootImage image = new GreenfootImage(baseImage);
         image.setColor(Color.WHITE);
-        greenfoot.Font myFont = new greenfoot.Font(fontName, 24);
+        greenfoot.Font myFont = new greenfoot.Font(fontName, FONT_SIZE);
         image.setFont(myFont);
 
         // Resources display
