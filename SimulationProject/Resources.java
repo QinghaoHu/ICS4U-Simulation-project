@@ -19,7 +19,7 @@ public class Resources extends SuperSmoothMover {
         } else {
             img = new GreenfootImage("Resources2.png");
         }
-        img.scale(60, 60);
+        img.scale(80, 80);
     }
 
     public int getTeamSide(){
