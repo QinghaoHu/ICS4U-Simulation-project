@@ -28,10 +28,10 @@ public class Team extends Actor {
     private static String[] strateges = {"ECO", "ATK", "DEF"};
 
     private int workerCoolDown = 0;
-    private int maxWorkerCoolDown = 420;
+    private int maxWorkerCoolDown = 480;
 
     private int marineCoolDown = 0;
-    private int maxMarineCoolDown = 600;
+    private int maxMarineCoolDown = 480;
 
     private int workerNeeded;
     private int currentWorkerAmount;
@@ -213,21 +213,24 @@ public class Team extends Actor {
     }
 
     public void setUpWorld() {
+        
+        
         // When strategy is Equal
         if (strategy.equals("ECO")) {
             currentWorkerAmount = 0;
-            workerNeeded = 5;
+            workerNeeded = 3;
         } else if (strategy.equals("ATK")) {
             currentBarrackAmount = 0;
+            workerNeeded = 1;
             barrackNeeded = 1;
 
             marineNeeded = 1;
             currentWorkerAmount = 0;
         } else {
             currentTurretAmount = 0;
+            workerNeeded = 1;
             turretNeeded = 1;
 
-            workerNeeded = 1;
             currentWorkerAmount = 0;
         }
     }
@@ -248,7 +251,7 @@ public class Team extends Actor {
     private void spawn() {
         if (strategy.equals("ECO")) {
             currentWorkerAmount = 0;
-            workerNeeded = 5;
+            workerNeeded = 4;
         } else if (strategy.equals("ATK")) {
             if (!isBarrackExist()) {
                 currentBarrackAmount = 0;
@@ -258,14 +261,14 @@ public class Team extends Actor {
             } else {
                 workerNeeded = 1;
                 currentWorkerAmount = 0;
-                marineNeeded = 4;
+                marineNeeded = 3;
                 currentMarinedAmount = 0;
             }
         } else {
             currentTurretAmount = 0;
             turretNeeded = 1;
 
-            workerNeeded = 1;
+            workerNeeded = 2;
             currentWorkerAmount = 0;
         }
     }
