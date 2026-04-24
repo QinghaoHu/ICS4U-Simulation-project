@@ -41,10 +41,11 @@ public class MyWorld extends World {
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
-
+        
         supplySpwanTimer = 0;
 
         setUpWorld();
+        setPaintOrder(EndScreen.class, UI.class);
         prepare();
     }
 
