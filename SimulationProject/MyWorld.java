@@ -1,5 +1,8 @@
 import greenfoot.*;
 
+import java.awt.*;
+import java.io.File;
+import java.io.IOException;
 import java.util.*;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,16 +44,17 @@ public class MyWorld extends World {
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
-
+        
         supplySpwanTimer = 0;
 
         setUpWorld();
+        setPaintOrder(EndScreen.class, UI.class);
         prepare();
     }
 
     //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
     public void act() {
-        if (Greenfoot.isKeyDown("space")) {
+        if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
             changeState(GAME_STATE);
         }
         spawnSupply();
@@ -111,7 +115,7 @@ public class MyWorld extends World {
 
         //testing defensive turret
         //addObject(new DefensiveTurret(blueTeam), 600, 200);
-        //        addObject(new Barrack(redTeam), 200, 200);
+        //addObject(new Barrack(redTeam), 200, 200);
     }
 
     private void setTitleState() {
@@ -192,5 +196,19 @@ public class MyWorld extends World {
      */
     private void prepare()
     {
+    }
+
+    public static String loadCustomFont(String file) {
+        try {
+            File fontFile = new File(file);
+            java.awt.Font customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(customFont);
+            return customFont.getFontName();
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+            return "Arial";
+        }
     }
 }

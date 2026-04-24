@@ -11,7 +11,7 @@ public class Base extends Buildings {
     private final int cost = 100; 
 
     public Base(Team team) {
-        super(team, 1500);
+        super(team, 1250);
         setupImage();
         setImage(img);
     }
@@ -21,7 +21,9 @@ public class Base extends Buildings {
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() {
-        super.act();
+        if(health <= 0 && getWorld() != null){
+            getWorld().addObject(new EndScreen(team.getTeamId()), 600, 400);
+        }
     }
 
     private void setupImage() {
@@ -50,6 +52,7 @@ public class Base extends Buildings {
             return false;
         }
         team.addWorker(worker);
+        
         getWorld().addObject(worker, getX(), getY());
         return true;
     }
