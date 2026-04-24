@@ -11,7 +11,7 @@ public class Base extends Buildings {
     private final int cost = 100; 
 
     public Base(Team team) {
-        super(team, 1500);
+        super(team, 1250);
         setupImage();
         setImage(img);
     }
@@ -50,6 +50,7 @@ public class Base extends Buildings {
             return false;
         }
         team.addWorker(worker);
+        
         getWorld().addObject(worker, getX(), getY());
         return true;
     }
