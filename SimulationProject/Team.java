@@ -28,10 +28,10 @@ public class Team extends Actor {
     private static String[] strateges = {"ECO", "ATK", "DEF"};
 
     private int workerCoolDown = 0;
-    private int maxWorkerCoolDown = 420;
+    private int maxWorkerCoolDown = 480;
 
     private int marineCoolDown = 0;
-    private int maxMarineCoolDown = 600;
+    private int maxMarineCoolDown = 240;
 
     private int workerNeeded;
     private int currentWorkerAmount;
@@ -42,14 +42,15 @@ public class Team extends Actor {
     private World world;
     private int currentBarrackAmount;
     private int barrackNeeded;
+    private int totalBarracksAmt;
 
     private int currentTurretAmount;
     private int turretNeeded;
 
-    private int workerCost = 50;
-    private int marineCost = 75;
-    private int barrackCost = 150;
-    private int turretCost = 175;
+    private int workerCost = 75;
+    private int marineCost = 50;
+    private int barrackCost = 125;
+    private int turretCost = 150;
 
     private World w;
 
@@ -148,6 +149,7 @@ public class Team extends Actor {
                 }
             }
         }
+        
     }
     
     public Worker leastBusyWorker(){
@@ -229,21 +231,25 @@ public class Team extends Actor {
     }
 
     public void setUpWorld() {
+        System.out.println(strategy);
+        
         // When strategy is Equal
         if (strategy.equals("ECO")) {
             currentWorkerAmount = 0;
-            workerNeeded = 5;
+            workerNeeded = 4;
         } else if (strategy.equals("ATK")) {
             currentBarrackAmount = 0;
+            workerNeeded = 1;
             barrackNeeded = 1;
 
             marineNeeded = 1;
             currentWorkerAmount = 0;
+            totalBarracksAmt ++;
         } else {
             currentTurretAmount = 0;
+            workerNeeded = 1;
             turretNeeded = 1;
 
-            workerNeeded = 1;
             currentWorkerAmount = 0;
         }
     }
@@ -262,26 +268,24 @@ public class Team extends Actor {
     }
 
     private void spawn() {
+        System.out.println(strategy);
+        System.out.println(totalBarracksAmt);
         if (strategy.equals("ECO")) {
             currentWorkerAmount = 0;
-            workerNeeded = 5;
+            workerNeeded = 4;
         } else if (strategy.equals("ATK")) {
-            if (!isBarrackExist()) {
+            
                 currentBarrackAmount = 0;
                 barrackNeeded = 1;
-                marineNeeded = 1;
+                marineNeeded = (3 * totalBarracksAmt);
                 currentMarinedAmount = 0;
-            } else {
-                workerNeeded = 1;
-                currentWorkerAmount = 0;
-                marineNeeded = 4;
-                currentMarinedAmount = 0;
-            }
+                
+                totalBarracksAmt ++;
         } else {
             currentTurretAmount = 0;
             turretNeeded = 1;
 
-            workerNeeded = 1;
+            workerNeeded = 2;
             currentWorkerAmount = 0;
         }
     }

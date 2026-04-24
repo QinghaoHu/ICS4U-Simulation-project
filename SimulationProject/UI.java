@@ -1,17 +1,88 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.util.List;
+import java.awt.FontFormatException;
+import java.awt.GraphicsEnvironment;
+import java.io.File;
+import java.io.IOException;
 
-public class UI extends Actor{
+public class UI extends Actor {
     public static final int PLAY_AREA_BOTTOM_Y = 640;
 
-    private GreenfootImage img;
-    //This is the constructor
+    private static final int RED_TEXT_X = 40;
+    private static final int BLUE_TEXT_X = 960;
+    private static final int TEXT_Y = 680;
+
+    private Team redTeam;
+    private Team blueTeam;
+    private GreenfootImage baseImage;
+    private String fontName;
+
     public UI() {
-        img = new GreenfootImage("Ui.png");
-        setImage(img);
-        
+        baseImage = new GreenfootImage("Ui.png");
+        setImage(baseImage);
+        fontName = loadCustomFont();
+    }
+
+    protected void addedToWorld(World world) {
+        syncTeams(world);
+
+        updateImage();
     }
 
     public void act() {
+        if (getWorld() == null) {
+            return;
+        }
 
+        if (redTeam == null || blueTeam == null) {
+            syncTeams(getWorld());
+        }
+
+        updateImage();
+    }
+
+    private void syncTeams(World world) {
+        List<Team> teams = world.getObjects(Team.class);
+        for (Team team : teams) {
+            if (team.getTeamId() == Team.RED) {
+                redTeam = team;
+            } else if (team.getTeamId() == Team.BLUE) {
+                blueTeam = team;
+            }
+        }
+    }
+
+    private void updateImage() {
+        GreenfootImage image = new GreenfootImage(baseImage);
+        image.setColor(Color.WHITE);
+        greenfoot.Font myFont = new greenfoot.Font(fontName, 24);
+        image.setFont(myFont);
+
+        // Resources display
+        image.drawString("Resources: " + String.valueOf(getResourcesFor(redTeam)), RED_TEXT_X, TEXT_Y);
+        image.drawString("Resources: " + String.valueOf(getResourcesFor(blueTeam)), BLUE_TEXT_X, TEXT_Y);
+
+        // Possible UI additions:
+        // image.drawString(String.valueOf(redPopulation), ...);
+
+        setImage(image);
+    }
+
+    private int getResourcesFor(Team team) {
+        return team == null ? 0 : team.getResources();
+    }
+
+    public String loadCustomFont() {
+        try {
+            File fontFile = new File("fonts/StarJediRounded-jW3R.ttf");
+            java.awt.Font customFont = java.awt.Font.createFont(java.awt.Font.TRUETYPE_FONT, fontFile);
+
+            GraphicsEnvironment ge = GraphicsEnvironment.getLocalGraphicsEnvironment();
+            ge.registerFont(customFont);
+            return customFont.getFontName();
+        } catch (IOException | FontFormatException e) {
+            e.printStackTrace();
+            return "Arial";
+        }
     }
 }

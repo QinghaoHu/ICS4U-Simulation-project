@@ -136,8 +136,8 @@ public class Worker extends People {
             miningImg = new GreenfootImage("BlueWorkerMining.png");
         }
 
-        if (emptyImg != null) emptyImg.scale(50, 50);
-        if (miningImg != null) miningImg.scale(50, 50);
+        if (emptyImg != null) emptyImg.scale(35, 35);
+        if (miningImg != null) miningImg.scale(35, 35);
     }
 
     private int[] resourceLocation() {

@@ -41,10 +41,12 @@ public class MyWorld extends World {
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
-
+        
         supplySpwanTimer = 0;
 
         setUpWorld();
+        setPaintOrder(EndScreen.class, UI.class);
+        prepare();
     }
 
     //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
@@ -79,12 +81,12 @@ public class MyWorld extends World {
         Base blueBase = new Base(blueTeam);
         addObject(blueBase, 990, 165);
         blueTeam.setBase(blueBase);
-        
+
         addObject(redTeam, 0, 0);
         addObject(blueTeam, 0, 0);
         //adds ui to the world
         addObject(new UI(), 600, 400);
-        
+
         // resources near red base (left side)
         //top left resource
         addObject(new Resources(Team.RED), 50, 400);
@@ -100,18 +102,14 @@ public class MyWorld extends World {
         addObject(new Resources(Team.BLUE), 1160, 145);
         //bottom right resource
         addObject(new Resources(Team.BLUE), 1140, 220);
-        //adds Resource counters to the world
-        addObject(new ResourceCounter(redTeam), 110, 670);
-        addObject(new ResourceCounter(blueTeam), 1020, 670);
-
 
         redTeam.setUpWorld();
         blueTeam.setUpWorld();
-        
+
         //testing soldiers
         //addObject(new Marine(blueTeam), 600, 200);
         //addObject(new Officer(redTeam), 500, 300);
-        
+
         //testing defensive turret
         //addObject(new DefensiveTurret(blueTeam), 600, 200);
         //addObject(new Barrack(redTeam), 200, 200);
@@ -119,10 +117,10 @@ public class MyWorld extends World {
 
     private void setTitleState() {
         /**GreenfootImage titleText = new GreenfootImage("Merge Conflict Demo", 54, Color.WHITE, new Color(0, 0, 0, 0));
-         background.drawImage(titleText, 325, 315);
+        background.drawImage(titleText, 325, 315);
 
-         GreenfootImage subtitleText = new GreenfootImage("Edit this world on two branches, then merge.", 28, Color.LIGHT_GRAY, new Color(0, 0, 0, 0));
-         background.drawImage(subtitleText, 345, 385);
+        GreenfootImage subtitleText = new GreenfootImage("Edit this world on two branches, then merge.", 28, Color.LIGHT_GRAY, new Color(0, 0, 0, 0));
+        background.drawImage(subtitleText, 345, 385);
          **/
     }
 
@@ -188,5 +186,12 @@ public class MyWorld extends World {
         double dx = a.getX() - targetX;
         double dy = a.getY() - targetY;
         return Math.sqrt(dx * dx + dy * dy);
+    }
+    /**
+     * Prepare the world for the start of the program.
+     * That is: create the initial objects and add them to the world.
+     */
+    private void prepare()
+    {
     }
 }
