@@ -70,12 +70,13 @@ public class Team extends Actor {
 
         this.strategy = strategy;
         this.world = w;
+        this.w = w;
 
         workerNeeded = 0;
         currentWorkerAmount = 0;
 
         marineNeeded = 0;
-        currentWorkerAmount = 0;
+        currentMarinedAmount = 0;
 
         currentBarrackAmount = 0;
         currentTurretAmount = 0;
@@ -94,22 +95,7 @@ public class Team extends Actor {
         }
 
         if (currentWorkerAmount < workerNeeded) {
-            if (workerCoolDown == 0) {
-                if (base.addPeople()){
-                    currentWorkerAmount++;
-                    workerCoolDown = maxWorkerCoolDown;
-                }// adds workers
-            }
-        }
-
-        if (!barracks.isEmpty() && currentMarinedAmount < marineNeeded) {
-            if (marineCoolDown == 0) {
-                if (barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople()){
-                    currentMarinedAmount++; // adds marines
-                    marineCoolDown = maxMarineCoolDown;
-            if (workerCoolDown == 0 && resources >= workerCost) {
-                base.addPeople();
-                resources -= workerCost;
+            if (workerCoolDown == 0 && resources >= workerCost && base != null && base.addPeople()) {
                 currentWorkerAmount++;
                 workerCoolDown = maxWorkerCoolDown;
             }
@@ -129,10 +115,11 @@ public class Team extends Actor {
         if (isBarrackExist()) {
             if (currentMarinedAmount < marineNeeded) {
                 if (marineCoolDown == 0 && resources >= marineCost) {
-                    currentMarinedAmount++;
-                    barracks.get(Greenfoot.getRandomNumber(barracks.size())).addPeople();
-                    marineCoolDown = maxMarineCoolDown;
-                    resources -= marineCost;
+                    Barrack barrack = barracks.get(Greenfoot.getRandomNumber(barracks.size()));
+                    if (barrack.addPeople()) {
+                        currentMarinedAmount++;
+                        marineCoolDown = maxMarineCoolDown;
+                    }
                 }
             }
         }
@@ -231,13 +218,6 @@ public class Team extends Actor {
             currentWorkerAmount = 0;
             workerNeeded = 5;
         } else if (strategy.equals("ATK")) {
-            Barrack addBarrack = new Barrack(this);
-            placeBuilding(addBarrack);
-            marineNeeded = 1;
-            currentWorkerAmount = 0;
-        } else {
-            Turret defenseTower = new Turret(this);
-            placeBuilding(defenseTower);
             currentBarrackAmount = 0;
             barrackNeeded = 1;
 
@@ -271,8 +251,6 @@ public class Team extends Actor {
             workerNeeded = 5;
         } else if (strategy.equals("ATK")) {
             if (!isBarrackExist()) {
-                Barrack newBarrack = new Barrack(this);
-                workerPlaceBuilding(newBarrack);
                 currentBarrackAmount = 0;
                 barrackNeeded = 1;
                 marineNeeded = 1;
@@ -287,8 +265,6 @@ public class Team extends Actor {
             currentTurretAmount = 0;
             turretNeeded = 1;
 
-
-            workerPlaceBuilding(defenseTower);
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
