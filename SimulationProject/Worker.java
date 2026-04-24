@@ -47,7 +47,8 @@ public class Worker extends People {
         return cost; 
     }
 
-    public void addedToWorld(World w) {
+    @Override
+    protected void addedToWorld(World w) {
         targetPositions.add(resourceLocation());
     }
 

@@ -175,7 +175,6 @@ public class Team extends Actor {
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers()) {
                     building.setStatBarEnabled(true);
-                    building.addStatBar(w);
                     leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return true;
@@ -191,7 +190,6 @@ public class Team extends Actor {
                 w.addObject(building, xPosition, yPosition);
                 if(!building.ifTouchingOthers() && leastBusyWorker() != null){
                     building.setStatBarEnabled(true);
-                    building.addStatBar(w);
                     leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return true;
@@ -214,7 +212,6 @@ public class Team extends Actor {
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers() && leastBusyWorker() != null) {
                     building.setStatBarEnabled(true);
-                    building.addStatBar(w);
                     leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return true;
@@ -230,7 +227,6 @@ public class Team extends Actor {
                 w.addObject(building, xPosition, yPosition);
                 if(!building.ifTouchingOthers()){
                     building.setStatBarEnabled(true);
-                    building.addStatBar(w);
                     leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return true;
