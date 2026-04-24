@@ -12,24 +12,24 @@ public class EndScreen extends Actor
      * Act - do whatever the EndScreen wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    int winner;
+    int loser;
     
-    GreenfootImage redWin = new GreenfootImage("RedBase.png");
-    GreenfootImage blueWin = new GreenfootImage("BlueBase.png");
-    public EndScreen(int w){
-        winner = w;
+    GreenfootImage winner;
+    public EndScreen(int l){
+        loser = l;
+        if(loser == 1){
+            System.out.println("red wins");
+            winner = new GreenfootImage("RedBase");
+        }
+        else if(loser == 0){
+            System.out.println("blue wins");
+            winner = new GreenfootImage("BlueBase");
+        }
     }
 
     public void act()
     {
-        if(winner == 1){
-            setImage(redWin);
-            System.out.println("red wins");
-        }
-        else if(winner == 0){
-            setImage(blueWin);
-            System.out.println("blue wins");
-        }
+        setImage(winner);
         Greenfoot.stop();
     }
 }
