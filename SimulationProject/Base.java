@@ -8,6 +8,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
  */
 public class Base extends Buildings {
     private GreenfootImage img;
+    private final int cost = 100; 
 
     public Base(Team team) {
         super(team, 1000);
@@ -35,12 +36,21 @@ public class Base extends Buildings {
             setImage(img);
         }
     }
+    
+    public int getCost(){
+        return 100; 
+    }
 
-    public void addPeople() {
+    public boolean addPeople() {
         if (getWorld() == null) {
-            return;
+            return false;
         }
         Worker worker = new Worker(team, this);
+        if (!team.spendMoney(worker.getCost())){
+            return false;
+        }
+        team.addWorker(worker);
         getWorld().addObject(worker, getX(), getY());
+        return true;
     }
 }

@@ -54,6 +54,8 @@ public abstract class Buildings extends Entity
         return newPerson;
     }
 
+    public abstract int getCost();
+    
     public int getHealth() {
         return health;
     }

@@ -14,7 +14,7 @@ public class Turret extends Buildings
     private int centerDist = 70;
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private static final int attackRange = 225;
-
+    private static final int cost = 175;
 
     public Turret(Team team) {
         super(team, 700);
@@ -22,8 +22,12 @@ public class Turret extends Buildings
             team.addBuilding(this);
         }
         setupImage();
-        this.cost = 175;
     }
+    
+    public int getCost(){
+        return 175; 
+    }
+    
     public void act()
     {
         shootCounter++;
