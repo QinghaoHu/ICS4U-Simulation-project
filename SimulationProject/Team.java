@@ -202,6 +202,8 @@ public class Team extends Actor {
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers()) {
+                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
+                    w.removeObject(building);
                     return true;
                 }
                 w.removeObject(building);
