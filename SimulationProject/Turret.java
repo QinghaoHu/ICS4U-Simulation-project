@@ -14,7 +14,7 @@ public class Turret extends Buildings
     private int centerDist = 70;
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private static final int attackRange = 225;
-
+    private static final int cost = 175;
 
     public Turret(Team team) {
         super(team, 500);
@@ -22,8 +22,12 @@ public class Turret extends Buildings
             team.addBuilding(this);
         }
         setupImage();
-        this.cost = 200;
     }
+    
+    public int getCost(){
+        return 175; 
+    }
+    
     public void act()
     {
         shootCounter++;
@@ -34,6 +38,7 @@ public class Turret extends Buildings
                 double angle = shootAngle(target);
                 int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
                 int Y = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
+ repel-marines
                 // getWorld().addObject(new TurretBullet(this, angle, 2.5, 3), X, Y); // adds bullet
                 getWorld().addObject(new SoldierBullet(this, shootAngle(target), 2.5, 7, 15), getX(), getY()); // adds bullet
             }
