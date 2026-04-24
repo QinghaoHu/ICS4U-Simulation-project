@@ -50,7 +50,7 @@ public class MyWorld extends World {
 
     //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
     public void act() {
-        if (Greenfoot.isKeyDown("space")) {
+        if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
             changeState(GAME_STATE);
         }
         spawnSupply();

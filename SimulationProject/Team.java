@@ -151,6 +151,7 @@ public class Team extends Actor {
     }
 
     private Boolean placeBarrack(Buildings building) {
+        building.setStatBarEnabled(false);
         if (teamId == 0) {
             int x1 = 0, x2 = 400;
             int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
@@ -159,6 +160,8 @@ public class Team extends Actor {
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers()) {
+                    building.setStatBarEnabled(true);
+                    building.addStatBar(w);
                     return true;
                 }
                 w.removeObject(building);
@@ -171,15 +174,19 @@ public class Team extends Actor {
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers()) {
+                    building.setStatBarEnabled(true);
+                    building.addStatBar(w);
                     return true;
                 }
                 w.removeObject(building);
             }
         }
+        building.setStatBarEnabled(true);
         return false;
     }
 
     private Boolean placingTurret(Buildings building) {
+        building.setStatBarEnabled(false);
         if (teamId == 0) {
             int x1 = 300, x2 = 600;
             int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
@@ -188,6 +195,8 @@ public class Team extends Actor {
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers()) {
+                    building.setStatBarEnabled(true);
+                    building.addStatBar(w);
                     return true;
                 }
                 w.removeObject(building);
@@ -200,11 +209,14 @@ public class Team extends Actor {
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers()) {
+                    building.setStatBarEnabled(true);
+                    building.addStatBar(w);
                     return true;
                 }
                 w.removeObject(building);
             }
         }
+        building.setStatBarEnabled(true);
         return false;
     }
 
