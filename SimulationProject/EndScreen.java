@@ -19,11 +19,11 @@ public class EndScreen extends Actor
         loser = l;
         if(loser == 1){
             System.out.println("red wins");
-            winner = new GreenfootImage("RedBase");
+            winner = new GreenfootImage("RedBase.png");
         }
         else if(loser == 0){
             System.out.println("blue wins");
-            winner = new GreenfootImage("BlueBase");
+            winner = new GreenfootImage("BlueBase.png");
         }
     }
 
