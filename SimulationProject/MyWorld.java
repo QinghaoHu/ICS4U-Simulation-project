@@ -100,9 +100,6 @@ public class MyWorld extends World {
         addObject(new Resources(Team.BLUE), 1160, 145);
         //bottom right resource
         addObject(new Resources(Team.BLUE), 1140, 220);
-        //adds Resource counters to the world
-        addObject(new ResourceCounter(redTeam), 110, 670);
-        addObject(new ResourceCounter(blueTeam), 1020, 670);
 
 
         redTeam.setUpWorld();
