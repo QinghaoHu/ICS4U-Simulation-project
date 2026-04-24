@@ -144,7 +144,8 @@ public class Supply extends SuperSmoothMover {
     }
 
     private void setupImage(){
-        img = new GreenfootImage(getClass().getName() +  ".png");
+        img = new GreenfootImage("upgrades.png");
+        img.scale(40,40);
         setImage(img);
     }
 

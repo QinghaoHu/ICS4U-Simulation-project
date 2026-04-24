@@ -10,7 +10,7 @@ public class Base extends Buildings {
     private GreenfootImage img;
 
     public Base(Team team) {
-        super(team, 1000);
+        super(team, 1500);
         setupImage();
         setImage(img);
     }
@@ -29,7 +29,7 @@ public class Base extends Buildings {
         }
 
         img = new GreenfootImage(team.getName() + getClass().getName() +  ".png");
-        img.scale(110, 110);
+        img.scale(115, 115);
 
         if (img != null) {
             setImage(img);

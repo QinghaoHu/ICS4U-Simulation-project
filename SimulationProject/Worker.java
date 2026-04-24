@@ -34,8 +34,8 @@ public class Worker extends People {
         this.cost = 50;
 
         carryAmount = 0;
-        maxCarry = 15;
-        minRate = 5;
+        maxCarry = 30;
+        minRate = 15;
 
         setupImage();
     }
@@ -148,8 +148,8 @@ public class Worker extends People {
             miningImg = new GreenfootImage("BlueWorkerMining.png");
         }
 
-        if (emptyImg != null) emptyImg.scale(50, 50);
-        if (miningImg != null) miningImg.scale(50, 50);
+        if (emptyImg != null) emptyImg.scale(35, 35);
+        if (miningImg != null) miningImg.scale(35, 35);
     }
 
     private int[] resourceLocation() {
