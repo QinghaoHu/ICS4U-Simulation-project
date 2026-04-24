@@ -1,7 +1,6 @@
 import greenfoot.Greenfoot;
 import greenfoot.*;
 
-import javax.sound.sampled.SourceDataLine;
 import java.util.ArrayList;
 import java.util.List;
 /**
@@ -13,9 +12,8 @@ import java.util.List;
 public class Team extends Actor {
     public static final int RED = 0;
     public static final int BLUE = 1;
-    private static final int BUILDING_PLACEMENT_ATTEMPTS = 200;
-    private static final int BUILDING_PLACEMENT_STEP = 25;
-    private static final int BUILDING_PLACEMENT_PADDING = 10;
+
+    private static int buildingMaximumAtempt = 200;
 
     private final int teamId;
     private final String name;
@@ -54,6 +52,8 @@ public class Team extends Actor {
     private World w;
 
     private Base base;
+
+    private String previousStrategy = "noStrategy";
 
     public Team(int teamId, String name, int startingMoney, String strategy, World w) {
         this.teamId = teamId;
@@ -102,7 +102,7 @@ public class Team extends Actor {
         if (currentBarrackAmount < barrackNeeded) {
             if (resources >= barrackCost) {
                 Barrack barrack = new Barrack(this);
-                if (placeBuilding(barrack)) {
+                if (placeBarrack(barrack)) {
                     barracks.add(barrack);
                     currentBarrackAmount++;
                     resources -= barrackCost;
@@ -124,7 +124,7 @@ public class Team extends Actor {
         if (currentTurretAmount < turretNeeded) {
             if (resources >= turretCost) {
                 Turret turret = new Turret(this);
-                if (canPlaceTurret(turret)) {
+                if (placingTurret(turret)) {
                     defensiveTurrets.add(turret);
                     currentTurretAmount++;
                     resources -= turretCost;
@@ -133,9 +133,80 @@ public class Team extends Actor {
         }
 
         if (currentMarinedAmount == marineNeeded && currentWorkerAmount == workerNeeded && currentBarrackAmount == barrackNeeded && currentTurretAmount == turretNeeded) {
-            strategy = strateges[Greenfoot.getRandomNumber(3)];
-            spawn();
+            if (workerCoolDown == 0 && marineCoolDown == 0) {
+                for (int i = 0; i < 200; i++) {
+                    String nextstrategy = strateges[Greenfoot.getRandomNumber(strateges.length)];
+                    if (!nextstrategy.equals(previousStrategy) || !nextstrategy.equals(strategy)) {
+                        previousStrategy = strategy;
+                        strategy = nextstrategy;
+                        spawn();
+                        break;
+                    }
+                }
+            }
         }
+    }
+
+    private Boolean placeBarrack(Buildings building) {
+        if (teamId == 0) {
+            int x1 = 0, x2 = 400;
+            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if (!building.ifTouchingOthers()) {
+                    return true;
+                }
+                w.removeObject(building);
+            }
+        } else if (teamId == 1) {
+            int x1 = 800, x2 = 1200;
+            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if (!building.ifTouchingOthers()) {
+                    return true;
+                }
+                w.removeObject(building);
+            }
+        }
+        return false;
+    }
+
+    private Boolean placingTurret(Buildings building) {
+        if (teamId == 0) {
+            int x1 = 300, x2 = 600;
+            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if (!building.ifTouchingOthers()) {
+                    return true;
+                }
+                w.removeObject(building);
+            }
+        } else if (teamId == 1) {
+            int x1 = 600, x2 = 900;
+            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if (!building.ifTouchingOthers()) {
+                    return true;
+                }
+                w.removeObject(building);
+            }
+        }
+        return false;
+    }
+
+    public void placeBuilding(Buildings building, int xPosition, int yPosition) {
+        w.addObject(building, xPosition, yPosition);
     }
 
     public void setUpWorld() {
@@ -156,31 +227,6 @@ public class Team extends Actor {
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
-    }
-    
-    private Boolean canPlaceTurret(Turret t) {
-        int counter = 0;
-        Boolean canPlaceTurret = false;
-        int [] location = null;
-        
-        while (true) {
-            counter++;
-            location = findValidBuildingLocation(t);
-            if (location[0] < 600 && location[1] > 300 && teamId == RED) {
-                canPlaceTurret = true;
-                placeBuilding(t, location[0], location[1]);
-                break;
-            } else if (location[0] > 600 && location[1] < 400 && teamId == BLUE) {
-                canPlaceTurret = true;
-                placeBuilding(t, location[0], location[1]);
-                break;
-            }
-            if (counter == 60) {
-                break;
-            }
-        }
-        
-        return canPlaceTurret;
     }
 
     private Boolean isBarrackExist() {
@@ -204,7 +250,6 @@ public class Team extends Actor {
             if (!isBarrackExist()) {
                 currentBarrackAmount = 0;
                 barrackNeeded = 1;
-                barrackNeeded = 1;
                 marineNeeded = 1;
                 currentMarinedAmount = 0;
             } else {
@@ -220,129 +265,6 @@ public class Team extends Actor {
             workerNeeded = 1;
             currentWorkerAmount = 0;
         }
-    }
-
-    private boolean placeBuilding(Buildings building) {
-        int[] location = findValidBuildingLocation(building);
-
-        if (location == null) {
-            buildings.remove(building);
-            return false;
-        }
-
-        return placeBuilding(building, location[0], location[1]);
-    }
-
-    public boolean placeBuilding(Buildings building, int x, int y) {
-        if (w == null || building == null || building.getImage() == null) {
-            buildings.remove(building);
-            return false;
-        }
-
-        if (!canPlaceBuildingAt(building, x, y)) {
-            buildings.remove(building);
-            return false;
-        }
-
-        w.addObject(building, x, y);
-        return true;
-    }
-
-    private int[] findValidBuildingLocation(Buildings building) {
-        if (w == null || building == null || building.getImage() == null) {
-            return null;
-        }
-
-        int width = building.getImage().getWidth();
-        int height = building.getImage().getHeight();
-        int halfWidth = width / 2;
-        int halfHeight = height / 2;
-        int redAreaRightX = w.getWidth() / 3;
-        int blueAreaLeftX = w.getWidth() * 2 / 3;
-
-        int minX = halfWidth;
-        int maxX = w.getWidth() - halfWidth;
-        if (teamId == RED) {
-            maxX = Math.min(maxX, redAreaRightX - halfWidth);
-        } else if (teamId == BLUE) {
-            minX = Math.max(minX, blueAreaLeftX + halfWidth);
-        }
-
-        int minY = halfHeight;
-        int maxY = Math.min(w.getHeight() - halfHeight, UI.PLAY_AREA_BOTTOM_Y - halfHeight);
-        if (minX > maxX || minY > maxY) {
-            return null;
-        }
-
-        for (int i = 0; i < BUILDING_PLACEMENT_ATTEMPTS; i++) {
-            int x = randomBetween(minX, maxX);
-            int y = randomBetween(minY, maxY);
-
-            if (canPlaceBuildingAt(building, x, y)) {
-                return new int[]{x, y};
-            }
-        }
-
-        for (int x = minX; x <= maxX; x += BUILDING_PLACEMENT_STEP) {
-            for (int y = minY; y <= maxY; y += BUILDING_PLACEMENT_STEP) {
-                if (canPlaceBuildingAt(building, x, y)) {
-                    return new int[]{x, y};
-                }
-            }
-        }
-
-        return null;
-    }
-
-    private int randomBetween(int min, int max) {
-        return min + Greenfoot.getRandomNumber(max - min + 1);
-    }
-
-    private boolean canPlaceBuildingAt(Buildings building, int x, int y) {
-        if (!isInAllowedBuildingArea(building, x, y)) {
-            return false;
-        }
-
-        for (Buildings other : w.getObjects(Buildings.class)) {
-            if (other != null && other.getImage() != null && overlapsBuilding(building, x, y, other)) {
-                return false;
-            }
-        }
-
-        return true;
-    }
-
-    private boolean isInAllowedBuildingArea(Buildings building, int x, int y) {
-        int halfWidth = building.getImage().getWidth() / 2;
-        int halfHeight = building.getImage().getHeight() / 2;
-        int left = x - halfWidth;
-        int right = x + halfWidth;
-        int top = y - halfHeight;
-        int bottom = y + halfHeight;
-        int redAreaRightX = w.getWidth() / 3;
-        int blueAreaLeftX = w.getWidth() * 2 / 3;
-
-        if (left < 0 || right > w.getWidth() || top < 0 || bottom > UI.PLAY_AREA_BOTTOM_Y) {
-            return false;
-        }
-
-        if (teamId == RED && right > redAreaRightX) {
-            return false;
-        }
-
-        if (teamId == BLUE && left < blueAreaLeftX) {
-            return false;
-        }
-
-        return true;
-    }
-
-    private boolean overlapsBuilding(Buildings building, int x, int y, Buildings other) {
-        int minHorizontalDistance = (building.getImage().getWidth() + other.getImage().getWidth()) / 2 + BUILDING_PLACEMENT_PADDING;
-        int minVerticalDistance = (building.getImage().getHeight() + other.getImage().getHeight()) / 2 + BUILDING_PLACEMENT_PADDING;
-
-        return Math.abs(x - other.getX()) < minHorizontalDistance
-                && Math.abs(y - other.getY()) < minVerticalDistance;
     }
 
     public void addMoney(int money) {

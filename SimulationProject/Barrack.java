@@ -3,7 +3,6 @@ import greenfoot.*;
 public class Barrack extends Buildings{
     
     private GreenfootImage img;
-    private int counter;
     
     public Barrack (Team team){
         super(team, 500);
@@ -13,12 +12,7 @@ public class Barrack extends Buildings{
     }
 
     public void act(){
-        counter++;
         super.act();
-        
-        if (counter % 300 == 0) {
-        getWorld().addObject(new Marine(team), getX() + getImage().getWidth()/2, getY());
-        }
     }
 
     public People addPeople(){
