@@ -6,11 +6,11 @@ public class StartingWorld extends World{
     private static final int CELL_SIZE = 1;
 
     private static final int BUTTON_Y_POSITION = 700;
-    private static final int START_BUTTON_X = 425;
+    private static final int START_BUTTON_X = 600;
     private static final int HELP_BUTTON_X = 590;
     private static final int TELE_BUTTON_X = 512;
-    private static final int TITLE_X = 255;
-    private static final int TITLE_Y = 150;
+    private static final int TITLE_X = 350;
+    private static final int TITLE_Y = 250;
     private static final int TITLE_FONT_SIZE = 52;
 
     private Button startButton;
@@ -24,7 +24,10 @@ public class StartingWorld extends World{
         fontName = MyWorld.loadCustomFont("fonts/StarJediRounded-jW3R.ttf");
         setupBackground();
         setupButtons();
-        bgm = new GreenfootSound("welcomeWorld.mp3");
+    }
+
+    public void act(){
+        checkClickButton();
     }
 
     private void setupBackground(){
