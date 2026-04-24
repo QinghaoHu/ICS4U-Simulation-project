@@ -173,6 +173,8 @@ public class Team extends Actor {
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
                 if (!building.ifTouchingOthers()) {
+                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
+                    w.removeObject(building);
                     return true;
                 }
                 w.removeObject(building);
@@ -184,7 +186,7 @@ public class Team extends Actor {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
-                if(!building.ifTouchingOthers()){
+                if(!building.ifTouchingOthers() && leastBusyWorker() != null){
                     leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return true;
@@ -203,7 +205,7 @@ public class Team extends Actor {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
                 w.addObject(building, xPosition, yPosition);
-                if (!building.ifTouchingOthers()) {
+                if (!building.ifTouchingOthers() && leastBusyWorker() != null) {
                     leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return true;
