@@ -181,7 +181,7 @@ public class Team extends Actor {
         building.setStatBarEnabled(false);
         if (teamId == 0) {
             int x1 = 0, x2 = 400;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            int y1 = 0, y2 = 400;
             for (int i = 0; i < buildingMaximumAtempt; i++) {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
@@ -196,7 +196,7 @@ public class Team extends Actor {
             }
         } else if (teamId == 1) {
             int x1 = 800, x2 = 1200;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            int y1 = 400, y2 = UI.PLAY_AREA_BOTTOM_Y;
             for (int i = 0; i < buildingMaximumAtempt; i++) {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
@@ -218,7 +218,7 @@ public class Team extends Actor {
         building.setStatBarEnabled(false);
         if (teamId == 0) {
             int x1 = 300, x2 = 600;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            int y1 = 400, y2 = UI.PLAY_AREA_BOTTOM_Y;
             for (int i = 0; i < buildingMaximumAtempt; i++) {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
@@ -233,7 +233,7 @@ public class Team extends Actor {
             }
         } else if (teamId == 1) {
             int x1 = 600, x2 = 900;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            int y1 = 0, y2 = 400;
             for (int i = 0; i < buildingMaximumAtempt; i++) {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
