@@ -76,7 +76,9 @@ public class MyWorld extends World {
 
     private void setGameState() {
         removeObjects(getObjects(null));
-
+        
+        addObject(new GameTimer(), 0, 15);
+        
         Base redBase = new Base(redTeam);
         addObject(redBase, 200, 490);
         redTeam.setBase(redBase);
