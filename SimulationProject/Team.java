@@ -84,21 +84,21 @@ public class Team extends Actor {
 
         barrackNeeded = 0;
         currentBarrackAmount = 0;
-
     }
 
     public void act() {
-        if (workerCoolDown > 0) {
-            workerCoolDown--;
-        }
-        if (marineCoolDown > 0) {
-            marineCoolDown--;
-        }
+
+        cleanWorkers();
+        currentWorkerAmount = workers.size();
+
+        if (workerCoolDown > 0) workerCoolDown--;
+        if (marineCoolDown > 0) marineCoolDown--;
 
         if (currentWorkerAmount < workerNeeded) {
-            if (workerCoolDown == 0 && resources >= workerCost && base != null && base.addPeople()) {
-                currentWorkerAmount++;
-                workerCoolDown = maxWorkerCoolDown;
+            if (workerCoolDown == 0 && resources >= workerCost && base != null) {
+                if (base.addPeople()) {
+                    workerCoolDown = maxWorkerCoolDown;
+                }
             }
         }
 
@@ -132,33 +132,46 @@ public class Team extends Actor {
                     defensiveTurrets.add(turret);
                     currentTurretAmount++;
                     resources -= turretCost;
+                    workerNeeded += 2;
                 }
             }
         }
 
-        if (currentMarinedAmount == marineNeeded && currentWorkerAmount == workerNeeded && currentBarrackAmount == barrackNeeded && currentTurretAmount == turretNeeded) {
+        if (currentMarinedAmount == marineNeeded &&
+            currentWorkerAmount >= workerNeeded &&
+            currentBarrackAmount == barrackNeeded &&
+            currentTurretAmount == turretNeeded) {
+
             if (workerCoolDown == 0 && marineCoolDown == 0) {
-                for (int i = 0; i < 200; i++) {
-                    String nextstrategy = strateges[Greenfoot.getRandomNumber(strateges.length)];
-                    if (!nextstrategy.equals(previousStrategy) || !nextstrategy.equals(strategy)) {
-                        previousStrategy = strategy;
-                        strategy = nextstrategy;
-                        spawn();
-                        break;
-                    }
+
+                String nextstrategy = strateges[Greenfoot.getRandomNumber(strateges.length)];
+
+                if (!nextstrategy.equals(strategy)) {
+                    previousStrategy = strategy;
+                    strategy = nextstrategy;
+                    spawn();
                 }
             }
         }
-        
     }
-    
+
+    private void cleanWorkers(){
+        for (int i = 0; i < workers.size(); i++){
+            if (workers.get(i) == null || workers.get(i).getWorld() == null){
+                workers.remove(i);
+                i--;
+            }
+        }
+    }
+
     public Worker leastBusyWorker(){
         Worker worker = null;
-        int least = Integer.MAX_VALUE; 
-        for (Worker w: workers){
-            if (w.available() < least){
+        int least = Integer.MAX_VALUE;
+
+        for (Worker w : workers){
+            if (w != null && w.available() < least){
                 least = w.available();
-                worker = w; 
+                worker = w;
             }
         }
         return worker;
@@ -166,104 +179,102 @@ public class Team extends Actor {
 
     private Boolean placeBarrack(Buildings building) {
         building.setStatBarEnabled(false);
-        if (teamId == 0) {
-            int x1 = 0, x2 = 400;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
-            for (int i = 0; i < buildingMaximumAtempt; i++) {
-                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
-                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
-                w.addObject(building, xPosition, yPosition);
-                if (!building.ifTouchingOthers()) {
-                    building.setStatBarEnabled(true);
-                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
+
+        int x1 = (teamId == 0) ? 0 : 800;
+        int x2 = (teamId == 0) ? 400 : 1200;
+        int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+
+        for (int i = 0; i < buildingMaximumAtempt; i++) {
+
+            int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+            int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+
+            w.addObject(building, xPosition, yPosition);
+
+            if (!building.ifTouchingOthers()) {
+
+                Worker worker = leastBusyWorker();
+                if (worker == null) {
                     w.removeObject(building);
-                    return true;
+                    return false;
                 }
+
+                building.setStatBarEnabled(true);
+                worker.prepBuild(building, xPosition, yPosition);
                 w.removeObject(building);
+                return true;
             }
-        } else if (teamId == 1) {
-            int x1 = 800, x2 = 1200;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
-            for (int i = 0; i < buildingMaximumAtempt; i++) {
-                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
-                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
-                w.addObject(building, xPosition, yPosition);
-                if(!building.ifTouchingOthers() && leastBusyWorker() != null){
-                    building.setStatBarEnabled(true);
-                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
-                    w.removeObject(building);
-                    return true;
-                }
-                w.removeObject(building);
-            }
+
+            w.removeObject(building);
         }
+
         building.setStatBarEnabled(true);
         return false;
     }
 
     private Boolean placeTurret(Buildings building) {
         building.setStatBarEnabled(false);
-        if (teamId == 0) {
-            int x1 = 300, x2 = 600;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
-            for (int i = 0; i < buildingMaximumAtempt; i++) {
-                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
-                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
-                w.addObject(building, xPosition, yPosition);
-                if (!building.ifTouchingOthers() && leastBusyWorker() != null) {
-                    building.setStatBarEnabled(true);
-                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
+
+        int x1 = (teamId == 0) ? 300 : 600;
+        int x2 = (teamId == 0) ? 600 : 900;
+        int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
+
+        for (int i = 0; i < buildingMaximumAtempt; i++) {
+
+            int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+            int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+
+            w.addObject(building, xPosition, yPosition);
+
+            if (!building.ifTouchingOthers()) {
+
+                Worker worker = leastBusyWorker();
+                if (worker == null) {
                     w.removeObject(building);
-                    return true;
+                    return false;
                 }
+
+                building.setStatBarEnabled(true);
+                worker.prepBuild(building, xPosition, yPosition);
                 w.removeObject(building);
+                return true;
             }
-        } else if (teamId == 1) {
-            int x1 = 600, x2 = 900;
-            int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
-            for (int i = 0; i < buildingMaximumAtempt; i++) {
-                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
-                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
-                w.addObject(building, xPosition, yPosition);
-                if(!building.ifTouchingOthers()){
-                    building.setStatBarEnabled(true);
-                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
-                    w.removeObject(building);
-                    return true;
-                }
-                w.removeObject(building);
-            }
+
+            w.removeObject(building);
         }
+
         building.setStatBarEnabled(true);
         return false;
     }
 
     public void setUpWorld() {
-        System.out.println(strategy);
-        
-        // When strategy is Equal
+        System.out.println(teamId + " " + strategy);
+        workerNeeded = 0;
+        marineNeeded = 0;
+        barrackNeeded = 0;
+        turretNeeded = 0;
+
+        currentWorkerAmount = 0;
+        currentMarinedAmount = 0;
+        currentBarrackAmount = 0;
+        currentTurretAmount = 0;
+
         if (strategy.equals("ECO")) {
-            currentWorkerAmount = 0;
             workerNeeded = 4;
         } else if (strategy.equals("ATK")) {
-            currentBarrackAmount = 0;
             workerNeeded = 1;
             barrackNeeded = 1;
-
             marineNeeded = 1;
-            currentWorkerAmount = 0;
-            totalBarracksAmt ++;
+            totalBarracksAmt++;
         } else {
-            currentTurretAmount = 0;
-            workerNeeded = 1;
+            workerNeeded = 2;
             turretNeeded = 1;
-
-            currentWorkerAmount = 0;
         }
     }
 
     private Boolean isBarrackExist() {
         Boolean isThereBarrack = false;
+
         for (int i = 0; i < barracks.size(); i++) {
             if (barracks.get(i) == null || barracks.get(i).getWorld() == null) {
                 barracks.remove(i);
@@ -272,37 +283,32 @@ public class Team extends Actor {
             }
             isThereBarrack = true;
         }
+
         return isThereBarrack;
     }
 
     private void spawn() {
-        System.out.println(strategy);
-        System.out.println(totalBarracksAmt);
+        System.out.println(teamId + " " + strategy);
         if (strategy.equals("ECO")) {
-            currentWorkerAmount = 0;
             workerNeeded = 4;
         } else if (strategy.equals("ATK")) {
-            
-                currentBarrackAmount = 0;
-                barrackNeeded = 1;
-                marineNeeded = (3 * totalBarracksAmt);
-                currentMarinedAmount = 0;
-                
-                totalBarracksAmt ++;
+            currentBarrackAmount = 0;
+            barrackNeeded = 1;
+            marineNeeded = (3 * totalBarracksAmt);
+            currentMarinedAmount = 0;
+            totalBarracksAmt++;
         } else {
             currentTurretAmount = 0;
             turretNeeded = 1;
-
             workerNeeded = 2;
-            currentWorkerAmount = 0;
         }
     }
-    
+
     public void correctBuildingList(Buildings building){
         if (building instanceof Turret){
             defensiveTurrets.add((Turret)building);
-        }else if (building instanceof Barrack){
-            barracks.add((Barrack)building); 
+        } else if (building instanceof Barrack){
+            barracks.add((Barrack)building);
         }
     }
 
@@ -349,7 +355,6 @@ public class Team extends Actor {
         if (building != null && !buildings.contains(building)) {
             buildings.add(building);
         }
-
     }
 
     public void setBase(Base base) {
@@ -389,8 +394,10 @@ public class Team extends Actor {
     public static String getRandomStrategy() {
         return strateges[Greenfoot.getRandomNumber(3)];
     }
-    
+
     public void addWorker(Worker w){
-        workers.add(w); 
+        if (w != null && !workers.contains(w)){
+            workers.add(w);
+        }
     }
 }

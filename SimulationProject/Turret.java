@@ -11,16 +11,16 @@ public class Turret extends Buildings
     private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
     private GreenfootImage shootingImg; // image when shooting
-    private int centerDist = 120;
+    private int centerDist = 200;
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private static final int attackRange = 225;
-    private static final int cost = 175;
+    private static final int cost = 150;
 
     private int decayTimer = 0;
     private static final int DECAY_RATE = 10;
 
     public Turret(Team team) {
-        super(team, 500);
+        super(team, 700);
         if (team != null) {
             team.addBuilding(this);
         }

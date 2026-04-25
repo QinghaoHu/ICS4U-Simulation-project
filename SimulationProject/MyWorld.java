@@ -37,8 +37,8 @@ public class MyWorld extends World {
     public MyWorld() {
         super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
 
-        String redTeamStrategy = Team.getRandomStrategy();
-        String blueTeamStrategy = Team.getRandomStrategy();
+        String redTeamStrategy = "ECO";
+        String blueTeamStrategy = "ECO";
         redTeam = new Team(Team.RED, "Red", 150, redTeamStrategy, this);
         blueTeam = new Team(Team.BLUE, "Blue", 150, blueTeamStrategy, this);
 
@@ -48,7 +48,7 @@ public class MyWorld extends World {
         supplySpwanTimer = 0;
 
         setUpWorld();
-        setPaintOrder(EndScreen.class, UI.class);
+        setPaintOrder(EndScreen.class, StrategyDisplay.class, UI.class);
         prepare();
     }
 
@@ -84,7 +84,10 @@ public class MyWorld extends World {
         Base blueBase = new Base(blueTeam);
         addObject(blueBase, 990, 165);
         blueTeam.setBase(blueBase);
-
+        
+        addObject(new StrategyDisplay(blueTeam), 920, 770);
+        addObject(new StrategyDisplay(redTeam), 115, 770);
+        
         addObject(redTeam, 0, 0);
         addObject(blueTeam, 0, 0);
         //adds ui to the world
@@ -108,7 +111,14 @@ public class MyWorld extends World {
 
         redTeam.setUpWorld();
         blueTeam.setUpWorld();
+        
+        //addObject(new SupplyBot(redTeam), 0 , 0);
+        
+    
+    
 
+ 
+        
         //testing soldiers
         //addObject(new Marine(blueTeam), 600, 200);
         //addObject(new Officer(redTeam), 500, 300);

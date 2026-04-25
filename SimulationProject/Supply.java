@@ -55,14 +55,16 @@ public class Supply extends SuperSmoothMover {
             return;
         }
 
-        setLocation(targetX, getY()+dropSpeed);
+        setLocation(targetX, getY() + dropSpeed);
     }
 
     private void checkForPickup() {
-        List<Entity> entities = getIntersectingObjects(Entity.class);
-        for (Entity entity : entities) {
-            if (entity != null && entity.getTeam() != null) {
-                applyBuff(entity.getTeam());
+        List<SupplyBot> bots = getIntersectingObjects(SupplyBot.class);
+
+        for (SupplyBot bot : bots) {
+            if (bot != null && bot.getTeam() != null) {
+                applyBuff(bot.getTeam());
+
                 if (getWorld() != null) {
                     getWorld().removeObject(this);
                 }
@@ -148,5 +150,4 @@ public class Supply extends SuperSmoothMover {
         img.scale(40,40);
         setImage(img);
     }
-
 }
