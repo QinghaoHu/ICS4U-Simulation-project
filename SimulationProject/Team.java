@@ -202,22 +202,31 @@ public class Team extends Actor {
 
     private Boolean placeBarrack(Buildings building) {
         building.setStatBarEnabled(false);
-
-        int x1 = (teamId == 0) ? 0 : 800;
-        int x2 = (teamId == 0) ? 400 : 1200;
-        int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
-
-        for (int i = 0; i < buildingMaximumAtempt; i++) {
-
-            int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
-            int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
-
-            w.addObject(building, xPosition, yPosition);
-
-            if (!building.ifTouchingOthers()) {
-
-                Worker worker = leastBusyWorker();
-                if (worker == null) {
+        if (teamId == 0) {
+            int x1 = 0, x2 = 400;
+            int y1 = 0, y2 = 400;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if (!building.ifTouchingOthers()) {
+                    building.setStatBarEnabled(true);
+                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
+                    w.removeObject(building);
+                    return true;
+                }
+                w.removeObject(building);
+            }
+        } else if (teamId == 1) {
+            int x1 = 800, x2 = 1200;
+            int y1 = 400, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if(!building.ifTouchingOthers() && leastBusyWorker() != null){
+                    building.setStatBarEnabled(true);
+                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return false;
                 }
@@ -237,22 +246,31 @@ public class Team extends Actor {
 
     private Boolean placeTurret(Buildings building) {
         building.setStatBarEnabled(false);
-
-        int x1 = (teamId == 0) ? 300 : 600;
-        int x2 = (teamId == 0) ? 600 : 900;
-        int y1 = 0, y2 = UI.PLAY_AREA_BOTTOM_Y;
-
-        for (int i = 0; i < buildingMaximumAtempt; i++) {
-
-            int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
-            int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
-
-            w.addObject(building, xPosition, yPosition);
-
-            if (!building.ifTouchingOthers()) {
-
-                Worker worker = leastBusyWorker();
-                if (worker == null) {
+        if (teamId == 0) {
+            int x1 = 300, x2 = 600;
+            int y1 = 400, y2 = UI.PLAY_AREA_BOTTOM_Y;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if (!building.ifTouchingOthers() && leastBusyWorker() != null) {
+                    building.setStatBarEnabled(true);
+                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
+                    w.removeObject(building);
+                    return true;
+                }
+                w.removeObject(building);
+            }
+        } else if (teamId == 1) {
+            int x1 = 600, x2 = 900;
+            int y1 = 0, y2 = 400;
+            for (int i = 0; i < buildingMaximumAtempt; i++) {
+                int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
+                int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
+                w.addObject(building, xPosition, yPosition);
+                if(!building.ifTouchingOthers()){
+                    building.setStatBarEnabled(true);
+                    leastBusyWorker().prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return false;
                 }
