@@ -31,7 +31,7 @@ public class Team extends Actor {
     private int workerCoolDown = 0;
     private int marineCoolDown = 0;
     private int supplyBotCoolDown = 0;
-
+    private int workerAmt = 0;
     private int workerNeeded;
     private int currentWorkerAmount;
 
@@ -103,9 +103,10 @@ public class Team extends Actor {
         if (marineCoolDown > 0) marineCoolDown--;
         if (supplyBotCoolDown > 0) supplyBotCoolDown--;
 
-        if (currentWorkerAmount < workerNeeded) {
-            if (workerCoolDown == 0 && resources >= Worker.getCost() && base != null && base.addPeople()) {
-                currentWorkerAmount++;
+        if (workerCoolDown == 0 && resources >= Worker.getCost() && base != null && currentWorkerAmount < workerNeeded) {
+            if (base.addPeople()) {
+                workerAmt++;
+                currentWorkerAmount = workers.size();
                 workerCoolDown = Worker.getMaxWorkerCoolDown();
             }
         }
@@ -311,7 +312,7 @@ public class Team extends Actor {
 
     private void spawn() {
         System.out.println(teamId + " " + strategy);
-        
+        System.out.println(teamId + " " + workerAmt);
         workerNeeded = 0;
         marineNeeded = 0;
         barrackNeeded = 0;
@@ -330,10 +331,12 @@ public class Team extends Actor {
         } 
         else if (strategy.equals("ATK")) {
             if(totalBarracksAmt < 3){
+                workerNeeded = 1;
                 barrackNeeded = 1;
                 marineNeeded = (3 * totalBarracksAmt);    
                 totalBarracksAmt++;
             } else {
+                workerNeeded = 1;
                 marineNeeded = 9;
             }
         } 
@@ -441,6 +444,7 @@ public class Team extends Actor {
     public void addWorker(Worker w){
         if (w != null && !workers.contains(w)){
             workers.add(w);
+            workerAmt ++;
         }
     }
 
