@@ -24,8 +24,8 @@ public class Marine extends Soldier
         }
     }
     
-    public static int getCost(){
-        return 50; 
+    public int getCost(){
+        return 75; 
     }
     
     public void act()
