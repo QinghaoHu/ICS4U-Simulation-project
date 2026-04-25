@@ -27,6 +27,7 @@ public class SupplyBot extends People{
     }
 
     public void act (){
+        if(getWorld() == null) return;
         super.act();
 
         if (suppliesCollected >= MAX_SUPPLIES) {
@@ -44,7 +45,7 @@ public class SupplyBot extends People{
 
         moveTowardsSupply();
 
-        if (targetSupply != null && isTouching(Supply.class)) {
+        if (targetSupply != null && getWorld() != null && isTouching(Supply.class)) {
             removeTouching(Supply.class);
             targetSupply = null;
             suppliesCollected++;
@@ -52,6 +53,9 @@ public class SupplyBot extends People{
     }
 
     private Supply findTargetSupply(){
+        if (getWorld() == null){    
+            return null;
+        }
         ArrayList<Supply> supplies = (ArrayList<Supply>)getWorld().getObjects(Supply.class);
 
         Supply closest = null;
@@ -73,7 +77,7 @@ public class SupplyBot extends People{
     }
 
     private void moveTowardsSupply(){
-        if (targetSupply == null || targetSupply.getWorld() == null)
+        if (targetSupply == null || targetSupply.getWorld() == null || getWorld() == null)
         {
             return;
         }

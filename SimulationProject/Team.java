@@ -49,6 +49,8 @@ public class Team extends Actor {
 
     private int barrackCost = 125;
     private int turretCost = 150;
+    
+    private int pendingBarracks = 0;
 
     private World w;
 
@@ -112,11 +114,11 @@ public class Team extends Actor {
             }
         }
 
-        if (currentBarrackAmount < barrackNeeded && barracks.size() < MAX_BARRACKS) {
+        if ((currentBarrackAmount + pendingBarracks) < barrackNeeded && (currentBarrackAmount + pendingBarracks) < MAX_BARRACKS) {
             if (resources >= barrackCost) {
                 Barrack barrack = new Barrack(this);
                 if (placeBarrack(barrack)) {
-                    currentBarrackAmount++;
+                    pendingBarracks++;
                     resources -= barrackCost;
                 }
             }
@@ -362,6 +364,9 @@ public class Team extends Actor {
         } else if (building instanceof Barrack){
             if (!barracks.contains((Barrack)building)){
                 barracks.add((Barrack)building);
+                if (pendingBarracks > 0){
+                    pendingBarracks--;
+                }
             }
         }
     }
