@@ -11,7 +11,7 @@ public class Turret extends Buildings
     private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
     private GreenfootImage shootingImg; // image when shooting
-    private int centerDist = 60;
+    private int centerDist = 70;
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private static final int attackRange = 225;
     private static final int cost = 150;
@@ -45,14 +45,13 @@ public class Turret extends Buildings
         if(target != null){
             if (shootCounter % 130 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
-                double angle = shootAngle(target);
-                int offsetX = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
-                int offsetY = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
-                int X = getX() + offsetX;
-                int Y = getY() + offsetY;
-                
-                // getWorld().addObject(new TurretBullet(this, angle, 2.5, 3), X, Y); // adds bullet
-                getWorld().addObject(new SoldierBullet(this, shootAngle(target), 2.5, 17, 15), getX(), getY()); // adds bullet
+                double angle = getRotation();
+
+                // spawns bullet at the tip
+                int bulletX = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
+                int bulletY = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
+
+                getWorld().addObject(new SoldierBullet(this, angle, 2.5, 17, 15), bulletX, bulletY);
             }
             
             
