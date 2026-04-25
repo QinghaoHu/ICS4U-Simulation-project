@@ -5,6 +5,8 @@ import java.util.ArrayList;
 public class SupplyBot extends People{
     private static int MAX_HEALTH = 35;
     private static int SPEED = 3;
+    private static int cost = 80;
+    private static int maxSupplyBotCoolDown = 200;
 
     private Supply targetSupply;
 
@@ -23,6 +25,7 @@ public class SupplyBot extends People{
     }
 
     public void act (){
+        super.act();
         collectSupply();
     }
 
@@ -61,5 +64,17 @@ public class SupplyBot extends People{
     private void setupImage(){
         img = new GreenfootImage ("SupplyBot.png");
         setImage(img);
+    }
+
+    public static int getCost() {
+        return cost;
+    }
+
+    public static int getMaxSupplyBotCoolDown() {
+        return maxSupplyBotCoolDown;
+    }
+
+    public static void modifyMaxSupplyBotCoolDown(int supplyBotCoolDown) {
+        maxSupplyBotCoolDown = supplyBotCoolDown;
     }
 }

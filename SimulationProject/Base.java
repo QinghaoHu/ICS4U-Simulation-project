@@ -56,4 +56,18 @@ public class Base extends Buildings {
         getWorld().addObject(worker, getX(), getY());
         return true;
     }
+
+    public boolean addBot() {
+        if (getWorld() == null) {
+            return false;
+        }
+        SupplyBot supplybot = new SupplyBot(team);
+        if (!team.spendMoney(SupplyBot.getCost())) {
+            return false;
+        }
+        team.addSupplyBot(supplybot);
+
+        getWorld().addObject(supplybot, getX(), getY());
+        return true;
+    }
 }
