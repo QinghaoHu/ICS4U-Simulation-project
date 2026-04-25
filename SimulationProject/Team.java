@@ -39,12 +39,13 @@ public class Team extends Actor {
     private int currentMarinedAmount;
 
     private int supplyBotNeeded;
-    private int currentSupplyBotAmount;
 
     private World world;
     private int currentBarrackAmount;
     private int barrackNeeded;
     private int totalBarracksAmt;
+    private int MAX_BARRACKS = 3;
+    
 
     private int currentTurretAmount;
     private int turretNeeded;
@@ -57,6 +58,7 @@ public class Team extends Actor {
     private Base base;
 
     private String previousStrategy = "noStrategy";
+    private int currentSupplyBotAmount;
 
     public Team(int teamId, String name, int startingMoney, String strategy, World w) {
         this.teamId = teamId;
@@ -88,16 +90,18 @@ public class Team extends Actor {
 
         supplyBotNeeded = 0;
         currentSupplyBotAmount = 0;
-
     }
 
     public void act() {
-
+        cleanSupplyBots();
         cleanWorkers();
+
+        currentSupplyBotAmount = supplybots.size();
         currentWorkerAmount = workers.size();
 
         if (workerCoolDown > 0) workerCoolDown--;
         if (marineCoolDown > 0) marineCoolDown--;
+        if (supplyBotCoolDown > 0) supplyBotCoolDown--;
 
         if (currentWorkerAmount < workerNeeded) {
             if (workerCoolDown == 0 && resources >= Worker.getCost() && base != null && base.addPeople()) {
@@ -130,7 +134,7 @@ public class Team extends Actor {
         }
 
         if (currentSupplyBotAmount < supplyBotNeeded) {
-            if (supplyBotCoolDown == 0 && resources >= SupplyBot.getCost()) {
+            if (supplyBotCoolDown == 0 && resources >= SupplyBot.getCost() && base != null) {
                 if (base.addBot()) {
                     currentSupplyBotAmount++;
                     supplyBotCoolDown = SupplyBot.getMaxSupplyBotCoolDown();
@@ -153,9 +157,10 @@ public class Team extends Actor {
         if (currentMarinedAmount == marineNeeded &&
             currentWorkerAmount >= workerNeeded &&
             currentBarrackAmount == barrackNeeded &&
-            currentTurretAmount == turretNeeded) {
+            currentTurretAmount == turretNeeded &&
+            currentSupplyBotAmount >= supplyBotNeeded) {
 
-            if (workerCoolDown == 0 && marineCoolDown == 0) {
+            if (workerCoolDown == 0 && marineCoolDown == 0 && supplyBotCoolDown == 0) {
 
                 String nextstrategy = strateges[Greenfoot.getRandomNumber(strateges.length)];
 
@@ -271,6 +276,7 @@ public class Team extends Actor {
         currentMarinedAmount = 0;
         currentBarrackAmount = 0;
         currentTurretAmount = 0;
+        currentSupplyBotAmount = 0;
 
         if (strategy.equals("ECO")) {
             workerNeeded = 4;
@@ -278,20 +284,13 @@ public class Team extends Actor {
             workerNeeded = 1;
             barrackNeeded = 1;
             marineNeeded = 1;
-            currentWorkerAmount = 0;
-            totalBarracksAmt ++;
+            totalBarracksAmt++;
         } else if (strategy.equals("DEF")){
-            currentTurretAmount = 0;
             workerNeeded = 1;
-
             turretNeeded = 1;
-            currentWorkerAmount = 0;
         } else {
             workerNeeded = 2;
-            currentWorkerAmount = 0;
-
             supplyBotNeeded = 1;
-            currentSupplyBotAmount = 0;
         }
     }
 
@@ -312,27 +311,39 @@ public class Team extends Actor {
 
     private void spawn() {
         System.out.println(teamId + " " + strategy);
+        
+        workerNeeded = 0;
+        marineNeeded = 0;
+        barrackNeeded = 0;
+        turretNeeded = 0;
+        supplyBotNeeded = 0;
+    
+        currentWorkerAmount = workers.size();
+        currentMarinedAmount = 0;
+        currentBarrackAmount = 0;
+        currentTurretAmount = 0;
+        currentSupplyBotAmount = 0;
+        
         if (strategy.equals("ECO")) {
             workerNeeded = 4;
-        } else if (strategy.equals("ATK")) {
-            
-                currentBarrackAmount = 0;
+            return;
+        } 
+        else if (strategy.equals("ATK")) {
+            if(totalBarracksAmt < 3){
                 barrackNeeded = 1;
-                marineNeeded = (3 * totalBarracksAmt);
-                currentMarinedAmount = 0;
-                
-                totalBarracksAmt ++;
-        } else if (strategy.equals("DEF")) {
-            currentTurretAmount = 0;
+                marineNeeded = (3 * totalBarracksAmt);    
+                totalBarracksAmt++;
+            } else {
+                marineNeeded = 9;
+            }
+        } 
+        else if (strategy.equals("DEF")) {
+            workerNeeded = 2;
             turretNeeded = 1;
+        } 
+        else {
             workerNeeded = 2;
-            currentWorkerAmount = 0;
-        } else {
-            workerNeeded = 2;
-            currentWorkerAmount = 0;
-
             supplyBotNeeded = 1;
-            currentSupplyBotAmount = 0;
         }
     }
 
@@ -424,7 +435,7 @@ public class Team extends Actor {
     }
 
     public static String getRandomStrategy() {
-        return strateges[Greenfoot.getRandomNumber(3)];
+        return strateges[Greenfoot.getRandomNumber(4)];
     }
 
     public void addWorker(Worker w){
@@ -433,6 +444,15 @@ public class Team extends Actor {
         }
     }
 
+    private void cleanSupplyBots(){
+        for (int i = 0; i < supplybots.size(); i++){
+            if (supplybots.get(i) == null || supplybots.get(i).getWorld() == null){
+                supplybots.remove(i);
+                i--;
+            }
+        }
+    }
+    
     public void addSupplyBot(SupplyBot s) {
         supplybots.add(s);
     }

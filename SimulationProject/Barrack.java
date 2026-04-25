@@ -4,7 +4,8 @@ public class Barrack extends Buildings{
     
     private GreenfootImage img;
     private final int cost = 100; 
-    
+    private int marineCoolDown = 0; //individually manages marine spawning cooldown
+
     public Barrack (Team team){
         super(team, 500);
         setupImage();
@@ -13,6 +14,8 @@ public class Barrack extends Buildings{
 
     public void act(){
         super.act();
+        
+        if (marineCoolDown > 0) marineCoolDown--;
     }
     
     public int getCost(){
@@ -23,12 +26,20 @@ public class Barrack extends Buildings{
         if (getWorld() == null) {
             return false;
         }
+
+        if (marineCoolDown > 0) {
+            return false;
+        }
+
         Marine marine = new Marine(team);
         if (!team.spendMoney(marine.getCost())){
             return false;
         }
         
         getWorld().addObject(marine, getX(), getY());
+
+        marineCoolDown = Marine.getMaxMarineCoolDown();
+
         return true;
     }
 
