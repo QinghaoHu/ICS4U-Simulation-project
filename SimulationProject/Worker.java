@@ -26,7 +26,9 @@ public class Worker extends People {
 
     private static int redIndex = 0;
     private static int blueIndex = 0;
-    private static final int cost = 75; 
+    private static final int cost = 75;
+
+    private static int maxWorkerCoolDown = 240;
 
     public Worker(Team team, Base base) {
         super(team, 30, 2);
@@ -201,5 +203,13 @@ public class Worker extends People {
         } else {
             setImage(emptyImg);
         }
+    }
+
+    public static int getMaxWorkerCoolDown() {
+        return maxWorkerCoolDown;
+    }
+
+    public static void modifyMaxWorkerCoolDown(int workerCoolDown) {
+        maxWorkerCoolDown = workerCoolDown;
     }
 }
