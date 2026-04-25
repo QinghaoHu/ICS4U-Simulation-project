@@ -31,7 +31,7 @@ public class Worker extends People {
     private static int maxWorkerCoolDown = 240;
 
     public Worker(Team team, Base base) {
-        super(team, 30, 2);
+        super(team, 60, 2);
 
         this.homeBase = base;
 

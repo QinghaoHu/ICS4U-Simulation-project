@@ -11,16 +11,16 @@ public class Turret extends Buildings
     private GreenfootImage img; // image when idle
     private GreenfootImage emptyImg;
     private GreenfootImage shootingImg; // image when shooting
-    private int centerDist = 120;
+    private int centerDist = 70;
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private static final int attackRange = 225;
-    private static final int cost = 175;
+    private static final int cost = 150;
 
     private int decayTimer = 0;
-    private static final int DECAY_RATE = 10;
+    private static final int DECAY_RATE = 7;
 
     public Turret(Team team) {
-        super(team, 500);
+        super(team, 700);
         if (team != null) {
             team.addBuilding(this);
         }
@@ -43,13 +43,15 @@ public class Turret extends Buildings
 
         Entity target = findTarget(attackRange);
         if(target != null){
-            if (shootCounter % 100 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
+            if (shootCounter % 130 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
-                double angle = shootAngle(target);
-                int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
-                int Y = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
-                // getWorld().addObject(new TurretBullet(this, angle, 2.5, 3), X, Y); // adds bullet
-                getWorld().addObject(new SoldierBullet(this, shootAngle(target), 2.5, 13, 15), getX(), getY()); // adds bullet
+                double angle = getRotation();
+
+                // spawns bullet at the tip
+                int bulletX = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
+                int bulletY = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
+
+                getWorld().addObject(new SoldierBullet(this, angle, 2.5, 17, 15), bulletX, bulletY);
             }
             
             
