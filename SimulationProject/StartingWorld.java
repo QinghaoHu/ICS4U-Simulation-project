@@ -7,9 +7,10 @@ public class StartingWorld extends World{
 
     private static final int BUTTON_Y_POSITION = 700;
     private static final int START_BUTTON_X = 600;
-    private static final int TITLE_X = 350;
-    private static final int TITLE_Y = 250;
-    private static final int TITLE_FONT_SIZE = 52;
+    private static final int TITLE_X = 180;
+    private static final int TITLE_Y = 300;
+    private static final int TITLE_FONT_SIZE = 90;
+    private static final Color TITLE_COLOR = new Color(126, 255, 255);
 
     private Button startButton;
     private String fontName;
@@ -33,7 +34,7 @@ public class StartingWorld extends World{
 
         greenfoot.Font myFont = new greenfoot.Font(fontName, TITLE_FONT_SIZE);
         background.setFont(myFont);
-        background.setColor(new Color(243, 200, 115, 255));
+        background.setColor(TITLE_COLOR);
         background.drawString("Siege Simulation", TITLE_X, TITLE_Y);
 
         setBackground(background);
