@@ -48,7 +48,7 @@ public class MyWorld extends World {
         supplySpwanTimer = 0;
 
         setUpWorld();
-        setPaintOrder(EndScreen.class, StrategyDisplay.class, UI.class);
+        setPaintOrder(EndScreen.class, UI.class);
         prepare();
     }
 
@@ -86,9 +86,6 @@ public class MyWorld extends World {
         Base blueBase = new Base(blueTeam);
         addObject(blueBase, 990, 165);
         blueTeam.setBase(blueBase);
-        
-        addObject(new StrategyDisplay(blueTeam), 920, 770);
-        addObject(new StrategyDisplay(redTeam), 115, 770);
         
         addObject(redTeam, 0, 0);
         addObject(blueTeam, 0, 0);
