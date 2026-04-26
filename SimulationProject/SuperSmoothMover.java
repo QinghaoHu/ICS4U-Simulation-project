@@ -1,4 +1,6 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, and Greenfoot)
+import java.util.HashMap;
+import java.util.Map; 
 
 /**
  * <p>A variation of an actor that maintains a precise location (using doubles for the co-ordinates
@@ -42,10 +44,18 @@ public abstract class SuperSmoothMover extends Actor
     private boolean staticRotation = false;
     private double cosRotation;
     private double sinRotation;
+    protected Map<String, GreenfootSound> sounds = new HashMap<>(); 
 
     /**
      * Round angles consistently, including negative values.
      */
+    
+    protected void stopMusic(){
+        for (GreenfootSound sound : sounds.values()) {
+            sound.stop();
+        }
+    }
+    
     private int roundAngle (double value) {
         return (int)Math.round(value);
     }

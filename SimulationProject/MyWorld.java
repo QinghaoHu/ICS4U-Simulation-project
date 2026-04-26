@@ -37,7 +37,7 @@ public class MyWorld extends World {
     private static final int MIN_SUPPLY_DROP_RANGE = 500;
     private static final int MAX_SUPPLY_DROP_RANGE = 700;
     private static final int SUPPLY_SPWAN_Y_OFFSET = -60;
-    private int supplySpwanTimer;
+    private int supplySpawnTimer;
 
     private static final String GAME_STATE = "game";
     private static final String TITLE_STATE = "title";
@@ -60,7 +60,7 @@ public class MyWorld extends World {
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
         
-        supplySpwanTimer = 0;
+        supplySpawnTimer = 0;
 
         setUpWorld();
         setPaintOrder(EndScreen.class, UI.class);
@@ -73,6 +73,10 @@ public class MyWorld extends World {
             changeState(GAME_STATE);
         }
         spawnSupply();
+    }
+    
+    private void stopMusic(){
+        
     }
 
     private void setUpWorld() {
@@ -157,14 +161,14 @@ public class MyWorld extends World {
     }
 
     private void spawnSupply(){
-        if (supplySpwanTimer <= 0 && getObjects(Supply.class).size() < 5) {
+        if (supplySpawnTimer <= 0 && getObjects(Supply.class).size() < 5) {
             // spawn supply
             addObject(new Supply(), Greenfoot.getRandomNumber(MAX_SUPPLY_DROP_RANGE - MIN_SUPPLY_DROP_RANGE + 1) + MIN_SUPPLY_DROP_RANGE, SUPPLY_SPWAN_Y_OFFSET);
 
             // Reset timer to random value between 300 (5s) and 900 (15s)
-            supplySpwanTimer = 300 + Greenfoot.getRandomNumber(601);
+            supplySpawnTimer = 300 + Greenfoot.getRandomNumber(601);
         } else {
-            supplySpwanTimer--;
+            supplySpawnTimer--;
         }
     }
 
