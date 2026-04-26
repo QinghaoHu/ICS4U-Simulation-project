@@ -27,7 +27,8 @@ public class Marine extends Soldier
             if (base != null) {
                 int level = base.getLevel();
                 bonusDamage = (level - 1);
-                health += (level - 1) * 3;
+                maxHealth += (level - 1) * 3;
+                health = maxHealth;
             }
         }
     }
@@ -47,7 +48,7 @@ public class Marine extends Soldier
         double angle = shootAngle(target);
         int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
         int Y = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
-        getWorld().addObject(new SoldierBullet(this, angle, 2.5, 3 + bonusDamage), X, Y); // adds bullet
+        getWorld().addObject(new SoldierBullet(this, angle, 4, 3 + bonusDamage), X, Y); // adds bullet
     }
 
     public static int getMaxMarineCoolDown() {

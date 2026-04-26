@@ -7,12 +7,12 @@ public class Supply extends SuperSmoothMover {
     private static final int MAX_DROP_SPEED = 3;
     private static final int COMMON_CHANCE = 70;
     private static final int RARE_CHANCE = 25;
-    private static final int COMMON_RESOURCE_DROP = 75;
-    private static final int RARE_RESOURCE_DROP = 150;
-    private static final int ULTRA_RARE_RESOURCE_DROP = 250;
-    private static final int COMMON_WORKER_DROP = 1;
-    private static final int RARE_WORKER_DROP = 2;
-    private static final int ULTRA_RARE_WORKER_DROP = 3;
+    private static final int COMMON_RESOURCE_DROP = 175;
+    private static final int RARE_RESOURCE_DROP = 250;
+    private static final int ULTRA_RARE_RESOURCE_DROP = 350;
+    private static final int COMMON_WORKER_DROP = 2;
+    private static final int RARE_WORKER_DROP = 3;
+    private static final int ULTRA_RARE_WORKER_DROP = 4;
     private static final int ULTRA_RARE_MARINE_DROP = 1;
     private static final int MIN_LANDING_Y = 60;
 
@@ -63,8 +63,24 @@ public class Supply extends SuperSmoothMover {
 
         for (SupplyBot bot : bots) {
             if (bot != null && bot.getTeam() != null) {
-                applyBuff(bot.getTeam());
+                String reward = applyBuff(bot.getTeam());
+                
+                String message = reward;
 
+                System.out.println(message);
+                
+                Color teamColor = Color.WHITE;
+                
+                if (bot.getTeam().getTeamId() == Team.RED) {
+                    teamColor = Color.RED;
+                } else if (bot.getTeam().getTeamId() == Team.BLUE) {
+                    teamColor = Color.BLUE;
+                }
+                
+                if (getWorld() != null) {
+                    getWorld().addObject(new SupplyText(message, teamColor), getX(), getY() - 30);
+                }
+                                
                 if (getWorld() != null) {
                     getWorld().removeObject(this);
                 }
@@ -73,23 +89,33 @@ public class Supply extends SuperSmoothMover {
         }
     }
 
-    private void applyBuff(Team team) {
+    private String applyBuff(Team team) {
         if (team == null) {
-            return;
+            return "Nothing";
         }
-
+    
         int roll = Greenfoot.getRandomNumber(100);
-
+    
         if (roll < COMMON_CHANCE) {
             applyDrop(team, COMMON_RESOURCE_DROP, COMMON_WORKER_DROP, 0);
-        } else if (roll < COMMON_CHANCE + RARE_CHANCE) {
+            return "+" + COMMON_RESOURCE_DROP + " RESOURCES, +" + COMMON_WORKER_DROP + " WORKER";
+        } 
+        else if (roll < COMMON_CHANCE + RARE_CHANCE) {
             applyDrop(team, RARE_RESOURCE_DROP, RARE_WORKER_DROP, 0);
-        } else {
+            return "+" + RARE_RESOURCE_DROP + " RESOURCES, +" + RARE_WORKER_DROP + " WORKERS";
+        } 
+        else {
             int marineDrop = 0;
-            if(team.hasBuilding(Barrack.class)){
+    
+            if (team.hasBuilding(Barrack.class)) {
                 marineDrop = ULTRA_RARE_MARINE_DROP;
             }
+    
             applyDrop(team, ULTRA_RARE_RESOURCE_DROP, ULTRA_RARE_WORKER_DROP, marineDrop);
+    
+            return "+" + ULTRA_RARE_RESOURCE_DROP + " RESOURCES, +"
+                    + ULTRA_RARE_WORKER_DROP + " WORKERS, +"
+                    + marineDrop + " MARINE";
         }
     }
 

@@ -77,9 +77,9 @@ public class Base extends Buildings {
     public boolean upgrade() {
         level++;
     
-        setMaxHealth(getMaxHealth() + 250);
-        healToFull();
-    
+        setMaxHealth(getMaxHealth() + 150);
+        health += 150;
+        updateStatBar();
         return true;
     }
 
