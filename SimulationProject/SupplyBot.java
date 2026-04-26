@@ -3,8 +3,8 @@ import greenfoot.GreenfootImage;
 import java.util.ArrayList;
 
 public class SupplyBot extends People{
-    private static int MAX_HEALTH = 100;
-    private static double SPEED = 0.6; 
+    private static int MAX_HEALTH = 150;
+    private static double SPEED = 4; 
     private static int cost = 85;
     private static int maxSupplyBotCoolDown = 200;
 
@@ -12,10 +12,10 @@ public class SupplyBot extends People{
     private GreenfootImage img;
 
     private int suppliesCollected = 0;
-    private final int MAX_SUPPLIES = 2;
+    private final int MAX_SUPPLIES = 1;
 
     public SupplyBot(Team team) {
-        super(team, MAX_HEALTH, 1); 
+        super(team, MAX_HEALTH, 4); 
 
         if (team != null) {
             team.addUnit(this);
@@ -46,7 +46,6 @@ public class SupplyBot extends People{
         moveTowardsSupply();
 
         if (targetSupply != null && getWorld() != null && isTouching(Supply.class)) {
-            removeTouching(Supply.class);
             targetSupply = null;
             suppliesCollected++;
         }
@@ -85,7 +84,7 @@ public class SupplyBot extends People{
         turnTowards(targetSupply.getX(), targetSupply.getY());
 
 
-       move(1);
+       move(SPEED);
     }
 
     private void setupImage(){

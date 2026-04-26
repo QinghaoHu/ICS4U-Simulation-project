@@ -32,7 +32,7 @@ public abstract class Soldier extends People
     private static final int detectionRange = 600;
     
     public Soldier(Team team) {
-        super(team, 25, 2);
+        super(team, 20, 4);
         if (team != null) {
             team.addUnit(this);
         }
@@ -65,7 +65,7 @@ public abstract class Soldier extends People
         }else if (state.equals(chase)){
             moveTowards(target.getX(), target.getY()); // walks towards enemies 
         }else{
-            if (shootCounter % 30 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
+            if (shootCounter % 15 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
                 
                 shoot(target);

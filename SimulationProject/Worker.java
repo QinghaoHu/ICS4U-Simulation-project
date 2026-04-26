@@ -34,7 +34,7 @@ public class Worker extends People {
      */
     
     public Worker(Team team, Base base) {
-        super(team, 60, 2);
+        super(team, 450, 5);
 
         this.homeBase = base;
 
@@ -144,8 +144,8 @@ public class Worker extends People {
                 getY() - targetPosition[1]
         );
 
-        if (dist < 55) {
-            timer = 120;
+        if (dist < 40) {
+            timer = 60;
 
             String state = states.peek();
             // sets a timer for how long the worker will preform this task

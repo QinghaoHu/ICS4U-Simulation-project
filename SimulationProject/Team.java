@@ -54,7 +54,8 @@ public class Team extends Actor {
 
     private int barrackCost = 125;
     private int turretCost = 150;
-
+    private int stuckTimer = 0;
+    private int lastWorkerAmount = 0;
     private int pendingBarracks = 0;
     private int pendingTurrets = 0;
 
@@ -195,6 +196,25 @@ public class Team extends Actor {
             resources -= 500;
             base.upgrade();
             baseUpgradeCoolDown = 10;
+        }
+        boolean progressMade = currentWorkerAmount != lastWorkerAmount;
+        
+        if (progressMade) {
+            stuckTimer = 0;
+        } else {
+            stuckTimer++;
+        }
+        
+        lastWorkerAmount = currentWorkerAmount;
+        
+        if (stuckTimer > 300) { // about a few seconds of no progress
+            System.out.println(name + " stuck — forcing strategy reset");
+        
+            String fallback = strateges[Greenfoot.getRandomNumber(strateges.length)];
+            strategy = fallback;
+        
+            spawn(); // recompute everything
+            stuckTimer = 0;
         }
     }
 

@@ -78,9 +78,9 @@ public class Base extends Buildings {
         // every upgrade makes its level higher, increases max health by 250 and sets health to max hp
         level++;
     
-        setMaxHealth(getMaxHealth() + 250);
-        healToFull();
-    
+        setMaxHealth(getMaxHealth() + 150);
+        health += 150;
+        updateStatBar();
         return true;
     }
 
