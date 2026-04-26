@@ -47,6 +47,11 @@ public class Worker extends People {
         states.add("mining");
         states.add("move");
         // initials states will be moving the resources and mining it then moving some where else
+        
+        sounds.put("mining", new GreenfootSound("mining.mp3"));
+        sounds.put("depositing", new GreenfootSound("depositing.mp3"));
+        sounds.put("building", new GreenfootSound("building.mp3"));
+        
         setupImage();
     }
 
@@ -70,6 +75,7 @@ public class Worker extends People {
         String state = states.peek();
         // does the equivalent action it needs to do in the state
         if (state.equals("move")) {
+            stopMusic();
             move();
         } else if (state.equals("mining")) {
             mine();
@@ -155,6 +161,9 @@ public class Worker extends People {
 
             states.remove();
             targetPositions.remove();
+            
+            sounds.get(states.peek()).play(); 
+            System.out.println(sounds.get(states.peek()));
         }
     }
 

@@ -21,6 +21,8 @@ public abstract class Buildings extends Entity
         if (team != null) {
             team.addBuilding(this);
         }
+        
+        sounds.put("explode", new GreenfootSound(this.getClass().getName() + "Explosion.mp3"));
     }
 
     /**
