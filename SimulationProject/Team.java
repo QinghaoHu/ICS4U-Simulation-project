@@ -10,6 +10,9 @@ import java.util.List;
  * @version (a version number or a date)
  */
 public class Team extends Actor {
+    // Every team will keep track of the people and buildings it has 
+    // and go with different approaches randomly and buy certain people and 
+    // buildings if it has the resource to buy it
     public static final int RED = 0;
     public static final int BLUE = 1;
 
@@ -219,7 +222,7 @@ public class Team extends Actor {
         }
     }
 
-    public Worker leastBusyWorker() {
+    public Worker leastBusyWorker() { // returns the worker with the shortest todo list
         Worker worker = null;
         int least = Integer.MAX_VALUE;
 
@@ -232,7 +235,9 @@ public class Team extends Actor {
         return worker;
     }
 
-    private Boolean placeBarrack(Buildings building) {
+    private Boolean placeBarrack(Buildings building) { 
+        // places a barrack done insuring it doesn't collide with anything else
+        // and then assigns that job to a worker to build
         building.setStatBarEnabled(false);
 
         if (teamId == 0) {
@@ -294,6 +299,8 @@ public class Team extends Actor {
     }
 
     private Boolean placeTurret(Buildings building) {
+        // places a Turret done insuring it doesn't collide with anything else
+        // and then assigns that job to a worker to build
         building.setStatBarEnabled(false);
 
         if (teamId == 0) {
@@ -355,7 +362,6 @@ public class Team extends Actor {
     }
 
     public void setUpWorld() {
-        System.out.println(teamId + " " + strategy);
         workerNeeded = 0;
         marineNeeded = 0;
         barrackNeeded = 0;
@@ -398,7 +404,6 @@ public class Team extends Actor {
     }
 
     private void spawn() {
-        System.out.println(teamId + " " + strategy);
         //System.out.println(teamId + " " + workerAmt);
         workerNeeded = 0;
         marineNeeded = 0;
@@ -439,6 +444,9 @@ public class Team extends Actor {
     }
 
     public void correctBuildingList(Buildings building) {
+        // add a building to the list after the building has been created
+        // instead of adding the building to the list and then creating it
+        // avoiding problems of team trying to spawn marines in barracks that don't exist yet
         if (building instanceof Turret) {
             if (!defensiveTurrets.contains((Turret) building)) {
                 defensiveTurrets.add((Turret) building);

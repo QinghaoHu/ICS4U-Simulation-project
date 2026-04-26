@@ -4,6 +4,9 @@ public abstract class People extends Entity{
     protected int speed;
     protected int centerDist = 20;
     private boolean hasStatBar;
+    
+    // people is a subclass of entity and will all be able to move
+    
     public People(Team team, int maxHealth, int speed) {
         super(team);
         this.maxHealth = maxHealth;
@@ -12,7 +15,7 @@ public abstract class People extends Entity{
     }
 
     public void act(){
-        if (isAtEdge()) {
+        if (isAtEdge()) { // if the person is outside the border, the person will be deleted
             getWorld().removeObject(this);
             return;
         }
@@ -43,6 +46,7 @@ public abstract class People extends Entity{
     }
     
     protected void moveTowards(int x, int y) {
+        // will move to a certain location at a set speed
         int dx = x - getX();
         int dy = y - getY();
 

@@ -38,7 +38,7 @@ public class Turret extends Buildings
         decayTimer++;
         if (decayTimer >= 60) {
             health-=(DECAY_RATE);
-            decayTimer = 0;
+            decayTimer = 0; // every 60 frames it will decrease its health
         }
 
         Entity target = findTarget(attackRange);
@@ -83,7 +83,7 @@ public class Turret extends Buildings
     
     private void updateDirection(int dx, int dy) {
         if (dx != 0 || dy != 0) {
-            setRotation((int) Math.toDegrees(Math.atan2(dy, dx)));
+            setRotation((int) Math.toDegrees(Math.atan2(dy, dx))); 
         }
     }
     
