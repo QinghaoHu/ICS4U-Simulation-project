@@ -11,8 +11,23 @@ import java.util.ArrayList;
 /**
  * Main simulation world.
  * <p>
- * This version intentionally changes most of the world setup code so it can be
- * used as a merge-conflict demonstration branch.
+ * This is the main world where all the game play occurs
+ * What you are about to witness is a 2d top-down AI battle Simulator
+ * The main game play of the game is having two teams: Red and Blue
+ * The objective of these two teams is to destroy the others bases
+ * The two teams will have an in-game currency called resources that they will use to buy people and buildings in order to achieve said objective
+ * In the people class we have: Workers, Soldiers, and Supply Bots
+ *     Workers: gather resources and build
+ *     Soldiers: fire bullets and are the main way of destroying the other team's base
+ *     Supply Bots:
+ * In the Building class we have: Turrets, Bases, Barracks
+ *     Turret: Defensive buildings with the objective of killing soldier that attempt to attack the base
+ *     Base: Spawn in workers and must be defended in order to win
+ *     Barrack: Spawn soldiers to destroy the other team's base
+ * In the middle of this chaos, to account for a team not overwhelming the other team once an advantage is reached, supplies will drop from the sky to give certain buffs
+ * 
+ * 
+ * 
  */
 public class MyWorld extends World {
     private static final int WORLD_WIDTH = 1200;
@@ -22,7 +37,7 @@ public class MyWorld extends World {
     private static final int MIN_SUPPLY_DROP_RANGE = 500;
     private static final int MAX_SUPPLY_DROP_RANGE = 700;
     private static final int SUPPLY_SPWAN_Y_OFFSET = -60;
-    private int supplySpwanTimer;
+    private int supplySpawnTimer;
 
     private static final String GAME_STATE = "game";
     private static final String TITLE_STATE = "title";
@@ -45,7 +60,7 @@ public class MyWorld extends World {
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
         
-        supplySpwanTimer = 0;
+        supplySpawnTimer = 0;
 
         setUpWorld();
         setPaintOrder(EndScreen.class, UI.class);
@@ -58,6 +73,10 @@ public class MyWorld extends World {
             changeState(GAME_STATE);
         }
         spawnSupply();
+    }
+    
+    private void stopMusic(){
+        
     }
 
     private void setUpWorld() {
@@ -142,14 +161,14 @@ public class MyWorld extends World {
     }
 
     private void spawnSupply(){
-        if (supplySpwanTimer <= 0 && getObjects(Supply.class).size() < 5) {
+        if (supplySpawnTimer <= 0 && getObjects(Supply.class).size() < 5) {
             // spawn supply
             addObject(new Supply(), Greenfoot.getRandomNumber(MAX_SUPPLY_DROP_RANGE - MIN_SUPPLY_DROP_RANGE + 1) + MIN_SUPPLY_DROP_RANGE, SUPPLY_SPWAN_Y_OFFSET);
 
             // Reset timer to random value between 300 (5s) and 900 (15s)
-            supplySpwanTimer = 300 + Greenfoot.getRandomNumber(601);
+            supplySpawnTimer = 300 + Greenfoot.getRandomNumber(601);
         } else {
-            supplySpwanTimer--;
+            supplySpawnTimer--;
         }
     }
 

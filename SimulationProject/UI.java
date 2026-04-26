@@ -9,14 +9,14 @@ public class UI extends Actor {
     public static final int PLAY_AREA_BOTTOM_Y = 640;
 
     private static final int RED_TEXT_X = 25;
-    private static final int BLUE_TEXT_X = 980;
+    private static final int BLUE_TEXT_X = 1015;
     private static final int RESOURCE_TEXT_Y = 675;
     private static final int WORKER_TEXT_Y = 775;
     private static final int BASE_HP_TEXT_Y = 725;
     private static final int STRATEGY_TEXT_Y = 775;
     private static final int FONT_SIZE = 18;
     private static final int LEVEL_TEXT_Y = 750;
-    private static final int RED_SIDE_TEXT_X = 230;
+    private static final int RED_SIDE_TEXT_X = 220;
     private static final int BLUE_SIDE_TEXT_X = 830;
     private static final int MARINE_TEXT_Y = 725;
 
@@ -24,7 +24,7 @@ public class UI extends Actor {
     private Team blueTeam;
     private GreenfootImage baseImage;
     private String fontName;
-
+    // the ui that is on the game screen at the bottom that tracks the stats of both teams
     public UI() {
         baseImage = new GreenfootImage("Ui.png");
         setImage(baseImage);
@@ -49,7 +49,7 @@ public class UI extends Actor {
         updateImage();
     }
 
-    private void syncTeams(World world) {
+    private void syncTeams(World world) { // make sure the stats are correct
         List<Team> teams = world.getObjects(Team.class);
         for (Team team : teams) {
             if (team.getTeamId() == Team.RED) {
@@ -61,6 +61,7 @@ public class UI extends Actor {
     }
 
     private void updateImage() {
+        // updates the displayed stats on screen
         GreenfootImage image = new GreenfootImage(baseImage);
         image.setColor(Color.WHITE);
         greenfoot.Font myFont = new greenfoot.Font(fontName, FONT_SIZE);
@@ -75,16 +76,16 @@ public class UI extends Actor {
         image.drawString("Workers: " + String.valueOf(getWorkersFor(blueTeam)), BLUE_SIDE_TEXT_X, WORKER_TEXT_Y);
 
         // Base HP display
-        image.drawString("Base HP: " + getBaseHealthFor(redTeam), RED_TEXT_X, BASE_HP_TEXT_Y);
-        image.drawString("Base HP: " + getBaseHealthFor(blueTeam), BLUE_TEXT_X, BASE_HP_TEXT_Y);
+        image.drawString(getBaseHealthFor(redTeam), RED_TEXT_X, BASE_HP_TEXT_Y);
+        image.drawString(getBaseHealthFor(blueTeam), BLUE_TEXT_X, BASE_HP_TEXT_Y);
         
         //level display
         image.drawString("Level: " + getLevelFor(redTeam), RED_TEXT_X, LEVEL_TEXT_Y);
         image.drawString("Level: " + getLevelFor(blueTeam), BLUE_TEXT_X, LEVEL_TEXT_Y);
         
         // Draws the marine damage
-        image.drawString(getStrongestMarineStats(redTeam), RED_SIDE_TEXT_X + 175, MARINE_TEXT_Y);
-        image.drawString(getStrongestMarineStats(blueTeam), BLUE_SIDE_TEXT_X - 215, MARINE_TEXT_Y);
+        image.drawString(getStrongestMarineStats(redTeam), RED_SIDE_TEXT_X, MARINE_TEXT_Y);
+        image.drawString(getStrongestMarineStats(blueTeam), BLUE_SIDE_TEXT_X , MARINE_TEXT_Y);
         
         // Strategy display
         greenfoot.Font font = new greenfoot.Font(fontName, FONT_SIZE - 3);
@@ -117,7 +118,7 @@ public class UI extends Actor {
     }
     
     
-    private String getStrongestMarineStats(Team team) {
+    private String getStrongestMarineStats(Team team) { 
         if (team == null) return "0 HP | 0 DMG";
     
         Marine strongest = null;
@@ -141,7 +142,7 @@ public class UI extends Actor {
             }
         }
     
-        if (strongest == null) return "25 HP | 3 DMG";
+        if (strongest == null) return "20 HP | 3 DMG";
     
         return strongest.getMaxHealth()
                 + " HP | " + strongest.getTotalDamage() + " DMG";

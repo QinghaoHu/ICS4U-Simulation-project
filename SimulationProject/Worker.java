@@ -4,7 +4,6 @@ import java.util.Queue;
 import java.util.LinkedList;
 
 public class Worker extends People {
-
     protected int carryAmount = 0;
     protected int maxCarry = 13;
     protected int minRate = 5;
@@ -16,9 +15,9 @@ public class Worker extends People {
     private Resources assignedResource;
     private Base homeBase;
 
-    private Queue<String> states = new LinkedList<>();
-    private Queue<int[]> targetPositions = new LinkedList<>();
-    private Queue<Buildings> buildings = new LinkedList<>();
+    private Queue<String> states = new LinkedList<>(); // keeps track of what the bot will do
+    private Queue<int[]> targetPositions = new LinkedList<>(); // keeps tracks of where the bot will go
+    private Queue<Buildings> buildings = new LinkedList<>(); // keeps track of what buildings the bot will create
 
     private int timer = 0;
 
@@ -32,8 +31,14 @@ public class Worker extends People {
     private static GreenfootSound miningSound = new GreenfootSound("mining.mp3");
     private static GreenfootSound depositSound = new GreenfootSound("resource gain.mp3");
 
+    /*
+     * The worker bot main functions are to create buildings and to collect resources
+     * It is able to do this by keeping a todo list of what to do through the states variable
+     * It alternatives between preforming a task a moving to a task to preform it
+     */
+    
     public Worker(Team team, Base base) {
-        super(team, 60, 2);
+        super(team, 450, 5);
 
         this.homeBase = base;
 
@@ -45,10 +50,16 @@ public class Worker extends People {
         states.add("move");
         states.add("mining");
         states.add("move");
-        
-        miningSound.setVolume(20);
-        depositSound.setVolume(30);
 
+        // initials states will be moving the resources and mining it then moving some where else
+        
+        sounds.put("mining", new GreenfootSound("mining.mp3"));
+        sounds.put("depositing", new GreenfootSound("depositing.mp3"));
+        sounds.put("building", new GreenfootSound("building.mp3"));
+      
+        sounds.get("mining").setVolume(20);
+        sounds.get("depositing").setVolume(30);
+        
         setupImage();
     }
 
@@ -58,7 +69,7 @@ public class Worker extends People {
 
     @Override
     protected void addedToWorld(World w) {
-        targetPositions.add(resourceLocation());
+        targetPositions.add(resourceLocation()); // the first place it will go to is to the resource it is assign to
     }
 
     public void act() {
@@ -68,17 +79,18 @@ public class Worker extends People {
         }
 
         timer--;
-
+        
         String state = states.peek();
-
+        // does the equivalent action it needs to do in the state
         if (state.equals("move")) {
+            stopMusic();
             move();
         } else if (state.equals("mining")) {
             mine();
         } else if (state.equals("depositing")) {
             deposit();
         } else if (state.equals("building")) {
-            build(buildings.peek());
+            build(buildings.peek()); // grabs the building it will build
         }
 
         updateImage();
@@ -87,6 +99,8 @@ public class Worker extends People {
 
     private void mine() {
         if (timer <= 0) {
+            // if a timer goes off it will collect the resources cross off the task it preformed
+            // add two more things to do, which is depositing the resources and moving to base
             carryAmount = maxCarry;
             states.remove();
             states.add("depositing");
@@ -103,6 +117,10 @@ public class Worker extends People {
     }
 
     public void build(Buildings building) {
+        // if bot takes enough time it will add a building to a correct location
+        // it will add tell team that it has that building and proceed to go back to
+        // mining
+        
         if (timer <= 0) {
             if (getWorld() == null || building == null) {
                 return;
@@ -123,6 +141,7 @@ public class Worker extends People {
     }
 
     public void prepBuild(Buildings building, int x, int y) {
+        // adds building to the worker's todo list
         states.add("building");
         states.add("move");
         buildings.add(building);
@@ -130,6 +149,7 @@ public class Worker extends People {
     }
 
     private void move() {
+        // moves to a position until it is 55 pixel away
         if (targetPositions.isEmpty()) {
             return;
         }
@@ -143,17 +163,20 @@ public class Worker extends People {
                 getY() - targetPosition[1]
         );
 
-        if (dist < 55) {
-            timer = 120;
+        if (dist < 40) {
+            timer = 60;
 
             String state = states.peek();
-
+            // sets a timer for how long the worker will preform this task
             if (state.equals("building")) {
                 timer = 1200;
             }
 
             states.remove();
             targetPositions.remove();
+            
+            sounds.get(states.peek()).play(); 
+            System.out.println(sounds.get(states.peek()));
         }
     }
 
@@ -173,6 +196,7 @@ public class Worker extends People {
     }
 
     private int[] resourceLocation() {
+        // gets the location of the resource it is assigned to
         if (getWorld() == null) return new int[]{-1, -1};
 
         if (assignedResource == null || assignedResource.getWorld() == null) {
@@ -206,6 +230,7 @@ public class Worker extends People {
     }
 
     private int[] goToBase() {
+        // returns the location of the base
         if (homeBase == null || homeBase.getWorld() == null) {
             return new int[]{-1, -1};
         }
@@ -214,6 +239,7 @@ public class Worker extends People {
     }
 
     private void deposit() {
+        // deposits resources and adds mining to its todo list
         if (timer <= 0) {
             team.addMoney(carryAmount);
             carryAmount = 0;
@@ -228,6 +254,7 @@ public class Worker extends People {
     }
 
     public int statesLeft() {
+        // returns the bots todo list size
         return states.size();
     }
     

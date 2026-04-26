@@ -25,11 +25,15 @@ public abstract class Projectile extends SuperSmoothMover
 
         this.speed = speed; 
         this.damage = damage;
+        sounds.put("shoot", new GreenfootSound(s.getClass().getName() + "Shoot.mp3"));
+        
+        sounds.get("shoot").play(); 
         
         img = new GreenfootImage(getClass().getName() + ".png");
         img.scale(10, 10);
         setImage(img);
     }
+    
     public void act()
     {
         if(isAtEdge()){

@@ -26,7 +26,7 @@ public class Barrack extends Buildings{
         return 100; 
     }
 
-    public boolean addPeople() {
+    public boolean addPeople() { // adds a marine into the world
         if (getWorld() == null) {
             return false;
         }
