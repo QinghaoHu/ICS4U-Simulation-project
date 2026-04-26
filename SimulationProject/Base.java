@@ -54,6 +54,7 @@ public class Base extends Buildings {
         team.addWorker(worker);
         
         getWorld().addObject(worker, getX(), getY());
+        UI.reportUpgrade(team, "Worker", 1);
         return true;
     }
 
@@ -68,6 +69,7 @@ public class Base extends Buildings {
         team.addSupplyBot(supplybot);
 
         getWorld().addObject(supplybot, getX(), getY());
+        UI.reportUpgrade(team, "SupplyBot", 1);
         return true;
     }
 }

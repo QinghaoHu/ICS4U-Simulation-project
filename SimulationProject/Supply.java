@@ -110,6 +110,8 @@ public class Supply extends SuperSmoothMover {
             Worker worker = new Worker(team, base);
             world.addObject(worker, base.getX(), base.getY());
         }
+
+        UI.reportUpgrade(team, "Worker", workerCount);
     }
 
     private void spawnMarines(Team team, int marineCount) {
@@ -123,6 +125,8 @@ public class Supply extends SuperSmoothMover {
             Marine marine = new Marine(team);
             world.addObject(marine, barrack.getX(), barrack.getY());
         }
+
+        UI.reportUpgrade(team, "Marine", marineCount);
     }
 
     private Base findBase(Team team) {

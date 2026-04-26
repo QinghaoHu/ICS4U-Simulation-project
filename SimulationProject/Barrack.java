@@ -37,6 +37,7 @@ public class Barrack extends Buildings{
         }
         
         getWorld().addObject(marine, getX(), getY());
+        UI.reportUpgrade(team, "Marine", 1);
 
         marineCoolDown = Marine.getMaxMarineCoolDown();
 

@@ -232,7 +232,7 @@ public class Team extends Actor {
                 }
 
                 building.setStatBarEnabled(true);
-                worker.prepBuild(building, xPosition, yPosition);
+                
                 w.removeObject(building);
                 return true;
             }
@@ -276,7 +276,7 @@ public class Team extends Actor {
                 }
 
                 building.setStatBarEnabled(true);
-                worker.prepBuild(building, xPosition, yPosition);
+            
                 w.removeObject(building);
                 return true;
             }
