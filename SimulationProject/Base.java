@@ -9,9 +9,12 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Base extends Buildings {
     private GreenfootImage img;
     private final int cost = 100; 
-
+    private int level = 1;
+    
+    
+    
     public Base(Team team) {
-        super(team, 1250);
+        super(team, 1500);
         setupImage();
         setImage(img);
     }
@@ -69,5 +72,22 @@ public class Base extends Buildings {
 
         getWorld().addObject(supplybot, getX(), getY());
         return true;
+    }
+    
+    public boolean upgrade() {
+        level++;
+    
+        setMaxHealth(getMaxHealth() + 250);
+        healToFull();
+    
+        return true;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 }

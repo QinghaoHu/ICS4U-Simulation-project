@@ -2,13 +2,11 @@ import greenfoot.*;
 import java.util.List;
 import java.util.Queue;
 import java.util.LinkedList;
-import java.util.HashMap;
-import java.util.Map;
 
 public class Worker extends People {
 
     protected int carryAmount = 0;
-    protected int maxCarry = 15;
+    protected int maxCarry = 13;
     protected int minRate = 5;
 
     private GreenfootImage emptyImg;
@@ -18,7 +16,7 @@ public class Worker extends People {
     private Resources assignedResource;
     private Base homeBase;
 
-    private Queue<String> states = new LinkedList<>(); 
+    private Queue<String> states = new LinkedList<>();
     private Queue<int[]> targetPositions = new LinkedList<>();
     private Queue<Buildings> buildings = new LinkedList<>();
 
@@ -37,16 +35,18 @@ public class Worker extends People {
 
         if (team != null) {
             team.addUnit(this);
+            team.addWorker(this);
         }
+
         states.add("move");
         states.add("mining");
         states.add("move");
 
         setupImage();
     }
-    
-    public static int getCost(){
-        return cost; 
+
+    public static int getCost() {
+        return cost;
     }
 
     @Override
@@ -55,8 +55,15 @@ public class Worker extends People {
     }
 
     public void act() {
+        if (states.isEmpty()) {
+            super.act();
+            return;
+        }
+
         timer--;
+
         String state = states.peek();
+
         if (state.equals("move")) {
             move();
         } else if (state.equals("mining")) {
@@ -80,27 +87,30 @@ public class Worker extends People {
             targetPositions.add(goToBase());
         }
     }
-    
-    public int available(){
-        return states.size(); 
+
+    public int available() {
+        return states.size();
     }
 
     public void build(Buildings building) {
-        if (timer <= 0){
-            if (getWorld() == null){
-                return; 
+        if (timer <= 0) {
+            if (getWorld() == null || building == null) {
+                return;
             }
+
             getWorld().addObject(building, getX(), getY());
             team.correctBuildingList(building);
+
             states.remove();
             states.add("mining");
-            states.add("move"); 
-            buildings.remove(building); 
+            states.add("move");
+
+            buildings.poll();
             targetPositions.add(resourceLocation());
         }
     }
-    
-    public void prepBuild(Buildings building, int x, int y){
+
+    public void prepBuild(Buildings building, int x, int y) {
         states.add("building");
         states.add("move");
         buildings.add(building);
@@ -108,7 +118,12 @@ public class Worker extends People {
     }
 
     private void move() {
-        int[] targetPosition = targetPositions.peek(); 
+        if (targetPositions.isEmpty()) {
+            return;
+        }
+
+        int[] targetPosition = targetPositions.peek();
+
         moveTowards(targetPosition[0], targetPosition[1]);
 
         double dist = Math.hypot(
@@ -118,8 +133,10 @@ public class Worker extends People {
 
         if (dist < 55) {
             timer = 120;
+
             String state = states.peek();
-            if (state.equals("build")){
+
+            if (state.equals("building")) {
                 timer = 1200;
             }
 
@@ -146,7 +163,7 @@ public class Worker extends People {
     private int[] resourceLocation() {
         if (getWorld() == null) return new int[]{-1, -1};
 
-        if (assignedResource == null) {
+        if (assignedResource == null || assignedResource.getWorld() == null) {
             List<Resources> all = getWorld().getObjects(Resources.class);
             List<Resources> valid = new java.util.ArrayList<>();
 
@@ -169,7 +186,9 @@ public class Worker extends People {
 
         targetResource = assignedResource;
 
-        if (targetResource == null) return new int[]{-1, -1};
+        if (targetResource == null || targetResource.getWorld() == null) {
+            return new int[]{-1, -1};
+        }
 
         return new int[]{targetResource.getX(), targetResource.getY()};
     }
@@ -178,6 +197,7 @@ public class Worker extends People {
         if (homeBase == null || homeBase.getWorld() == null) {
             return new int[]{-1, -1};
         }
+
         return new int[]{homeBase.getX(), homeBase.getY()};
     }
 
@@ -185,18 +205,42 @@ public class Worker extends People {
         if (timer <= 0) {
             team.addMoney(carryAmount);
             carryAmount = 0;
-            
+
             states.remove();
             states.add("mining");
             states.add("move");
             targetPositions.add(resourceLocation());
         }
     }
-    
-    public int statesLeft(){
+
+    public int statesLeft() {
         return states.size();
     }
+    
+    public int getPendingBarracks() {
+        int count = 0;
+    
+        for (Buildings building : buildings) {
+            if (building instanceof Barrack) {
+                count++;
+            }
+        }
+    
+        return count;
+    }
 
+    public int getPendingTurrets() {
+        int count = 0;
+    
+        for (Buildings building : buildings) {
+            if (building instanceof Turret) {
+                count++;
+            }
+        }
+    
+        return count;
+    }
+    
     private void updateImage() {
         if (carryAmount > 0) {
             setImage(miningImg);
