@@ -27,6 +27,10 @@ public class Worker extends People {
     private static final int cost = 75;
 
     private static int maxWorkerCoolDown = 240;
+    
+    private static GreenfootSound constructionSound = new GreenfootSound("building construction.mp3");
+    private static GreenfootSound miningSound = new GreenfootSound("mining.mp3");
+    private static GreenfootSound depositSound = new GreenfootSound("resource gain.mp3");
 
     public Worker(Team team, Base base) {
         super(team, 60, 2);
@@ -41,6 +45,9 @@ public class Worker extends People {
         states.add("move");
         states.add("mining");
         states.add("move");
+        
+        miningSound.setVolume(20);
+        depositSound.setVolume(30);
 
         setupImage();
     }
@@ -86,6 +93,9 @@ public class Worker extends People {
             states.add("move");
             targetPositions.add(goToBase());
         }
+        if (timer % 50 == 0) {
+            miningSound.play();
+        }
     }
 
     public int available() {
@@ -107,6 +117,8 @@ public class Worker extends People {
 
             buildings.poll();
             targetPositions.add(resourceLocation());
+            
+            constructionSound.play();
         }
     }
 
@@ -210,6 +222,8 @@ public class Worker extends People {
             states.add("mining");
             states.add("move");
             targetPositions.add(resourceLocation());
+            
+            depositSound.play();
         }
     }
 

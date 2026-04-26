@@ -1,5 +1,5 @@
+import greenfoot.*;
 import greenfoot.GreenfootImage;
-
 import java.util.ArrayList;
 
 public class SupplyBot extends People{
@@ -13,6 +13,8 @@ public class SupplyBot extends People{
 
     private int suppliesCollected = 0;
     private final int MAX_SUPPLIES = 2;
+    
+    private static GreenfootSound collectSupplyCrateSound = new GreenfootSound("supply crate.mp3");
 
     public SupplyBot(Team team) {
         super(team, MAX_HEALTH, 1); 
@@ -49,6 +51,8 @@ public class SupplyBot extends People{
             removeTouching(Supply.class);
             targetSupply = null;
             suppliesCollected++;
+            
+            collectSupplyCrateSound.play();
         }
     }
 
