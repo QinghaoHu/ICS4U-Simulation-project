@@ -3,10 +3,9 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.util.ArrayList;
 
 /**
- * Write a description of class Buildings here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * This is the superclass for all entities that are buildings
+ * The shared trait that all buildings will not be not spawn touching another building
+ * and spawning people (except for turret) 
  */
 public abstract class Buildings extends Entity
 {
@@ -95,7 +94,7 @@ public abstract class Buildings extends Entity
         ArrayList<Buildings> intersectingBuilding = (ArrayList<Buildings>) getIntersectingObjects(Buildings.class);
         ArrayList<Resources> intersectingResources = (ArrayList<Resources>) getIntersectingObjects(Resources.class);
         ArrayList<People> intersectingPeoples = (ArrayList<People>) getIntersectingObjects(People.class);
-
+        // checks if the building is touching other things to ensure where it spawns makes sense
         if (intersectingBuilding.isEmpty() && intersectingResources.isEmpty() && intersectingPeoples.isEmpty()) {
             return false;
         }

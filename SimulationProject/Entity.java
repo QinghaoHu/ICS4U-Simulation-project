@@ -1,6 +1,8 @@
 import greenfoot.*;
 import java.util.ArrayList;
 
+// The superclass for actors that can die, have health, and wants to a move to a specific position
+
 public abstract class Entity extends SuperSmoothMover{
     protected Team team;
     protected int health;
@@ -10,7 +12,7 @@ public abstract class Entity extends SuperSmoothMover{
     private ArrayList<Entity> enemies;
 
     public Entity(Team team){
-        //this(); im not sure what this does
+        // sets the team of the entity
         setTeam(team);
     }
     
@@ -21,17 +23,17 @@ public abstract class Entity extends SuperSmoothMover{
     public void act(){
         if (health <= 0 && getWorld() != null) {
             getWorld().removeObject(this);
-            return;
+            return; // if the entity has less than or equal to 0 health then remove it from the world
         }
     }
     
     public void damage(int d){
-        health -= d; 
+        health -= d; // removes health from an entity
     }
     
-    public Entity findTarget(int range)
-    {
-        Entity closest = null;
+    public Entity findTarget(int range) // find the closest enttiy that is also not on its team with a specific range
+    { 
+        Entity closest = null; 
         double closestDist = range;
     
         for (Object obj : getObjectsInRange(range, Actor.class)) {
@@ -51,7 +53,7 @@ public abstract class Entity extends SuperSmoothMover{
         return closest;
     }
     
-    public Entity findTarget() {
+    public Entity findTarget() { // finds closest entity on the other team with infinite range
         enemies = (ArrayList<Entity>)getWorld().getObjects(Entity.class);
         Entity closest = null;
         double shortestDist = 0;
@@ -69,23 +71,23 @@ public abstract class Entity extends SuperSmoothMover{
     }
 
 
-    public boolean isAlive(){
+    public boolean isAlive(){ // returns if the entity has more than 0 hp
         return health > 0;
     }
 
-    public Team getTeam(){
+    public Team getTeam(){ // returns what team it is on
         return team;
     }
     
-    public int getHealth() {
+    public int getHealth() { // returns health
         return health;
     }
     
-    public int getMaxHealth() {
+    public int getMaxHealth() { // returns max health
         return maxHealth;
     }
 
-    public int getTeamId() {
+    public int getTeamId() { // returns what team it is on
         if (team == null) {
             return -1;
         }
@@ -93,11 +95,11 @@ public abstract class Entity extends SuperSmoothMover{
         return team.getTeamId();
     }
 
-    public void setTeam(Team team) {
+    public void setTeam(Team team) { // sets the team it is on
         this.team = team;
     }
 
-    public boolean isOpponent(Entity other) {
+    public boolean isOpponent(Entity other) { // returns if the entity is not on the same team 
         if (other == null || getTeam() == null || other.getTeam() == null) {
             return false;
         }

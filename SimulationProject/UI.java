@@ -24,7 +24,7 @@ public class UI extends Actor {
     private Team blueTeam;
     private GreenfootImage baseImage;
     private String fontName;
-
+    // the ui that is on the game screen at the bottom that tracks the stats of both teams
     public UI() {
         baseImage = new GreenfootImage("Ui.png");
         setImage(baseImage);
@@ -49,7 +49,7 @@ public class UI extends Actor {
         updateImage();
     }
 
-    private void syncTeams(World world) {
+    private void syncTeams(World world) { // make sure the stats are correct
         List<Team> teams = world.getObjects(Team.class);
         for (Team team : teams) {
             if (team.getTeamId() == Team.RED) {
@@ -61,6 +61,7 @@ public class UI extends Actor {
     }
 
     private void updateImage() {
+        // updates the displayed stats on screen
         GreenfootImage image = new GreenfootImage(baseImage);
         image.setColor(Color.WHITE);
         greenfoot.Font myFont = new greenfoot.Font(fontName, FONT_SIZE);
@@ -117,7 +118,7 @@ public class UI extends Actor {
     }
     
     
-    private String getStrongestMarineStats(Team team) {
+    private String getStrongestMarineStats(Team team) { 
         if (team == null) return "0 HP | 0 DMG";
     
         Marine strongest = null;

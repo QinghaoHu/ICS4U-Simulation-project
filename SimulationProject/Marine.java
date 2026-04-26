@@ -42,7 +42,7 @@ public class Marine extends Soldier
         // Add your action code here.
     }
     
-    protected void shoot(Entity target){
+    protected void shoot(Entity target){ // will create a bullet at the tip of it's gun going towards the entity it wants to shoot at
         turnTowards(target.getX(), target.getY());
         double angle = shootAngle(target);
         int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
