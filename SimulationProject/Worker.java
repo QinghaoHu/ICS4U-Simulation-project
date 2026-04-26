@@ -27,6 +27,10 @@ public class Worker extends People {
 
     private static int maxWorkerCoolDown = 240;
     
+    private static GreenfootSound constructionSound = new GreenfootSound("building construction.mp3");
+    private static GreenfootSound miningSound = new GreenfootSound("mining.mp3");
+    private static GreenfootSound depositSound = new GreenfootSound("resource gain.mp3");
+
     /*
      * The worker bot main functions are to create buildings and to collect resources
      * It is able to do this by keeping a todo list of what to do through the states variable
@@ -46,11 +50,15 @@ public class Worker extends People {
         states.add("move");
         states.add("mining");
         states.add("move");
+
         // initials states will be moving the resources and mining it then moving some where else
         
         sounds.put("mining", new GreenfootSound("mining.mp3"));
         sounds.put("depositing", new GreenfootSound("depositing.mp3"));
         sounds.put("building", new GreenfootSound("building.mp3"));
+      
+        sounds.get("mining").setVolume(20);
+        sounds.get("depositing").setVolume(30);
         
         setupImage();
     }
@@ -99,6 +107,9 @@ public class Worker extends People {
             states.add("move");
             targetPositions.add(goToBase());
         }
+        if (timer % 50 == 0) {
+            miningSound.play();
+        }
     }
 
     public int available() {
@@ -124,6 +135,8 @@ public class Worker extends People {
 
             buildings.poll();
             targetPositions.add(resourceLocation());
+            
+            constructionSound.play();
         }
     }
 
@@ -235,6 +248,8 @@ public class Worker extends People {
             states.add("mining");
             states.add("move");
             targetPositions.add(resourceLocation());
+            
+            depositSound.play();
         }
     }
 
