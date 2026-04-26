@@ -32,7 +32,7 @@ public abstract class Soldier extends People
     private static final int detectionRange = 600;
     
     public Soldier(Team team) {
-        super(team, 30, 2);
+        super(team, 25, 2);
         if (team != null) {
             team.addUnit(this);
         }

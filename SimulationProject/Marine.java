@@ -16,11 +16,19 @@ public class Marine extends Soldier
     
     private static final int cost = 100;
     private static int maxMarineCoolDown = 400;
+    private int bonusDamage;
     
     public Marine(Team team) {
         super(team);
         if (team != null) {
             team.addUnit(this);
+    
+            Base base = team.getBase();
+            if (base != null) {
+                int level = base.getLevel();
+                bonusDamage = (level - 1);
+                health += (level - 1) * 3;
+            }
         }
     }
     
@@ -39,7 +47,7 @@ public class Marine extends Soldier
         double angle = shootAngle(target);
         int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
         int Y = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
-        getWorld().addObject(new SoldierBullet(this, angle, 2.5, 3), X, Y); // adds bullet
+        getWorld().addObject(new SoldierBullet(this, angle, 2.5, 3 + bonusDamage), X, Y); // adds bullet
     }
 
     public static int getMaxMarineCoolDown() {
@@ -48,5 +56,9 @@ public class Marine extends Soldier
 
     public static void modifyMaxMarineCoolDown(int marineCoolDown) {
         maxMarineCoolDown = marineCoolDown;
+    }
+    
+    public int getTotalDamage() {
+        return 3 + bonusDamage;
     }
 }

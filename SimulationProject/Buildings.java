@@ -12,6 +12,7 @@ public abstract class Buildings extends Entity
 {
     private boolean hasStatBar;
     private boolean statBarEnabled = true;
+    private SuperStatBar statBar;
 
     public Buildings(Team team, int maxHealth) {
         super(team);
@@ -27,9 +28,13 @@ public abstract class Buildings extends Entity
      * Act - do whatever the Buildings wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
-    public void act()
-    {
+    public void act() {
         super.act();
+    
+        if (statBar != null) {
+            statBar.setMaxVal(maxHealth);
+            statBar.update(health);
+        }
     }
 
     protected void addedToWorld(World world) {
@@ -42,7 +47,8 @@ public abstract class Buildings extends Entity
 
     public void addStatBar(World world) {
         if (world != null && statBarEnabled && !hasStatBar) {
-            world.addObject(new SuperStatBar(maxHealth, health, this, 50, 6, -65), getX(), getY());
+            statBar = new SuperStatBar(maxHealth, health, this, 50, 6, -65);
+            world.addObject(statBar, getX(), getY());
             hasStatBar = true;
         }
     }
@@ -94,5 +100,21 @@ public abstract class Buildings extends Entity
             return false;
         }
         return true;
+    }
+    
+        public void setMaxHealth(int newMax) {
+        maxHealth = newMax;
+    }
+    
+    public void updateStatBar() {
+        if (statBar != null) {
+            statBar.setMaxVal(maxHealth);
+            statBar.update(health);
+        }
+    }
+    
+    public void healToFull() {
+        health = maxHealth;
+        updateStatBar();
     }
 }
