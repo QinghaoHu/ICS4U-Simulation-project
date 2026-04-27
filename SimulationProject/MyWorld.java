@@ -37,6 +37,10 @@ public class MyWorld extends World {
     private static final int MIN_SUPPLY_DROP_RANGE = 500;
     private static final int MAX_SUPPLY_DROP_RANGE = 700;
     private static final int SUPPLY_SPWAN_Y_OFFSET = -60;
+    private static final int[][] RED_BARRACK_POSITIONS = {{120, 210}, {270, 165}};
+    private static final int[][] BLUE_BARRACK_POSITIONS = {{1070, 600}, {930, 645}};
+    private static final int[][] RED_TURRET_POSITIONS = {{350, 460}, {480, 530}};
+    private static final int[][] BLUE_TURRET_POSITIONS = {{840, 250}, {720, 135}};
     private int supplySpawnTimer;
 
     private static final String GAME_STATE = "game";
@@ -48,14 +52,20 @@ public class MyWorld extends World {
 
     private Team redTeam;
     private Team blueTeam;
+    private final SimulationConfig config;
 
     public MyWorld() {
+        this(SimulationConfig.defaultConfig());
+    }
+
+    public MyWorld(SimulationConfig config) {
         super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
 
-        String redTeamStrategy = "ECO";
-        String blueTeamStrategy = "ECO";
-        redTeam = new Team(Team.RED, "Red", 150, redTeamStrategy, this);
-        blueTeam = new Team(Team.BLUE, "Blue", 150, blueTeamStrategy, this);
+        this.config = config == null ? SimulationConfig.defaultConfig() : config;
+        TeamSetup redSetup = this.config.getRedSetup();
+        TeamSetup blueSetup = this.config.getBlueSetup();
+        redTeam = new Team(Team.RED, "Red", redSetup.getStartingResources(), redSetup.getStrategy(), this);
+        blueTeam = new Team(Team.BLUE, "Blue", blueSetup.getStartingResources(), blueSetup.getStrategy(), this);
 
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
@@ -72,7 +82,9 @@ public class MyWorld extends World {
         if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
             changeState(GAME_STATE);
         }
-        spawnSupply();
+        if (config.isSupplyDropsEnabled()) {
+            spawnSupply();
+        }
     }
     
     private void stopMusic(){
@@ -126,6 +138,9 @@ public class MyWorld extends World {
         addObject(new Resources(Team.BLUE), 1160, 145);
         //bottom right resource
         addObject(new Resources(Team.BLUE), 1140, 220);
+
+        applyTeamSetup(redTeam, redBase, config.getRedSetup(), RED_BARRACK_POSITIONS, RED_TURRET_POSITIONS);
+        applyTeamSetup(blueTeam, blueBase, config.getBlueSetup(), BLUE_BARRACK_POSITIONS, BLUE_TURRET_POSITIONS);
 
         redTeam.setUpWorld();
         blueTeam.setUpWorld();
@@ -224,6 +239,43 @@ public class MyWorld extends World {
      */
     private void prepare()
     {
+    }
+
+    private void applyTeamSetup(Team team, Base base, TeamSetup setup, int[][] barrackPositions, int[][] turretPositions) {
+        if (team == null || base == null || setup == null) {
+            return;
+        }
+
+        spawnStartingWorkers(team, base, setup.getExtraWorkers());
+        spawnStartingBuildings(team, setup.getExtraBarracks(), barrackPositions, true);
+        spawnStartingBuildings(team, setup.getExtraTurrets(), turretPositions, false);
+        spawnStartingSupplyBot(team, base, setup.isSupplyBotsEnabled());
+    }
+
+    private void spawnStartingWorkers(Team team, Base base, int count) {
+        for (int i = 0; i < count; i++) {
+            Worker worker = new Worker(team, base);
+            addObject(worker, base.getX() + (i * 14), base.getY() + (i * 10));
+        }
+    }
+
+    private void spawnStartingBuildings(Team team, int count, int[][] positions, boolean barracks) {
+        int limit = Math.min(count, positions.length);
+        for (int i = 0; i < limit; i++) {
+            Buildings building = barracks ? new Barrack(team) : new Turret(team);
+            addObject(building, positions[i][0], positions[i][1]);
+            team.correctBuildingList(building);
+        }
+    }
+
+    private void spawnStartingSupplyBot(Team team, Base base, boolean enabled) {
+        if (!enabled) {
+            return;
+        }
+
+        SupplyBot bot = new SupplyBot(team);
+        team.addSupplyBot(bot);
+        addObject(bot, base.getX() + 40, base.getY() + 25);
     }
 
     public static String loadCustomFont(String file) {

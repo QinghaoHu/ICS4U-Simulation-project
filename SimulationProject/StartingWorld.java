@@ -48,7 +48,7 @@ public class StartingWorld extends World{
 
     private void checkClickButton(){
         if (Greenfoot.mouseClicked(startButton)) {
-            Greenfoot.setWorld(new MyWorld());
+            Greenfoot.setWorld(new ConfigWorld());
             if (bgm != null) {
                 bgm.stop();
             }

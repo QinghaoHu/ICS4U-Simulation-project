@@ -73,7 +73,11 @@ public class Button extends Actor
     }
 
     private void redraw() {
-        fontName = MyWorld.loadCustomFont(fontFile);
+        if (fontFile == null || fontFile.length() == 0) {
+            fontName = "Arial";
+        } else {
+            fontName = MyWorld.loadCustomFont(fontFile);
+        }
 
         image = new GreenfootImage(width, height);
         image.setColor(isDisabled ? DISABLED_FILL_COLOR : fillColor);
