@@ -34,7 +34,7 @@ public class EndingWorld extends World
         
         setBackground(winner);
         setupButtons();
-    
+        SoundManager.buttonSoundSetup();
     }
     
     public void act(){
@@ -48,6 +48,7 @@ public class EndingWorld extends World
 
     private void checkClickButton(){
         if (Greenfoot.mouseClicked(startButton)) {
+            SoundManager.playButtonSound();
             Greenfoot.setWorld(new StartingWorld());
         }
     }
