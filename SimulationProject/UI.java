@@ -37,7 +37,7 @@ public class UI extends Actor {
     private int blueUpgradeTimer;
 
     public UI() {
-        baseImage = new GreenfootImage("Ui.png");
+        baseImage = ResourceCache.getImage("Ui.png");
         setImage(baseImage);
         fontName = MyWorld.loadCustomFont("fonts/SupremeSpike-KVO8D.ttf");
     }

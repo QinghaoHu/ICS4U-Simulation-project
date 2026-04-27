@@ -29,11 +29,9 @@ public abstract class Projectile extends SuperSmoothMover
         this.speed = speed; 
         this.damage = damage;
         
-        sounds.put("shoot", new GreenfootSound(s.getClass().getName() + "Shoot.mp3"));
-        sounds.get("shoot").setVolume(20);
-        sounds.get("shoot").play(); 
+        ResourceCache.playSound(s.getClass().getName() + "Shoot.mp3", 20);
         
-        img = new GreenfootImage(getClass().getName() + ".png");
+        img = ResourceCache.getImage(getClass().getName() + ".png");
         img.scale(10, 10);
         setImage(img);
     }

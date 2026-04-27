@@ -69,7 +69,7 @@ public class ConfigWorld extends World {
     public ConfigWorld() {
         super(WORLD_WIDTH, WORLD_HEIGHT, CELL_SIZE);
         fontName = MyWorld.loadCustomFont("fonts/StarJediRounded-jW3R.ttf");
-        background = new GreenfootImage("Background.png");
+        background = ResourceCache.getImage("Background.png");
         drawStaticBackground();
         setBackground(background);
         setupButtons();
@@ -116,14 +116,14 @@ public class ConfigWorld extends World {
     }
 
     private void drawLabel(String text, int x, int y, String imageName) {
-        GreenfootImage icon = new GreenfootImage(imageName);
+        GreenfootImage icon = ResourceCache.getImage(imageName);
         icon.scale(34, 34);
         background.drawImage(icon, x, y - 24);
         background.drawString(text, x + 46, y);
     }
 
     private void drawCenteredIconLabel(String text, int centerX, int y, String imageName) {
-        GreenfootImage icon = new GreenfootImage(imageName);
+        GreenfootImage icon = ResourceCache.getImage(imageName);
         icon.scale(34, 34);
         background.drawImage(icon, centerX - 17, y - 36);
         drawCenteredTextLabel(text, centerX, y + 18);

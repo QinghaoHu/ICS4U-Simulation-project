@@ -63,7 +63,7 @@ public class Turret extends Buildings
             return;
         }
 
-        img = new GreenfootImage(team.getName() + getClass().getName() +  ".png");
+        img = ResourceCache.getImage(team.getName() + getClass().getName() +  ".png");
         
         img.scale(150, 150);
         setImage(img);

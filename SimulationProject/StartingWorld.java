@@ -30,7 +30,7 @@ public class StartingWorld extends World{
     }
 
     private void setupBackground(){
-        background = new GreenfootImage("Background.png"); // placeHolder
+        background = ResourceCache.getImage("Background.png"); // placeHolder
 
         greenfoot.Font myFont = new greenfoot.Font(fontName, TITLE_FONT_SIZE);
         background.setFont(myFont);

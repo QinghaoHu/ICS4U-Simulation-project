@@ -18,10 +18,10 @@ public class EndScreen extends Actor
     public EndScreen(int l){
         loser = l;
         if(loser == 1){
-            winner = new GreenfootImage("redwins.png");
+            winner = ResourceCache.getImage("redwins.png");
         }
         else if(loser == 0){
-            winner = new GreenfootImage("bluewins.png");
+            winner = ResourceCache.getImage("bluewins.png");
         }
     }
 

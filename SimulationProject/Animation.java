@@ -23,7 +23,7 @@ public class Animation
         curDelay = delay;
         images = new GreenfootImage[length]; // sets an appropriate length to the animation
         for (int i = 0; i< length; i++){
-            GreenfootImage curImg = new GreenfootImage(path + "/" + i + ".png"); // sets each image to respective space in the list
+            GreenfootImage curImg = ResourceCache.getImage(path + "/" + i + ".png"); // sets each image to respective space in the list
             if (curImg != null){
                 images[i] = curImg; // 
             }
@@ -37,7 +37,7 @@ public class Animation
         loop = false;
         images = new GreenfootImage[length];
         for (int i = 0; i< length; i++){  
-            GreenfootImage curImg = new GreenfootImage(path + "/" + i + ".png");
+            GreenfootImage curImg = ResourceCache.getImage(path + "/" + i + ".png");
             if (curImg != null){
                 images[i] = curImg; 
             }

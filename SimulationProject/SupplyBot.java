@@ -14,7 +14,7 @@ public class SupplyBot extends People{
     private int suppliesCollected = 0;
     private final int MAX_SUPPLIES = 1;
     
-    private static GreenfootSound collectSupplyCrateSound = new GreenfootSound("supply crate.mp3");
+    private static final String SUPPLY_CRATE_SOUND_FILE = "supply crate.mp3";
 
     public SupplyBot(Team team) {
         super(team, MAX_HEALTH, 4); 
@@ -24,8 +24,6 @@ public class SupplyBot extends People{
             team.addSupplyBot(this);
         }
         
-        collectSupplyCrateSound.setVolume(20);
-
         targetSupply = null;
         setupImage();
     }
@@ -53,7 +51,7 @@ public class SupplyBot extends People{
             targetSupply = null;
             suppliesCollected++;
             
-            collectSupplyCrateSound.play();
+            ResourceCache.playSound(SUPPLY_CRATE_SOUND_FILE, 20);
         }
     }
 
