@@ -54,26 +54,6 @@ public abstract class Buildings extends Entity
         }
     }
 
-    public People addPeople(String type){
-        if (getWorld() == null || team == null) {
-            return null;
-        }
-
-        People newPerson = null;
-
-        if ("Officer".equals(type)) {
-            newPerson = new Officer(team);
-        } else if ("Marine".equals(type)) {
-            newPerson = new Marine(team);
-        }
-
-        if (newPerson != null) {
-            getWorld().addObject(newPerson, getX(), getY());
-        }
-
-        return newPerson;
-    }
-
     public abstract int getCost();
     
     public int getHealth() {

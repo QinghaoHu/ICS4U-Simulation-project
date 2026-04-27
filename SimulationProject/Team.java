@@ -310,6 +310,8 @@ public class Team extends Actor {
                     return true;
                 }
 
+                building.setStatBarEnabled(true);
+                
                 w.removeObject(building);
             }
         }
@@ -373,6 +375,8 @@ public class Team extends Actor {
                     return true;
                 }
 
+                building.setStatBarEnabled(true);
+            
                 w.removeObject(building);
             }
         }
