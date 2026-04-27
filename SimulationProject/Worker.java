@@ -26,6 +26,7 @@ public class Worker extends People {
     private static final int cost = 75;
 
     private static int maxWorkerCoolDown = 180;
+    
 
     /*
      * The worker bot main functions are to create buildings and to collect resources
@@ -35,7 +36,7 @@ public class Worker extends People {
     
     public Worker(Team team, Base base) {
         super(team, 450, 5);
-
+        setStatBarEnabled(false);
         this.homeBase = base;
 
         if (team != null) {
