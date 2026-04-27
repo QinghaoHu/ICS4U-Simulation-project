@@ -39,8 +39,8 @@ public class EndingWorld extends World
     
     public void act(){
         checkClickButton();
-
     }
+    
      private void setupButtons(){
         startButton = new Button("Restart", 150);
         addObject(startButton, START_BUTTON_X, BUTTON_Y_POSITION);
