@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class Worker extends People {
     protected int carryAmount = 0;
-    protected int maxCarry = 15;
+    protected int maxCarry = 17;
     protected int minRate = 5;
 
     private GreenfootImage emptyImg;
