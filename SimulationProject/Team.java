@@ -442,7 +442,7 @@ public class Team extends Actor {
         currentSupplyBotAmount = 0;
 
         if (strategy.equals("ECO")) {
-            workerNeeded = currentWorkerAmount + 4;
+            workerNeeded = currentWorkerAmount + 3;
             return;
         } else if (strategy.equals("ATK")) {
             workerNeeded = currentWorkerAmount + 1;
@@ -460,9 +460,9 @@ public class Team extends Actor {
     }
 
     private void spendMoney() {
-        if (!strategy.equals("ATK")) {
-            if (resources > 300 && marineNeeded < 4) {
-                marineNeeded = 4;
+        if (resources >= 75 && isBarrackExist()) {
+            if (marineNeeded < currentMarinedAmount + 1) {
+                marineNeeded = currentMarinedAmount + 1;
             }
         }
     }
