@@ -16,6 +16,9 @@ public class EndingWorld extends World
     int loser;
     
     GreenfootImage winner;
+    private Button startButton;
+    private static final int BUTTON_Y_POSITION = 100;
+    private static final int START_BUTTON_X = 1000;
 
     public EndingWorld(int l)
     {    
@@ -30,6 +33,22 @@ public class EndingWorld extends World
         }
         
         setBackground(winner);
+        setupButtons();
     
+    }
+    
+    public void act(){
+        checkClickButton();
+
+    }
+     private void setupButtons(){
+        startButton = new Button("Restart", 150);
+        addObject(startButton, START_BUTTON_X, BUTTON_Y_POSITION);
+    }
+
+    private void checkClickButton(){
+        if (Greenfoot.mouseClicked(startButton)) {
+            Greenfoot.setWorld(new StartingWorld());
+        }
     }
 }

@@ -13,7 +13,8 @@ public class EndScreen extends Actor
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     int loser;
-    
+ 
+
     GreenfootImage winner;
     public EndScreen(int l){
         loser = l;
@@ -30,4 +31,6 @@ public class EndScreen extends Actor
         setImage(winner);
         Greenfoot.stop();
     }
+    
+    
 }
