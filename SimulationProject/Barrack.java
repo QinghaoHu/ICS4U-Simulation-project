@@ -16,8 +16,6 @@ public class Barrack extends Buildings{
         super.act();
         
         if (marineCoolDown > 0) marineCoolDown--;
-        
-        if (health <= 0) sounds.get("explode").play();
     }
     
     public int getCost(){

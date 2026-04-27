@@ -23,6 +23,7 @@ public abstract class Buildings extends Entity
         }
         
         sounds.put("explode", ResourceCache.getSound(this.getClass().getName() + "Explosion.mp3"));
+        sounds.get("explode").setVolume(10);
     }
 
     /**
@@ -36,6 +37,8 @@ public abstract class Buildings extends Entity
             statBar.setMaxVal(maxHealth);
             statBar.update(health);
         }
+        
+        if (health <= 0) sounds.get("explode").play();
     }
 
     protected void addedToWorld(World world) {
