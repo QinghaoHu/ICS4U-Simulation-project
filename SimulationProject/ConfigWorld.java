@@ -258,7 +258,7 @@ public class ConfigWorld extends World {
             EXTRA_WORKERS[redWorkersIndex],
             0,
             0,
-            false
+            true
         );
         TeamSetup blueSetup = new TeamSetup(
             STRATEGIES[blueStrategyIndex],
@@ -266,7 +266,7 @@ public class ConfigWorld extends World {
             EXTRA_WORKERS[blueWorkersIndex],
             0,
             0,
-            false
+            true
         );
         return new SimulationConfig(redSetup, blueSetup, supplyDropsEnabled);
     }
