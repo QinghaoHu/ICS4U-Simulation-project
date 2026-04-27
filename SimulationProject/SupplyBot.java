@@ -23,6 +23,8 @@ public class SupplyBot extends People{
             team.addUnit(this);
             team.addSupplyBot(this);
         }
+        
+        collectSupplyCrateSound.setVolume(20);
 
         targetSupply = null;
         setupImage();
