@@ -25,7 +25,7 @@ public class Worker extends People {
     private static int blueIndex = 0;
     private static final int cost = 75;
 
-    private static int maxWorkerCoolDown = 240;
+    private static int maxWorkerCoolDown = 180;
 
     /*
      * The worker bot main functions are to create buildings and to collect resources

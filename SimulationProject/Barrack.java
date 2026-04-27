@@ -17,7 +17,11 @@ public class Barrack extends Buildings{
         
         if (marineCoolDown > 0) marineCoolDown--;
         
-        if (health <= 0) sounds.get("explode").play();
+        if (health <= 0) {
+            GreenfootSound explode = sounds.get("explode");
+            explode.setVolume(22); // added this, barracks was way too loud
+            explode.play();
+        }
     }
     
     public int getCost(){

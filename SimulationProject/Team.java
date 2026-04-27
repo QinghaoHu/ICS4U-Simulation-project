@@ -442,7 +442,7 @@ public class Team extends Actor {
         currentSupplyBotAmount = 0;
 
         if (strategy.equals("ECO")) {
-            workerNeeded = currentWorkerAmount + 3;
+            workerNeeded = currentWorkerAmount + 4;
             return;
         } else if (strategy.equals("ATK")) {
             workerNeeded = currentWorkerAmount + 1;

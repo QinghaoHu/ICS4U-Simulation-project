@@ -13,7 +13,7 @@ public class UI extends Actor {
     private static final int STRATEGY_TEXT_Y = 775;
     private static final int FONT_SIZE = 18;
     private static final int LEVEL_TEXT_Y = 750;
-    private static final int RED_SIDE_TEXT_X = 220;
+    private static final int RED_SIDE_TEXT_X = 200;
     private static final int BLUE_SIDE_TEXT_X = 830;
     private static final int MARINE_TEXT_Y = 725;
     private static final int UPGRADE_ICON_SIZE = 55;
@@ -182,7 +182,7 @@ public class UI extends Actor {
             return findExistingImage(teamName + "Turret.png", "placeholder.png");
         }
         if ("SupplyBot".equals(typeName)) {
-            return findExistingImage("SupplyBot.png", "placeholder.png");
+            return findExistingImage(teamName + "SupplyBot.png", "placeholder.png");
         }
 
         return "placeholder.png";

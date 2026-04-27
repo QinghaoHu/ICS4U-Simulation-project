@@ -59,6 +59,7 @@ public class MyWorld extends World {
 
     public MyWorld() {
         this(SimulationConfig.defaultConfig());
+        prepare();
     }
 
     public MyWorld(SimulationConfig config) {
@@ -248,6 +249,7 @@ public class MyWorld extends World {
         double dy = a.getY() - targetY;
         return Math.sqrt(dx * dx + dy * dy);
     }
+    
     /**
      * Prepare the world for the start of the program.
      * That is: create the initial objects and add them to the world.
