@@ -99,11 +99,11 @@ public class ConfigWorld extends World {
 
         drawCenteredTextLabel("Strategy", RED_X, STRATEGY_LABEL_Y);
         drawCenteredIconLabel("Resources", RED_X, RESOURCES_LABEL_Y, "Resources1.png");
-        drawCenteredIconLabel("Workers", RED_X, WORKERS_LABEL_Y, "RedWorkerRegular.png");
+        drawCenteredIconLabel("Extra Workers", RED_X, WORKERS_LABEL_Y, "RedWorkerRegular.png");
 
         drawCenteredTextLabel("Strategy", BLUE_X, STRATEGY_LABEL_Y);
         drawCenteredIconLabel("Resources", BLUE_X, RESOURCES_LABEL_Y, "Resources2.png");
-        drawCenteredIconLabel("Workers", BLUE_X, WORKERS_LABEL_Y, "BlueWorkerRegular.png");
+        drawCenteredIconLabel("Extra Workers", BLUE_X, WORKERS_LABEL_Y, "BlueWorkerRegular.png");
         
         background.setColor(TITLE_COLOR);
         background.drawString("Supply Drops", 485, SUPPLY_DROP_Y);
