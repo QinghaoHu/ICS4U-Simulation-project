@@ -8,14 +8,74 @@ import java.util.Map;
  * @version (a version number or a date)
  */
 public class ResourceCache {
-    private static final int soundPoolSize = 6;
+    private static final int soundPoolSize = 4;
+
+    private static final String[] IMAGE_FILES = {
+            "Background.png",
+            "BlueBarrack.png",
+            "BlueBase.png",
+            "BlueMarine.png",
+            "BlueMarineRecoil.png",
+            "BlueTurret.png",
+            "BlueWorkerMining.png",
+            "BlueWorkerRegular.png",
+            "Counter.png",
+            "placeholder.png",
+            "redwins.png",
+            "bluewins.png",
+            "RedBarrack.png",
+            "RedBase.png",
+            "RedMarine.png",
+            "RedMarineRecoil.png",
+            "RedOfficer.png",
+            "RedOfficerRecoil.png",
+            "RedTurret.png",
+            "RedWorkerMining.png",
+            "RedWorkerRegular.png",
+            "Resources1.png",
+            "Resources2.png",
+            "SoldierBullet.png",
+            "Supply.png",
+            "SupplyBot.png",
+            "Ui.png",
+            "upgrades.png"
+    };
+    private static final String[] SOUND_FILES = {
+            "BarrackExplosion.mp3",
+            "BaseExplosion.mp3",
+            "building.mp3",
+            "depositing.mp3",
+            "MarineShoot.mp3",
+            "mining.mp3",
+            "OfficerShoot.mp3",
+            "supply crate.mp3",
+            "TurretExplosion.mp3",
+            "TurretShoot.mp3"
+    };
 
     private static final Map<String, GreenfootImage> images = new HashMap<>();
     private static final Map<String, GreenfootSound> sounds = new HashMap<>();
     private static final Map<String, GreenfootSound[]> soundPools = new HashMap<>();
     private static final Map<String, Integer> soundPoolIndexes = new HashMap<>();
+    private static boolean allResourcesLoaded;
 
     private ResourceCache() {
+    }
+
+    public static void loadAllResources() {
+        if (allResourcesLoaded) {
+            return;
+        }
+
+        for (String imageFile : IMAGE_FILES) {
+            getImage(imageFile);
+        }
+
+        for (String soundFile : SOUND_FILES) {
+            getSound(soundFile);
+        }
+
+        allResourcesLoaded = true;
     }
 
     public static GreenfootImage getImage(String fileName) {
@@ -67,4 +127,5 @@ public class ResourceCache {
         pool[index].play();
         soundPoolIndexes.put(fileName, (index + 1) % pool.length);
     }
+
 }
