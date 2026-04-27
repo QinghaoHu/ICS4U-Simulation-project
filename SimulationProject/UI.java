@@ -1,11 +1,24 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+<<<<<<< HEAD
+=======
 import java.io.File;
+>>>>>>> UI
 import java.util.List;
 
 public class UI extends Actor {
     public static final int PLAY_AREA_BOTTOM_Y = 640;
 
     private static final int RED_TEXT_X = 25;
+    private static final int BLUE_TEXT_X = 1015;
+    private static final int RESOURCE_TEXT_Y = 675;
+    private static final int WORKER_TEXT_Y = 775;
+    private static final int BASE_HP_TEXT_Y = 725;
+    private static final int STRATEGY_TEXT_Y = 775;
+    private static final int FONT_SIZE = 18;
+    private static final int LEVEL_TEXT_Y = 750;
+    private static final int RED_SIDE_TEXT_X = 220;
+    private static final int BLUE_SIDE_TEXT_X = 830;
+    private static final int MARINE_TEXT_Y = 725;
     private static final int BLUE_TEXT_X = 940;
     private static final int RESOURCE_TEXT_Y = 680;
     private static final int STRATEGY_TEXT_Y = 770;
