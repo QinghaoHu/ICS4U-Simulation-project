@@ -56,6 +56,8 @@ public class MyWorld extends World {
     private Counter fpsCounter = new Counter("FPS: ");
     private int frames = 0;
     private long lastTime = System.currentTimeMillis();
+    
+    private static GreenfootSound backgroundMusic = ResourceCache.getSound("BackgroundMusic.mp3");
 
     public MyWorld() {
         this(SimulationConfig.defaultConfig());
@@ -83,6 +85,7 @@ public class MyWorld extends World {
 
     //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
     public void act() {
+        backgroundMusic.playLoop();
         if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
             changeState(GAME_STATE);
         }
@@ -102,8 +105,8 @@ public class MyWorld extends World {
         }
     }
     
-    private void stopMusic(){
-        
+    public void stopped(){
+        backgroundMusic.stop();
     }
 
     private void setUpWorld() {
