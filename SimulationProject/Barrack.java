@@ -5,8 +5,6 @@ public class Barrack extends Buildings{
     private GreenfootImage img;
     private final int cost = 100; 
     private int marineCoolDown = 0; //individually manages marine spawning cooldown
-    
-    private static GreenfootSound barrackDestroyedSound = new GreenfootSound("barrack collapse.mp3");
 
     public Barrack (Team team){
         super(team, 500);
@@ -19,7 +17,7 @@ public class Barrack extends Buildings{
         
         if (marineCoolDown > 0) marineCoolDown--;
         
-        if (!this.isAlive()) barrackDestroyedSound.play();
+        if (health <= 0) sounds.get("explode").play();
     }
     
     public int getCost(){

@@ -1,5 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
-
+import java.util.ArrayList;
 /**
  * Write a description of class Projectile here.
  * 
@@ -17,6 +17,9 @@ public abstract class Projectile extends SuperSmoothMover
     protected double angle;
     protected GreenfootImage img;
     protected double speed;
+    
+    private final ArrayList<Marine> marines = new ArrayList<Marine>();
+    
     public Projectile(Entity s, double angle, double speed, int damage){
         shooter = s;
         
@@ -25,8 +28,9 @@ public abstract class Projectile extends SuperSmoothMover
 
         this.speed = speed; 
         this.damage = damage;
-        sounds.put("shoot", new GreenfootSound(s.getClass().getName() + "Shoot.mp3"));
         
+        sounds.put("shoot", new GreenfootSound(s.getClass().getName() + "Shoot.mp3"));
+        sounds.get("shoot").setVolume(20);
         sounds.get("shoot").play(); 
         
         img = new GreenfootImage(getClass().getName() + ".png");

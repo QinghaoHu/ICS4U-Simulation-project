@@ -591,7 +591,7 @@ public class Team extends Actor {
         }
     }
     
-        public int getWorkerCount() {
+    public int getWorkerCount() {
         return workers.size();
     }
 
