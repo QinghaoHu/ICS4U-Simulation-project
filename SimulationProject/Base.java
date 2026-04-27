@@ -23,6 +23,7 @@ public class Base extends Buildings {
      */
     public void act() {
         if(health <= 0 && getWorld() != null){
+            getWorld().stopped();
             Greenfoot.setWorld(new EndingWorld(team.getTeamId()));
         }
     }
