@@ -1,4 +1,5 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
+import java.io.File;
 import java.util.List;
 
 public class UI extends Actor {
@@ -15,21 +16,35 @@ public class UI extends Actor {
     private static final int RED_SIDE_TEXT_X = 220;
     private static final int BLUE_SIDE_TEXT_X = 830;
     private static final int MARINE_TEXT_Y = 725;
+    private static final int UPGRADE_ICON_SIZE = 55;
+    private static final int RED_UPGRADE_X = 430;
+    private static final int BLUE_UPGRADE_X = 640;
+    private static final int UPGRADE_ICON_Y = 720;
+    private static final int UPGRADE_TEXT_Y = 755;
+    private static final int UPGRADE_TEXT_OFFSET_X = 100;
+    private static final int UPGRADE_DISPLAY_TIME = 180;
+    private static UI instance;
 
     private Team redTeam;
     private Team blueTeam;
     private GreenfootImage baseImage;
     private String fontName;
-    // the ui that is on the game screen at the bottom that tracks the stats of both teams
+    private GreenfootImage redUpgradeIcon;
+    private GreenfootImage blueUpgradeIcon;
+    private int redUpgradeAmount;
+    private int blueUpgradeAmount;
+    private int redUpgradeTimer;
+    private int blueUpgradeTimer;
+
     public UI() {
         baseImage = ResourceCache.getImage("Ui.png");
         setImage(baseImage);
-        fontName = MyWorld.loadCustomFont("fonts/StarJediRounded-jW3R.ttf");
+        fontName = MyWorld.loadCustomFont("fonts/SupremeSpike-KVO8D.ttf");
     }
 
     protected void addedToWorld(World world) {
+        instance = this;
         syncTeams(world);
-
         updateImage();
     }
 
@@ -41,7 +56,7 @@ public class UI extends Actor {
         if (redTeam == null || blueTeam == null) {
             syncTeams(getWorld());
         }
-
+        tickUpgradeTimers();
         updateImage();
     }
 
@@ -89,6 +104,10 @@ public class UI extends Actor {
         image.drawString("Strategy: " + getStrategyFor(redTeam), RED_TEXT_X, STRATEGY_TEXT_Y);
         image.drawString("Strategy: " + getStrategyFor(blueTeam), BLUE_TEXT_X, STRATEGY_TEXT_Y);
 
+        // upgrade display
+        drawUpgradeDisplay(image, redUpgradeIcon, redUpgradeAmount, redUpgradeTimer, RED_UPGRADE_X);
+        drawUpgradeDisplay(image, blueUpgradeIcon, blueUpgradeAmount, blueUpgradeTimer, BLUE_UPGRADE_X);
+
         setImage(image);
     }
 
@@ -96,6 +115,102 @@ public class UI extends Actor {
         return team == null || team.getBase() == null ? 0 : team.getBase().getLevel();
     }
     
+    public void updateUpgrade(){
+        updateImage();
+    }
+
+    public static void reportUpgrade(Team team, String typeName, int amount) {
+        if (instance == null || team == null || typeName == null || amount <= 0) {
+            return;
+        }
+        instance.recordUpgrade(team, typeName, amount);
+    }
+
+    private void recordUpgrade(Team team, String typeName, int amount) {
+        GreenfootImage icon = loadUpgradeImage(team, typeName);
+        if (team.getTeamId() == Team.RED) {
+            redUpgradeIcon = icon;
+            redUpgradeAmount = amount;
+            redUpgradeTimer = UPGRADE_DISPLAY_TIME;
+        } else if (team.getTeamId() == Team.BLUE) {
+            blueUpgradeIcon = icon;
+            blueUpgradeAmount = amount;
+            blueUpgradeTimer = UPGRADE_DISPLAY_TIME;
+        }
+    }
+
+    private void tickUpgradeTimers() {
+        if (redUpgradeTimer > 0) {
+            redUpgradeTimer--;
+            if (redUpgradeTimer == 0) {
+                redUpgradeIcon = null;
+                redUpgradeAmount = 0;
+            }
+        }
+        if (blueUpgradeTimer > 0) {
+            blueUpgradeTimer--;
+            if (blueUpgradeTimer == 0) {
+                blueUpgradeIcon = null;
+                blueUpgradeAmount = 0;
+            }
+        }
+    }
+
+    private GreenfootImage loadUpgradeImage(Team team, String typeName) {
+        String imageName = getUpgradeImageName(team, typeName);
+        GreenfootImage icon = new GreenfootImage(imageName);
+        icon.scale(UPGRADE_ICON_SIZE, UPGRADE_ICON_SIZE);
+        return icon;
+    }
+
+    private String getUpgradeImageName(Team team, String typeName) {
+        String teamName = team == null ? "" : team.getName();
+
+        if ("Marine".equals(typeName)) {
+            return findExistingImage(teamName + "Marine.png", "placeholder.png");
+        }
+        if ("Worker".equals(typeName)) {
+            return findExistingImage(teamName + "WorkerRegular.png", "placeholder.png");
+        }
+        if ("Officer".equals(typeName)) {
+            return findExistingImage(teamName + "Officer.png", "placeholder.png");
+        }
+        if ("Barrack".equals(typeName)) {
+            return findExistingImage(teamName + "Barrack.png", "placeholder.png");
+        }
+        if ("Turret".equals(typeName)) {
+            return findExistingImage(teamName + "Turret.png", "placeholder.png");
+        }
+        if ("SupplyBot".equals(typeName)) {
+            return findExistingImage("SupplyBot.png", "placeholder.png");
+        }
+
+        return "placeholder.png";
+    }
+
+    private String findExistingImage(String preferred, String fallback) {
+        File preferredFile = new File("images/" + preferred);
+        if (preferredFile.exists()) {
+            return preferred;
+        }
+        return fallback;
+    }
+
+    private void drawUpgradeDisplay(GreenfootImage image, GreenfootImage icon, int amount, int timer, int x) {
+        if (icon == null || amount <= 0 || timer <= 0) {
+            return;
+        }
+
+        int transparency = (int)(255.0 * timer / UPGRADE_DISPLAY_TIME);
+
+        GreenfootImage fadedIcon = new GreenfootImage(icon);
+        fadedIcon.setTransparency(transparency);
+        image.drawImage(fadedIcon, x, UPGRADE_ICON_Y);
+        image.setColor(new Color(255, 255, 255, transparency));
+        image.setFont(new greenfoot.Font(fontName, FONT_SIZE));
+        image.drawString("+" + amount, x + UPGRADE_TEXT_OFFSET_X, UPGRADE_TEXT_Y);
+    }
+
     private int getResourcesFor(Team team) {
         return team == null ? 0 : team.getResources();
     }

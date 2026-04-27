@@ -16,8 +16,6 @@ public class Barrack extends Buildings{
         super.act();
         
         if (marineCoolDown > 0) marineCoolDown--;
-        
-        if (health <= 0) sounds.get("explode").play();
     }
     
     public int getCost(){
@@ -39,6 +37,7 @@ public class Barrack extends Buildings{
         }
         
         getWorld().addObject(marine, getX(), getY());
+        UI.reportUpgrade(team, "Marine", 1);
 
         marineCoolDown = Marine.getMaxMarineCoolDown();
 

@@ -23,6 +23,7 @@ public abstract class Buildings extends Entity
         }
         
         sounds.put("explode", ResourceCache.getSound(this.getClass().getName() + "Explosion.mp3"));
+        sounds.get("explode").setVolume(10);
     }
 
     /**
@@ -36,6 +37,8 @@ public abstract class Buildings extends Entity
             statBar.setMaxVal(maxHealth);
             statBar.update(health);
         }
+        
+        if (health <= 0) sounds.get("explode").play();
     }
 
     protected void addedToWorld(World world) {
@@ -52,26 +55,6 @@ public abstract class Buildings extends Entity
             world.addObject(statBar, getX(), getY());
             hasStatBar = true;
         }
-    }
-
-    public People addPeople(String type){
-        if (getWorld() == null || team == null) {
-            return null;
-        }
-
-        People newPerson = null;
-
-        if ("Officer".equals(type)) {
-            newPerson = new Officer(team);
-        } else if ("Marine".equals(type)) {
-            newPerson = new Marine(team);
-        }
-
-        if (newPerson != null) {
-            getWorld().addObject(newPerson, getX(), getY());
-        }
-
-        return newPerson;
     }
 
     public abstract int getCost();

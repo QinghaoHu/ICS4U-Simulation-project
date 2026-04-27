@@ -118,6 +118,7 @@ public class Worker extends People {
             getWorld().addObject(building, getX(), getY());
             team.correctBuildingList(building);
 
+            UI.reportUpgrade(team, building.getClass().getSimpleName(), 1);
             states.remove();
             states.add("mining");
             states.add("move");
