@@ -53,6 +53,9 @@ public class MyWorld extends World {
     private Team redTeam;
     private Team blueTeam;
     private final SimulationConfig config;
+    private Counter fpsCounter = new Counter("FPS: ");
+    private int frames = 0;
+    private long lastTime = System.currentTimeMillis();
 
     public MyWorld() {
         this(SimulationConfig.defaultConfig());
@@ -73,7 +76,7 @@ public class MyWorld extends World {
         supplySpawnTimer = 0;
 
         setUpWorld();
-        setPaintOrder(EndScreen.class, UI.class);
+        setPaintOrder(EndScreen.class, Counter.class, UI.class);
         prepare();
     }
 
@@ -85,6 +88,17 @@ public class MyWorld extends World {
         if (config.isSupplyDropsEnabled()) {
             spawnSupply();
         }
+        countFPS();
+    }
+
+    private void countFPS() {
+        frames++;
+        long currentTime = System.currentTimeMillis();
+        if (currentTime - lastTime >= 1000) {
+            fpsCounter.setValue(frames);
+            frames = 0;
+            lastTime = currentTime;
+        }
     }
     
     private void stopMusic(){
@@ -94,7 +108,7 @@ public class MyWorld extends World {
     private void setUpWorld() {
         removeObjects(getObjects(null));
         //background = new GreenfootImage(currentState + ".png");
-        background = new GreenfootImage("Background.png");
+        background = ResourceCache.getImage("Background.png");
         setBackground(background);
 
         Runnable stateHandler = stateHandlers.get(currentState);
@@ -103,6 +117,7 @@ public class MyWorld extends World {
             stateHandler = stateHandlers.get(currentState);
         }
         stateHandler.run();
+        addObject(fpsCounter, WORLD_WIDTH / 2, 20);
     }
 
     private void setGameState() {

@@ -22,7 +22,7 @@ public class UI extends Actor {
     private String fontName;
     // the ui that is on the game screen at the bottom that tracks the stats of both teams
     public UI() {
-        baseImage = new GreenfootImage("Ui.png");
+        baseImage = ResourceCache.getImage("Ui.png");
         setImage(baseImage);
         fontName = MyWorld.loadCustomFont("fonts/StarJediRounded-jW3R.ttf");
     }

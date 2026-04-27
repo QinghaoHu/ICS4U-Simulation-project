@@ -50,7 +50,7 @@ public class Barrack extends Buildings{
             return;
         }
         
-        img = new GreenfootImage(team.getName() + getClass().getName() +  ".png");
+        img = ResourceCache.getImage(team.getName() + getClass().getName() +  ".png");
         
         img.scale(100, 100);
 

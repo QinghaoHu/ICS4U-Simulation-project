@@ -13,7 +13,7 @@ public class Mineral extends Actor
     private GreenfootImage mineral;
     
     public Mineral(int side) {
-        mineral = new GreenfootImage("Resources" + side + ".png");
+        mineral = ResourceCache.getImage("Resources" + side + ".png");
         setImage(mineral);
         
         depleted = false;

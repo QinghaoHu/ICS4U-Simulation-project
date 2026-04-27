@@ -49,14 +49,6 @@ public class Worker extends People {
 
         // initials states will be moving the resources and mining it then moving some where else
         
-        sounds.put("mining", new GreenfootSound("mining.mp3"));
-        sounds.put("depositing", new GreenfootSound("depositing.mp3"));
-        sounds.put("building", new GreenfootSound("building.mp3"));
-      
-        sounds.get("mining").setVolume(15);
-        sounds.get("depositing").setVolume(20);
-        sounds.get("building").setVolume(20);
-        
         setupImage();
     }
 
@@ -105,7 +97,7 @@ public class Worker extends People {
             targetPositions.add(goToBase());
         }
         if (timer % 50 == 0) {
-            sounds.get("mining").play();
+            ResourceCache.playSound("mining.mp3", 15);
         }
     }
 
@@ -133,7 +125,7 @@ public class Worker extends People {
             buildings.poll();
             targetPositions.add(resourceLocation());
             
-            sounds.get("building").play();
+            ResourceCache.playSound("building.mp3", 20);
         }
     }
 
@@ -172,8 +164,8 @@ public class Worker extends People {
             states.remove();
             targetPositions.remove();
             
-            sounds.get(states.peek()).play(); 
-            System.out.println(sounds.get(states.peek()));
+            ResourceCache.playSound(states.peek() + ".mp3", getSoundVolume(states.peek()));
+            System.out.println(states.peek());
         }
     }
 
@@ -181,11 +173,11 @@ public class Worker extends People {
         if (team == null) return;
 
         if (team.getTeamId() == Team.RED) {
-            emptyImg = new GreenfootImage("RedWorkerRegular.png");
-            miningImg = new GreenfootImage("RedWorkerMining.png");
+            emptyImg = ResourceCache.getImage("RedWorkerRegular.png");
+            miningImg = ResourceCache.getImage("RedWorkerMining.png");
         } else if (team.getTeamId() == Team.BLUE) {
-            emptyImg = new GreenfootImage("BlueWorkerRegular.png");
-            miningImg = new GreenfootImage("BlueWorkerMining.png");
+            emptyImg = ResourceCache.getImage("BlueWorkerRegular.png");
+            miningImg = ResourceCache.getImage("BlueWorkerMining.png");
         }
 
         if (emptyImg != null) emptyImg.scale(35, 35);
@@ -246,7 +238,7 @@ public class Worker extends People {
             states.add("move");
             targetPositions.add(resourceLocation());
             
-            sounds.get("depositing").play();
+            ResourceCache.playSound("depositing.mp3", 20);
         }
     }
 
@@ -285,6 +277,13 @@ public class Worker extends People {
         } else {
             setImage(emptyImg);
         }
+    }
+
+    private int getSoundVolume(String state) {
+        if (state.equals("mining")) {
+            return 15;
+        }
+        return 20;
     }
 
     public static int getMaxWorkerCoolDown() {

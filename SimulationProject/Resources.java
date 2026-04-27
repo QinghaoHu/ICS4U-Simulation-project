@@ -15,9 +15,9 @@ public class Resources extends SuperSmoothMover {
 
     public void setupImage() {
         if ((int) (Math.random() * 2) == 0) {
-            img = new GreenfootImage("Resources1.png");
+            img = ResourceCache.getImage("Resources1.png");
         } else {
-            img = new GreenfootImage("Resources2.png");
+            img = ResourceCache.getImage("Resources2.png");
         }
         img.scale(80, 80);
     }

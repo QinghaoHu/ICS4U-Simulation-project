@@ -32,7 +32,7 @@ public class Base extends Buildings {
             return;
         }
 
-        img = new GreenfootImage(team.getName() + getClass().getName() +  ".png");
+        img = ResourceCache.getImage(team.getName() + getClass().getName() +  ".png");
         img.scale(115, 115);
 
         if (img != null) {

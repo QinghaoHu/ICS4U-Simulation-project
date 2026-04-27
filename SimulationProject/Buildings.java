@@ -22,7 +22,7 @@ public abstract class Buildings extends Entity
             team.addBuilding(this);
         }
         
-        sounds.put("explode", new GreenfootSound(this.getClass().getName() + "Explosion.mp3"));
+        sounds.put("explode", ResourceCache.getSound(this.getClass().getName() + "Explosion.mp3"));
     }
 
     /**

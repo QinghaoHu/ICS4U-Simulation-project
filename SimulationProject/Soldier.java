@@ -177,11 +177,11 @@ public abstract class Soldier extends People
         }
 
         if (team.getTeamId() == Team.RED) {
-            emptyImg = new GreenfootImage("Red" + getClass().getName() + ".png");
-            shootingImg = new GreenfootImage("Red" + getClass().getName() + "Recoil.png");
+            emptyImg = ResourceCache.getImage("Red" + getClass().getName() + ".png");
+            shootingImg = ResourceCache.getImage("Red" + getClass().getName() + "Recoil.png");
         } else if (team.getTeamId() == Team.BLUE) {
-            emptyImg = new GreenfootImage("Blue" + getClass().getName() + ".png");
-            shootingImg = new GreenfootImage("Blue" + getClass().getName() + "Recoil.png");
+            emptyImg = ResourceCache.getImage("Blue" + getClass().getName() + ".png");
+            shootingImg = ResourceCache.getImage("Blue" + getClass().getName() + "Recoil.png");
         }
 
         if (emptyImg != null) {
