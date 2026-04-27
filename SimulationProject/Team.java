@@ -451,7 +451,7 @@ public class Team extends Actor {
             } else {
                 barrackNeeded = MAX_BARRACKS;
             }
-            marineNeeded = barracks.size() * 2;
+            marineNeeded = (barracks.size() + pendingBarracks) * 2;
         } else if (strategy.equals("DEF")) {
             turretNeeded = defensiveTurrets.size() + pendingTurrets + 1;
         } else {
