@@ -23,6 +23,7 @@ public class StartingWorld extends World{
         fontName = MyWorld.loadCustomFont("fonts/StarJediRounded-jW3R.ttf");
         setupBackground();
         setupButtons();
+        SoundManager.buttonSoundSetup();
     }
 
     public void act(){
@@ -48,6 +49,7 @@ public class StartingWorld extends World{
 
     private void checkClickButton(){
         if (Greenfoot.mouseClicked(startButton)) {
+            SoundManager.playButtonSound();
             Greenfoot.setWorld(new ConfigWorld());
             if (bgm != null) {
                 bgm.stop();

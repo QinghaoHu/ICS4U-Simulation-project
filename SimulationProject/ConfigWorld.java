@@ -74,6 +74,7 @@ public class ConfigWorld extends World {
         setBackground(background);
         setupButtons();
         refreshButtons();
+        SoundManager.buttonSoundSetup();
     }
 
     public void act() {
@@ -206,35 +207,48 @@ public class ConfigWorld extends World {
 
     private void handleClicks() {
         if (Greenfoot.mouseClicked(startButton)) {
+            SoundManager.playButtonSound();
             Greenfoot.setWorld(new MyWorld(buildConfig()));
             return;
         }
         if (Greenfoot.mouseClicked(backButton)) {
+            SoundManager.playButtonSound();
             Greenfoot.setWorld(new StartingWorld());
             return;
         }
 
         if (Greenfoot.mouseClicked(redStrategyButton)) {
+            SoundManager.playButtonSound();
             redStrategyIndex = nextIndex(redStrategyIndex, STRATEGIES.length);
         } else if (Greenfoot.mouseClicked(blueStrategyButton)) {
+            SoundManager.playButtonSound();
             blueStrategyIndex = nextIndex(blueStrategyIndex, STRATEGIES.length);
         } else if (!redResourcesMinusButton.isDisabled() && Greenfoot.mouseClicked(redResourcesMinusButton)) {
+            SoundManager.playButtonSound();
             redResourcesIndex = previousIndex(redResourcesIndex);
         } else if (!redResourcesPlusButton.isDisabled() && Greenfoot.mouseClicked(redResourcesPlusButton)) {
+            SoundManager.playButtonSound();
             redResourcesIndex = nextIndex(redResourcesIndex, RESOURCES.length);
         } else if (!blueResourcesMinusButton.isDisabled() && Greenfoot.mouseClicked(blueResourcesMinusButton)) {
+            SoundManager.playButtonSound();
             blueResourcesIndex = previousIndex(blueResourcesIndex);
         } else if (!blueResourcesPlusButton.isDisabled() && Greenfoot.mouseClicked(blueResourcesPlusButton)) {
+            SoundManager.playButtonSound();
             blueResourcesIndex = nextIndex(blueResourcesIndex, RESOURCES.length);
         } else if (!redWorkersMinusButton.isDisabled() && Greenfoot.mouseClicked(redWorkersMinusButton)) {
+            SoundManager.playButtonSound();
             redWorkersIndex = previousIndex(redWorkersIndex);
         } else if (!redWorkersPlusButton.isDisabled() && Greenfoot.mouseClicked(redWorkersPlusButton)) {
+            SoundManager.playButtonSound();
             redWorkersIndex = nextIndex(redWorkersIndex, EXTRA_WORKERS.length);
         } else if (!blueWorkersMinusButton.isDisabled() && Greenfoot.mouseClicked(blueWorkersMinusButton)) {
+            SoundManager.playButtonSound();
             blueWorkersIndex = previousIndex(blueWorkersIndex);
         } else if (!blueWorkersPlusButton.isDisabled() && Greenfoot.mouseClicked(blueWorkersPlusButton)) {
+            SoundManager.playButtonSound();
             blueWorkersIndex = nextIndex(blueWorkersIndex, EXTRA_WORKERS.length);
         } else if (Greenfoot.mouseClicked(supplyDropsButton)) {
+            SoundManager.playButtonSound();
             supplyDropsEnabled = !supplyDropsEnabled;
         } else {
             return;
