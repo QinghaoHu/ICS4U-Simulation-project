@@ -41,6 +41,11 @@ public class Marine extends Soldier
     {
         super.act();
         // Add your action code here.
+        
+        if (health <= 0) {
+            int random = Greenfoot.getRandomNumber(2);
+            ResourceCache.playSound("MarineDeath" + random + ".mp3", 20);
+        }
     }
     
     protected void shoot(Entity target){ // will create a bullet at the tip of it's gun going towards the entity it wants to shoot at
