@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 public abstract class Entity extends SuperSmoothMover{
     protected Team team;
+    protected Team opponetTeam;
     protected int health;
     protected int maxHealth;
     protected int[] targetPosition = new int[]{0, 0};
@@ -81,6 +82,20 @@ public abstract class Entity extends SuperSmoothMover{
 
     public Team getTeam(){ // returns what team it is on
         return team;
+    }
+    
+    public Team getOpponentTeam() {
+        if (getWorld() == null || team == null) return null;
+    
+        for (Object obj : getWorld().getObjects(Team.class)) {
+            Team t = (Team) obj;
+    
+            if (t != this.team) {
+                return t;
+            }
+        }
+    
+        return null;
     }
     
     public int getHealth() { // returns health

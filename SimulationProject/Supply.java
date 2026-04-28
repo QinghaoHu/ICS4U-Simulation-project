@@ -1,5 +1,6 @@
 import greenfoot.*;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Supply extends SuperSmoothMover {
@@ -16,14 +17,16 @@ public class Supply extends SuperSmoothMover {
     private static final int ULTRA_RARE_MARINE_DROP = 1;
     private static final int MIN_LANDING_Y = 60;
 
+    private boolean isChaosMode;
     private int targetX;
     private int targetY;
     private int dropSpeed;
     private boolean hasLanded;
     private GreenfootImage img;
 
-    public Supply() {
+    public Supply(boolean isChaosMode) {
         dropSpeed = Greenfoot.getRandomNumber(MAX_DROP_SPEED - MIN_DROP_SPEED + 1) + MIN_DROP_SPEED;
+        this.isChaosMode = isChaosMode;
         setupImage();
     }
 
@@ -63,7 +66,7 @@ public class Supply extends SuperSmoothMover {
 
         for (SupplyBot bot : bots) {
             if (bot != null && bot.getTeam() != null) {
-                String reward = applyBuff(bot.getTeam());
+                String reward = applyBuff(bot.getTeam(), bot.getOpponentTeam(), isChaosMode);
                 
                 String message = reward;
 
@@ -89,40 +92,71 @@ public class Supply extends SuperSmoothMover {
         }
     }
 
-    private String applyBuff(Team team) {
-        if (team == null) {
+    private String applyBuff(Team team, Team opponentTeam, boolean isChaosMode) {
+        if (team == null || opponentTeam == null) {
             return "Nothing";
         }
     
         int roll = Greenfoot.getRandomNumber(100);
-    
-        if (roll < COMMON_CHANCE) {
-            applyDrop(team, COMMON_RESOURCE_DROP, COMMON_WORKER_DROP, 0);
-            return "+" + COMMON_RESOURCE_DROP + " RESOURCES, +" + COMMON_WORKER_DROP + " WORKER";
-        } 
-        else if (roll < COMMON_CHANCE + RARE_CHANCE) {
-            applyDrop(team, RARE_RESOURCE_DROP, RARE_WORKER_DROP, 0);
-            return "+" + RARE_RESOURCE_DROP + " RESOURCES, +" + RARE_WORKER_DROP + " WORKERS";
-        } 
-        else {
-            int marineDrop = 0;
-    
-            if (team.hasBuilding(Barrack.class)) {
-                marineDrop = ULTRA_RARE_MARINE_DROP;
+        int chance = Greenfoot.getRandomNumber(2);
+        if(isChaosMode && chance == 0){
+            if (roll < COMMON_CHANCE) {
+                removeDrop(opponentTeam, COMMON_RESOURCE_DROP, COMMON_WORKER_DROP, 0);
+                return "-" + COMMON_RESOURCE_DROP + " RESOURCES, -" + COMMON_WORKER_DROP + " WORKER";
             }
-    
-            applyDrop(team, ULTRA_RARE_RESOURCE_DROP, ULTRA_RARE_WORKER_DROP, marineDrop);
-    
-            return "+" + ULTRA_RARE_RESOURCE_DROP + " RESOURCES, +"
-                    + ULTRA_RARE_WORKER_DROP + " WORKERS, +"
-                    + marineDrop + " MARINE";
+            else if (roll < COMMON_CHANCE + RARE_CHANCE) {
+                removeDrop(opponentTeam, RARE_RESOURCE_DROP, RARE_WORKER_DROP, 0);
+                return "-" + RARE_RESOURCE_DROP + " RESOURCES, -" + RARE_WORKER_DROP + " WORKERS";
+            }
+            else {
+                int marineDrop = 0;
+
+                if (opponentTeam.hasBuilding(Barrack.class)) {
+                    marineDrop = ULTRA_RARE_MARINE_DROP;
+                }
+
+                removeDrop(opponentTeam, ULTRA_RARE_RESOURCE_DROP, ULTRA_RARE_WORKER_DROP, marineDrop * 2);
+
+                return "-" + ULTRA_RARE_RESOURCE_DROP + " RESOURCES, -"
+                        + ULTRA_RARE_WORKER_DROP + " WORKERS, -"
+                        + marineDrop + " MARINE";
+            }
+        }else if(!isChaosMode || chance != 1){
+            if (roll < COMMON_CHANCE) {
+                applyDrop(team, COMMON_RESOURCE_DROP, COMMON_WORKER_DROP, 0);
+                return "+" + COMMON_RESOURCE_DROP + " RESOURCES, +" + COMMON_WORKER_DROP + " WORKER";
+            }
+            else if (roll < COMMON_CHANCE + RARE_CHANCE) {
+                applyDrop(team, RARE_RESOURCE_DROP, RARE_WORKER_DROP, 0);
+                return "+" + RARE_RESOURCE_DROP + " RESOURCES, +" + RARE_WORKER_DROP + " WORKERS";
+            }
+            else {
+                int marineDrop = 0;
+
+                if (team.hasBuilding(Barrack.class)) {
+                    marineDrop = ULTRA_RARE_MARINE_DROP;
+                }
+
+                applyDrop(team, ULTRA_RARE_RESOURCE_DROP, ULTRA_RARE_WORKER_DROP, marineDrop);
+
+                return "+" + ULTRA_RARE_RESOURCE_DROP + " RESOURCES, +"
+                        + ULTRA_RARE_WORKER_DROP + " WORKERS, +"
+                        + marineDrop + " MARINE";
+            }
         }
+        return null;
     }
 
     private void applyDrop(Team team, int resources, int workerCount, int marineCount) {
         team.addResources(resources);
         spawnWorkers(team, workerCount);
         spawnMarines(team, marineCount);
+    }
+
+    private void removeDrop(Team team, int resources, int workerCount, int marineCount) {
+        team.addResources(-resources);
+        removeWorkers(team, workerCount);
+        removeMarines(team, marineCount);
     }
 
     private void spawnWorkers(Team team, int workerCount) {
@@ -153,6 +187,24 @@ public class Supply extends SuperSmoothMover {
         }
 
         UI.reportUpgrade(team, "Marine", marineCount);
+    }
+
+    private void removeWorkers (Team team, int workerCount){
+        ArrayList<Worker> workers = (ArrayList<Worker>) getWorld().getObjects(Worker.class);
+        if (workers.size() >= 2) {
+            for (int i = 0; i < workerCount; i++){
+                getWorld().removeObject(workers.get(i));
+            }
+        }
+    }
+
+    private void removeMarines (Team team, int marineCount){
+        ArrayList<Marine> marines = (ArrayList<Marine>) getWorld().getObjects(Marine.class);
+        if (marines.size() >= marineCount) {
+            for (int i = 0; i < marineCount; i++){
+                getWorld().removeObject(marines.get(i));
+            }
+        }
     }
 
     private Base findBase(Team team) {
