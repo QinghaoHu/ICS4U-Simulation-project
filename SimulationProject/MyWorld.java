@@ -79,12 +79,13 @@ public class MyWorld extends World {
         supplySpawnTimer = 0;
 
         setUpWorld();
-        setPaintOrder(EndScreen.class, Counter.class, UI.class);
+        setPaintOrder(HealthBar.class, EndScreen.class, Counter.class, UI.class);
         prepare();
     }
 
     //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
     public void act() {
+        backgroundMusic.setVolume(25);
         backgroundMusic.playLoop();
         if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
             changeState(GAME_STATE);

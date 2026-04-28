@@ -22,6 +22,10 @@ public abstract class Entity extends SuperSmoothMover{
     
     public void act(){
         if (health <= 0 && getWorld() != null) {
+            if (this instanceof Buildings) {
+                ((Buildings) this).remove();
+                return;
+            }
             getWorld().removeObject(this);
             return; // if the entity has less than or equal to 0 health then remove it from the world
         }

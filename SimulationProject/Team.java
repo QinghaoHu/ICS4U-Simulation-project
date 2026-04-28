@@ -267,6 +267,8 @@ public class Team extends Actor {
 
     private Boolean placeBarrack(Buildings building) { 
         building.setStatBarEnabled(false);
+        // places a barrack done insuring it doesn't collide with anything else
+        // and then assigns that job to a worker to build
 
         if (teamId == 0) {
             int x1 = 0, x2 = 400;
@@ -282,11 +284,10 @@ public class Team extends Actor {
                     Worker worker = leastBusyWorker();
 
                     if (worker == null) {
-                        w.removeObject(building);
+                        building.remove();
                         return false;
                     }
 
-                    building.setStatBarEnabled(true);
                     worker.prepBuild(building, xPosition, yPosition);
                     w.removeObject(building);
                     return true;
@@ -312,22 +313,23 @@ public class Team extends Actor {
                         return false;
                     }
 
-                    building.setStatBarEnabled(true);
                     worker.prepBuild(building, xPosition, yPosition);
-                    w.removeObject(building);
+                    building.remove();;
                     return true;
                 }
 
                 w.removeObject(building);
+                building.remove();
             }
         }
 
-        building.setStatBarEnabled(true);
         return false;
     }
 
     private Boolean placeTurret(Buildings building) {
         building.setStatBarEnabled(false);
+        // places a Turret done insuring it doesn't collide with anything else
+        // and then assigns that job to a worker to build
 
         if (teamId == 0) {
             int x1 = 300, x2 = 600;
@@ -343,17 +345,16 @@ public class Team extends Actor {
                     Worker worker = leastBusyWorker();
 
                     if (worker == null) {
-                        w.removeObject(building);
+                        building.remove();
                         return false;
                     }
 
-                    building.setStatBarEnabled(true);
                     worker.prepBuild(building, xPosition, yPosition);
-                    w.removeObject(building);
+                    building.remove();
                     return true;
                 }
 
-                w.removeObject(building);
+                building.remove();
             }
         } else if (teamId == 1) {
             int x1 = 600, x2 = 900;
@@ -369,21 +370,21 @@ public class Team extends Actor {
                     Worker worker = leastBusyWorker();
 
                     if (worker == null) {
-                        w.removeObject(building);
+                        building.remove();
                         return false;
                     }
 
-                    building.setStatBarEnabled(true);
                     worker.prepBuild(building, xPosition, yPosition);
-                    w.removeObject(building);
+                    building.remove();
                     return true;
                 }
 
                 w.removeObject(building);
+            
+                building.remove();
             }
         }
 
-        building.setStatBarEnabled(true);
         return false;
     }
 
