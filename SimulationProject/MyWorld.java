@@ -79,7 +79,7 @@ public class MyWorld extends World {
         supplySpawnTimer = 0;
 
         setUpWorld();
-        setPaintOrder(EndScreen.class, Counter.class, UI.class);
+        setPaintOrder(HealthBar.class, EndScreen.class, Counter.class, UI.class);
         prepare();
     }
 
