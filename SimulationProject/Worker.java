@@ -25,7 +25,7 @@ public class Worker extends People {
     private static int blueIndex = 0;
     private static final int cost = 75;
 
-    private static int maxWorkerCoolDown = 180;
+    private static int maxWorkerCoolDown = 120;
     
 
     /*
@@ -288,8 +288,19 @@ public class Worker extends People {
         return 20;
     }
 
-    public static int getMaxWorkerCoolDown() {
-        return maxWorkerCoolDown;
+    public static int getMaxWorkerCoolDown(Base base) {
+        if (base == null) {
+            return maxWorkerCoolDown;
+        }
+    
+        int level = base.getLevel();
+        int reduced = maxWorkerCoolDown - ((level - 1) * 15);
+    
+        if (reduced < 30) {
+            reduced = 30;
+        }
+    
+        return reduced;
     }
 
     public static void modifyMaxWorkerCoolDown(int workerCoolDown) {

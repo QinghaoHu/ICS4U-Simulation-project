@@ -68,6 +68,8 @@ public class Team extends Actor {
 
     private int MAX_BARRACKS = 4;
 
+    private boolean strategyStarted = false;
+
     public Team(int teamId, String name, int startingMoney, String strategy, World w) {
         this.teamId = teamId;
         this.name = name;
@@ -118,7 +120,8 @@ public class Team extends Actor {
             if (base.addPeople()) {
                 //workerAmt++;
                 currentWorkerAmount = workers.size();
-                workerCoolDown = Worker.getMaxWorkerCoolDown();
+                workerCoolDown = Worker.getMaxWorkerCoolDown(base);
+                strategyStarted = true;
             }
         }
 
@@ -128,6 +131,7 @@ public class Team extends Actor {
                 if (placeBarrack(barrack)) {
                     pendingBarracks++;
                     resources -= barrackCost;
+                    strategyStarted = true;
                 }
             }
         }
@@ -138,6 +142,7 @@ public class Team extends Actor {
                     Barrack barrack = barracks.get(Greenfoot.getRandomNumber(barracks.size()));
                     if (barrack.addPeople()) {
                         currentMarinedAmount++;
+                        strategyStarted = true;
                         //marineCoolDown = Marine.getMaxMarineCoolDown();
                     }
                 }
@@ -149,6 +154,7 @@ public class Team extends Actor {
                 if (base.addBot()) {
                     currentSupplyBotAmount++;
                     supplyBotCoolDown = SupplyBot.getMaxSupplyBotCoolDown();
+                    strategyStarted = true;
                 }
             }
         }
@@ -160,6 +166,7 @@ public class Team extends Actor {
                     pendingTurrets++;
                     resources -= turretCost;
                     workerNeeded += 2;
+                    strategyStarted = true;
                 }
             }
         }
@@ -197,24 +204,27 @@ public class Team extends Actor {
             base.upgrade();
             baseUpgradeCoolDown = 10;
         }
-        boolean progressMade = currentWorkerAmount != lastWorkerAmount;
+
+        if (strategyStarted) {
+            boolean progressMade = currentWorkerAmount != lastWorkerAmount;
         
-        if (progressMade) {
-            stuckTimer = 0;
-        } else {
-            stuckTimer++;
-        }
+            if (progressMade) {
+                stuckTimer = 0;
+            } else {
+                stuckTimer++;
+            }
         
-        lastWorkerAmount = currentWorkerAmount;
+            lastWorkerAmount = currentWorkerAmount;
         
-        if (stuckTimer > 300) { // about a few seconds of no progress
-            System.out.println(name + " stuck — forcing strategy reset");
+            if (stuckTimer > 600) {
+                System.out.println(name + " stuck — forcing strategy reset");
         
-            String fallback = strateges[Greenfoot.getRandomNumber(strateges.length)];
-            strategy = fallback;
+                String fallback = strateges[Greenfoot.getRandomNumber(strateges.length)];
+                strategy = fallback;
         
-            spawn(); // recompute everything
-            stuckTimer = 0;
+                spawn();
+                stuckTimer = 0;
+            }
         }
     }
 
@@ -242,7 +252,7 @@ public class Team extends Actor {
         }
     }
 
-    public Worker leastBusyWorker() { // returns the worker with the shortest todo list
+    public Worker leastBusyWorker() {
         Worker worker = null;
         int least = Integer.MAX_VALUE;
 
@@ -256,6 +266,7 @@ public class Team extends Actor {
     }
 
     private Boolean placeBarrack(Buildings building) { 
+        building.setStatBarEnabled(false);
         // places a barrack done insuring it doesn't collide with anything else
         // and then assigns that job to a worker to build
 
@@ -306,6 +317,8 @@ public class Team extends Actor {
                     building.remove();;
                     return true;
                 }
+
+                w.removeObject(building);
                 building.remove();
             }
         }
@@ -314,6 +327,7 @@ public class Team extends Actor {
     }
 
     private Boolean placeTurret(Buildings building) {
+        building.setStatBarEnabled(false);
         // places a Turret done insuring it doesn't collide with anything else
         // and then assigns that job to a worker to build
 
@@ -365,6 +379,7 @@ public class Team extends Actor {
                     return true;
                 }
 
+                w.removeObject(building);
             
                 building.remove();
             }
@@ -378,6 +393,7 @@ public class Team extends Actor {
         marineNeeded = 0;
         barrackNeeded = 0;
         turretNeeded = 0;
+        supplyBotNeeded = 0;
 
         currentWorkerAmount = 0;
         currentMarinedAmount = 0;
@@ -385,16 +401,19 @@ public class Team extends Actor {
         currentTurretAmount = 0;
         currentSupplyBotAmount = 0;
 
+        strategyStarted = false;
+        stuckTimer = 0;
+
         if (strategy.equals("ECO")) {
             workerNeeded = 4;
         } else if (strategy.equals("ATK")) {
-            workerNeeded = 1;
             barrackNeeded = 1;
             marineNeeded = 1;
-        } else if (strategy.equals("DEF")) {
             workerNeeded = 1;
+        } else if (strategy.equals("DEF")) {
             turretNeeded = 1;
-        } else {
+            workerNeeded = 1;
+        } else if (strategy.equals("REG")) {
             workerNeeded = 2;
             supplyBotNeeded = 1;
         }
@@ -416,7 +435,6 @@ public class Team extends Actor {
     }
 
     private void spawn() {
-        //System.out.println(teamId + " " + workerAmt);
         workerNeeded = 0;
         marineNeeded = 0;
         barrackNeeded = 0;
@@ -427,7 +445,10 @@ public class Team extends Actor {
         currentMarinedAmount = 0;
         currentBarrackAmount = barracks.size();
         currentTurretAmount = defensiveTurrets.size();
-        currentSupplyBotAmount = 0;
+        currentSupplyBotAmount = supplybots.size();
+
+        stuckTimer = 0;
+        lastWorkerAmount = currentWorkerAmount;
 
         if (strategy.equals("ECO")) {
             workerNeeded = currentWorkerAmount + 3;
@@ -442,8 +463,9 @@ public class Team extends Actor {
             marineNeeded = (barracks.size() + pendingBarracks) * 2;
         } else if (strategy.equals("DEF")) {
             turretNeeded = defensiveTurrets.size() + pendingTurrets + 1;
-        } else {
+        } else if (strategy.equals("REG")) {
             supplyBotNeeded = 1;
+            workerNeeded = currentWorkerAmount + 1;
         }
     }
 
@@ -456,9 +478,6 @@ public class Team extends Actor {
     }
 
     public void correctBuildingList(Buildings building) {
-        // add a building to the list after the building has been created
-        // instead of adding the building to the list and then creating it
-        // avoiding problems of team trying to spawn marines in barracks that don't exist yet
         if (building instanceof Turret) {
             if (!defensiveTurrets.contains((Turret) building)) {
                 defensiveTurrets.add((Turret) building);

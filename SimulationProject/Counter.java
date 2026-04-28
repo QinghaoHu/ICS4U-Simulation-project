@@ -126,7 +126,7 @@ public class Counter extends Actor
         }
 
         image.drawImage(text, (image.getWidth()-text.getWidth())/2,
-                (image.getHeight()-text.getHeight())/2);
+        (image.getHeight()-text.getHeight())/2);
         setImage(image);
     }
 }
