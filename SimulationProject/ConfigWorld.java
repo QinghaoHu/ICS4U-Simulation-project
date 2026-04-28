@@ -21,6 +21,7 @@ public class ConfigWorld extends World {
     private static final int WORKERS_LABEL_Y = 555;
     private static final int WORKERS_CONTROL_Y = 615;
     private static final int SUPPLY_DROP_Y = 725;
+    private static final int CHAOS_MODE_Y = 760;
     private static final int START_X = 1020;
     private static final int START_Y = 735;
     private static final int BACK_X = 170;
@@ -46,6 +47,7 @@ public class ConfigWorld extends World {
     private int redWorkersIndex;
     private int blueWorkersIndex;
     private boolean supplyDropsEnabled = true;
+    private boolean chaosModeEnabled = false;
 
     private Button redStrategyButton;
     private Button blueStrategyButton;
@@ -58,6 +60,7 @@ public class ConfigWorld extends World {
     private Button blueWorkersMinusButton;
     private Button blueWorkersPlusButton;
     private Button supplyDropsButton;
+    private Button chaosModeButton;
     private Button startButton;
     private Button backButton;
 
@@ -108,6 +111,7 @@ public class ConfigWorld extends World {
         
         background.setColor(TITLE_COLOR);
         background.drawString("Supply Drops", 485, SUPPLY_DROP_Y);
+        background.drawString("Chaos Mode", 485, CHAOS_MODE_Y);
 
         background.setFont(new greenfoot.Font(fontName, 28));
         background.setColor(new Color(131, 26, 32));
@@ -147,6 +151,7 @@ public class ConfigWorld extends World {
         blueWorkersMinusButton = makeStepButton("-", BLUE_FILL);
         blueWorkersPlusButton = makeStepButton("+", BLUE_FILL);
         supplyDropsButton = new Button("", 60, 40, Color.WHITE, GRAY_FILL, Color.WHITE, null, 18);
+        chaosModeButton = new Button("", 60, 40, Color.WHITE, GRAY_FILL, Color.WHITE, null, 18);
         startButton = new Button("Start Sim", 170, 40, Color.WHITE, GREEN_FILL, Color.WHITE, null, 18);
         backButton = new Button("Back", 140, 40, Color.WHITE, GRAY_FILL, Color.WHITE, null, 18);
 
@@ -162,6 +167,7 @@ public class ConfigWorld extends World {
         addStepControl(RED_X, WORKERS_CONTROL_Y, redWorkersMinusButton, redWorkersValue, redWorkersPlusButton);
         addStepControl(BLUE_X, WORKERS_CONTROL_Y, blueWorkersMinusButton, blueWorkersValue, blueWorkersPlusButton);
         addObject(supplyDropsButton, 680, SUPPLY_DROP_Y - 10);
+        addObject(chaosModeButton, 680, CHAOS_MODE_Y);
         addObject(startButton, START_X, START_Y);
         addObject(backButton, BACK_X, BACK_Y);
     }
@@ -193,6 +199,14 @@ public class ConfigWorld extends World {
         } else {
             supplyDropsButton.setText("OFF");
             supplyDropsButton.setButtonColor(GRAY_FILL);
+        }
+
+        if (chaosModeEnabled) {
+            chaosModeButton.setText("ON");
+            chaosModeButton.setButtonColor(GREEN_FILL);
+        } else {
+            chaosModeButton.setText("OFF");
+            chaosModeButton.setButtonColor(GRAY_FILL);
         }
 
         redResourcesMinusButton.setDisabled(redResourcesIndex == 0);
@@ -256,6 +270,9 @@ public class ConfigWorld extends World {
         } else if (Greenfoot.mouseClicked(supplyDropsButton)) {
             SoundManager.playButtonSound();
             supplyDropsEnabled = !supplyDropsEnabled;
+        } else if (Greenfoot.mouseClicked(chaosModeButton)) {
+            SoundManager.playButtonSound();
+            chaosModeEnabled = !chaosModeEnabled;
         } else {
             return;
         }
@@ -288,6 +305,6 @@ public class ConfigWorld extends World {
             0,
             false
         );
-        return new SimulationConfig(redSetup, blueSetup, supplyDropsEnabled);
+        return new SimulationConfig(redSetup, blueSetup, supplyDropsEnabled, chaosModeEnabled);
     }
 }

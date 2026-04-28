@@ -53,6 +53,7 @@ public class MyWorld extends World {
     private Team redTeam;
     private Team blueTeam;
     private final SimulationConfig config;
+    private boolean isChaosMode;
     private Counter fpsCounter = new Counter("FPS: ");
     private int frames = 0;
     private long lastTime = System.currentTimeMillis();
@@ -72,7 +73,6 @@ public class MyWorld extends World {
         TeamSetup blueSetup = this.config.getBlueSetup();
         redTeam = new Team(Team.RED, "Red", redSetup.getStartingResources(), redSetup.getStrategy(), this);
         blueTeam = new Team(Team.BLUE, "Blue", blueSetup.getStartingResources(), blueSetup.getStrategy(), this);
-
         stateHandlers.put(GAME_STATE, this::setGameState);
         stateHandlers.put(TITLE_STATE, this::setTitleState);
         
@@ -201,9 +201,16 @@ public class MyWorld extends World {
     }
 
     private void spawnSupply(){
-        if (supplySpawnTimer <= 0 && getObjects(Supply.class).size() < 5) {
+        boolean maxSupplies;
+
+        if (!isChaosMode){
+            maxSupplies = getObjects(Supply.class).size() >= 5;
+        }else{
+            maxSupplies = getObjects(Supply.class).size() >= 10;
+        }
+        if (supplySpawnTimer <= 0 && !maxSupplies) {
             // spawn supply
-            addObject(new Supply(), Greenfoot.getRandomNumber(MAX_SUPPLY_DROP_RANGE - MIN_SUPPLY_DROP_RANGE + 1) + MIN_SUPPLY_DROP_RANGE, SUPPLY_SPWAN_Y_OFFSET);
+            addObject(new Supply(isChaosMode), Greenfoot.getRandomNumber(MAX_SUPPLY_DROP_RANGE - MIN_SUPPLY_DROP_RANGE + 1) + MIN_SUPPLY_DROP_RANGE, SUPPLY_SPWAN_Y_OFFSET);
 
             // Reset timer to random value between 300 (5s) and 900 (15s)
             supplySpawnTimer = 300 + Greenfoot.getRandomNumber(601);
