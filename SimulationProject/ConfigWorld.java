@@ -219,9 +219,15 @@ public class ConfigWorld extends World {
 
         if (Greenfoot.mouseClicked(redStrategyButton)) {
             SoundManager.playButtonSound();
+            if(redStrategyIndex == STRATEGIES.length -1){
+                redStrategyIndex = 0;
+            }
             redStrategyIndex = nextIndex(redStrategyIndex, STRATEGIES.length);
         } else if (Greenfoot.mouseClicked(blueStrategyButton)) {
             SoundManager.playButtonSound();
+            if(blueStrategyIndex == STRATEGIES.length -1){
+                blueStrategyIndex = 0;
+            }
             blueStrategyIndex = nextIndex(blueStrategyIndex, STRATEGIES.length);
         } else if (!redResourcesMinusButton.isDisabled() && Greenfoot.mouseClicked(redResourcesMinusButton)) {
             SoundManager.playButtonSound();
