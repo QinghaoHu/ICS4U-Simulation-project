@@ -15,7 +15,7 @@ public class Marine extends Soldier
      */
     
     private static final int cost = 100;
-    private static int maxMarineCoolDown = 400;
+    private static int maxMarineCoolDown = 200;
     private int bonusDamage;
     
     public Marine(Team team) {
@@ -51,8 +51,19 @@ public class Marine extends Soldier
         getWorld().addObject(new SoldierBullet(this, angle, 8, 3 + bonusDamage), X, Y); // adds bullet
     }
 
-    public static int getMaxMarineCoolDown() {
-        return maxMarineCoolDown;
+    public static int getMaxMarineCoolDown(Base base) {
+        if (base == null) {
+            return maxMarineCoolDown;
+        }
+    
+        int level = base.getLevel();
+        int reduced = maxMarineCoolDown - ((level - 1) * 20);
+    
+        if (reduced < 40) {
+            reduced = 40;
+        }
+    
+        return reduced;
     }
 
     public static void modifyMaxMarineCoolDown(int marineCoolDown) {

@@ -5,6 +5,8 @@ public class Barrack extends Buildings{
     private GreenfootImage img;
     private final int cost = 100; 
     private int marineCoolDown = 0; //individually manages marine spawning cooldown
+    private int decayTimer = 0;
+    private int DECAY_RATE = 3;
 
     public Barrack (Team team){
         super(team, 500);
@@ -14,6 +16,12 @@ public class Barrack extends Buildings{
 
     public void act(){
         super.act();
+        
+        decayTimer++;
+        if (decayTimer >= 60) {
+            health -= (DECAY_RATE);
+            decayTimer = 0;
+        }
         
         if (marineCoolDown > 0) marineCoolDown--;
     }
@@ -39,7 +47,7 @@ public class Barrack extends Buildings{
         getWorld().addObject(marine, getX(), getY());
         UI.reportUpgrade(team, "Marine", 1);
 
-        marineCoolDown = Marine.getMaxMarineCoolDown();
+        marineCoolDown = Marine.getMaxMarineCoolDown(team.getBase());
 
         return true;
     }
