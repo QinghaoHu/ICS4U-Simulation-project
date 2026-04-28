@@ -10,6 +10,8 @@ public class Base extends Buildings {
     private GreenfootImage img;
     private final int cost = 100; 
     private int level = 1;
+
+    private Explosion expld;
     
     public Base(Team team) {
         super(team, 750);
@@ -17,12 +19,21 @@ public class Base extends Buildings {
         setImage(img);
     }
 
-    /**
+    /**¡™
      * Act - do whatever the Base wants to do. This method is called whenever
      * the 'Act' or 'Run' button gets pressed in the environment.
      */
     public void act() {
         if(health <= 0 && getWorld() != null){
+            if (expld == null) {
+                expld = new Explosion(1, 30, 300, 20, Color.RED);
+                getWorld().addObject(expld, this.getX(), this.getY());
+                img = new GreenfootImage(2, 2);
+                setImage(img);
+            }
+            if (Explosion.getIsInUse()) {
+                return;
+            }
             getWorld().stopped();
             Greenfoot.setWorld(new EndingWorld(team.getTeamId()));
         }
