@@ -51,7 +51,10 @@ public class ResourceCache {
             "supply crate.mp3",
             "TurretExplosion.mp3",
             "TurretShoot.mp3",
-            "BackgroundMusic.mp3"
+            "BackgroundMusic.mp3",
+            "MarineDeath0.mp3",
+            "MarineDeath1.mp3",
+            "MarineDeath2.mp3"
     };
 
     private static final Map<String, GreenfootImage> images = new HashMap<>();
