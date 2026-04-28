@@ -79,7 +79,7 @@ public class MyWorld extends World {
         supplySpawnTimer = 0;
 
         setUpWorld();
-        setPaintOrder(HealthBar.class, EndScreen.class, Counter.class, UI.class);
+        setPaintOrder(GameTimer.class, HealthBar.class, EndScreen.class, Counter.class, UI.class );
         prepare();
     }
 
@@ -129,7 +129,9 @@ public class MyWorld extends World {
     private void setGameState() {
         removeObjects(getObjects(null));
         
-        addObject(new GameTimer(), 0, 15);
+       
+        
+        //addObject(new GoldMineral(), 600, 350);
         
         Base redBase = new Base(redTeam);
         addObject(redBase, 200, 490);
@@ -162,7 +164,9 @@ public class MyWorld extends World {
 
         applyTeamSetup(redTeam, redBase, config.getRedSetup(), RED_BARRACK_POSITIONS, RED_TURRET_POSITIONS);
         applyTeamSetup(blueTeam, blueBase, config.getBlueSetup(), BLUE_BARRACK_POSITIONS, BLUE_TURRET_POSITIONS);
-
+        
+        addObject(new GameTimer(), 600, 670);
+        
         redTeam.setUpWorld();
         blueTeam.setUpWorld();
         

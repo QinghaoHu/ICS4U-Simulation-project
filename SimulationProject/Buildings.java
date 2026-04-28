@@ -57,8 +57,15 @@ public abstract class Buildings extends Entity
     }
 
     public void remove() {
-        getWorld().removeObject(statBar);
-        getWorld().removeObject(this);
+        World world = getWorld();
+    
+        if (world == null) return;
+    
+        if (statBar != null && statBar.getWorld() != null) {
+            world.removeObject(statBar);
+        }
+    
+        world.removeObject(this);
     }
 
     public abstract int getCost();

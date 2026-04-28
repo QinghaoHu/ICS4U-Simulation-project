@@ -159,7 +159,7 @@ public class Team extends Actor {
             }
         }
 
-        if ((currentTurretAmount + pendingTurrets) < turretNeeded) {
+        if ((currentTurretAmount + pendingTurrets) < turretNeeded && turretNeeded > 0) {
             if (resources >= turretCost) {
                 Turret turret = new Turret(this);
                 if (placeTurret(turret)) {
@@ -266,7 +266,7 @@ public class Team extends Actor {
     }
 
     private Boolean placeBarrack(Buildings building) { 
-        building.setStatBarEnabled(false);
+        
         // places a barrack done insuring it doesn't collide with anything else
         // and then assigns that job to a worker to build
 
@@ -327,7 +327,7 @@ public class Team extends Actor {
     }
 
     private Boolean placeTurret(Buildings building) {
-        building.setStatBarEnabled(false);
+        //building.setStatBarEnabled(false);
         // places a Turret done insuring it doesn't collide with anything else
         // and then assigns that job to a worker to build
 
@@ -586,7 +586,16 @@ public class Team extends Actor {
             //workerAmt ++;
         }
     }
-
+    
+    public void spawnGoldBot() {
+        if (base == null || base.getWorld() == null) {
+            return;
+        }
+    
+        GoldBot bot = new GoldBot(this, base);
+        base.getWorld().addObject(bot, base.getX(), base.getY());
+    }
+    
     private void cleanSupplyBots() {
         for (int i = 0; i < supplybots.size(); i++) {
             if (supplybots.get(i) == null || supplybots.get(i).getWorld() == null) {

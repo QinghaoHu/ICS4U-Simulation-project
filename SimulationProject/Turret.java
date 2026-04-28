@@ -15,7 +15,7 @@ public class Turret extends Buildings
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private final int attackRange = 260;
     private final int cost = 150;
-    private int damage = 19;
+    private int damage = 24;
     private int decayTimer = 0;
     private int DECAY_RATE = 20;
 

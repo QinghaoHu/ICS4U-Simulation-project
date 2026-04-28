@@ -57,10 +57,10 @@ public class Marine extends Soldier
         }
     
         int level = base.getLevel();
-        int reduced = maxMarineCoolDown - ((level - 1) * 20);
+        int reduced = maxMarineCoolDown - ((level - 1) * 10);
     
-        if (reduced < 40) {
-            reduced = 40;
+        if (reduced < 10) {
+            reduced = 10;
         }
     
         return reduced;
