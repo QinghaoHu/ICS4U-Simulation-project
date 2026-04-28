@@ -10,6 +10,7 @@ public class Base extends Buildings {
     private GreenfootImage img;
     private final int cost = 100; 
     private int level = 1;
+    private int deathTimer = 0;
     
     public Base(Team team) {
         super(team, 750);
@@ -23,8 +24,12 @@ public class Base extends Buildings {
      */
     public void act() {
         if(health <= 0 && getWorld() != null){
-            getWorld().stopped();
-            Greenfoot.setWorld(new EndingWorld(team.getTeamId()));
+            deathTimer++;
+            
+            if(deathTimer >= 420){
+                getWorld().stopped();
+                Greenfoot.setWorld(new EndingWorld(team.getTeamId()));
+            }
         }
     }
 
@@ -100,8 +105,6 @@ public class Base extends Buildings {
         }
         
         SupplyBot.upgradeSupplyBot();
-        
-        
         
         return true;
     }

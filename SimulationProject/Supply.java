@@ -8,11 +8,11 @@ public class Supply extends SuperSmoothMover {
     private static final int COMMON_CHANCE = 70;
     private static final int RARE_CHANCE = 25;
     private static final int COMMON_RESOURCE_DROP = 175;
-    private static final int RARE_RESOURCE_DROP = 350;
-    private static final int ULTRA_RARE_RESOURCE_DROP = 500;
+    private static final int RARE_RESOURCE_DROP = 250;
+    private static final int ULTRA_RARE_RESOURCE_DROP = 350;
     private static final int COMMON_WORKER_DROP = 2;
-    private static final int RARE_WORKER_DROP = 2;
-    private static final int ULTRA_RARE_WORKER_DROP = 3;
+    private static final int RARE_WORKER_DROP = 3;
+    private static final int ULTRA_RARE_WORKER_DROP = 4;
     private static final int ULTRA_RARE_MARINE_DROP = 1;
     private static final int MIN_LANDING_Y = 60;
 
