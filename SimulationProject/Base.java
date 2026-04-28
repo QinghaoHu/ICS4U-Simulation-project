@@ -26,7 +26,7 @@ public class Base extends Buildings {
     public void act() {
         if(health <= 0 && getWorld() != null){
             if (expld == null) {
-                expld = new Explosion(1, 30, 300, 20, Color.RED);
+                expld = new Explosion(1, 5, 300, 120, Color.RED);
                 getWorld().addObject(expld, this.getX(), this.getY());
                 img = new GreenfootImage(2, 2);
                 setImage(img);
