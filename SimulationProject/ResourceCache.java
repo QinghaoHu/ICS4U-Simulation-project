@@ -40,18 +40,23 @@ public class ResourceCache {
             "Ui.png",
             "upgrades.png"
     };
+
     private static final String[] SOUND_FILES = {
             "BarrackExplosion.mp3",
             "BaseExplosion.mp3",
+            "supply crate.mp3",
+            "TurretShoot.mp3",
+            "BackgroundMusic.mp3",
+    };
+
+    private static final String[] SOUND_POOL_FILES = {
             "building.mp3",
             "depositing.mp3",
             "MarineShoot.mp3",
             "mining.mp3",
             "OfficerShoot.mp3",
             "supply crate.mp3",
-            "TurretExplosion.mp3",
             "TurretShoot.mp3",
-            "BackgroundMusic.mp3",
             "MarineDeath0.mp3",
             "MarineDeath1.mp3",
             "MarineDeath2.mp3"
@@ -61,9 +66,27 @@ public class ResourceCache {
     private static final Map<String, GreenfootSound> sounds = new HashMap<>();
     private static final Map<String, GreenfootSound[]> soundPools = new HashMap<>();
     private static final Map<String, Integer> soundPoolIndexes = new HashMap<>();
-    private static boolean allResourcesLoaded;
+
+    private static volatile boolean loadingStarted = false;
+    private static volatile boolean allResourcesLoaded = false;
+    private static volatile int loadedCount = 0;
+    private static volatile int totalCount = IMAGE_FILES.length + SOUND_FILES.length + SOUND_POOL_FILES.length;
 
     private ResourceCache() {
+    }
+
+    public static void startLoadingAsync() {
+        if (loadingStarted || allResourcesLoaded) {
+            return;
+        }
+
+        loadingStarted = true;
+
+        Thread loadingThread = new Thread(() -> {
+            loadAllResources();
+        });
+
+        loadingThread.start();
     }
 
     public static void loadAllResources() {
@@ -71,12 +94,26 @@ public class ResourceCache {
             return;
         }
 
+        loadedCount = 0;
+
         for (String imageFile : IMAGE_FILES) {
             getImage(imageFile);
+            loadedCount++;
         }
 
         for (String soundFile : SOUND_FILES) {
             getSound(soundFile);
+            loadedCount++;
+        }
+
+        for (String soundFile : SOUND_POOL_FILES) {
+            GreenfootSound[] pool = new GreenfootSound[soundPoolSize];
+            for (int i = 0; i < soundPoolSize; i++) {
+                pool[i] = new GreenfootSound(soundFile);
+            }
+            soundPools.put(soundFile, pool);
+            soundPoolIndexes.put(soundFile, 0);
+            loadedCount++;
         }
 
         allResourcesLoaded = true;
@@ -130,6 +167,17 @@ public class ResourceCache {
         pool[index].setVolume(volume);
         pool[index].play();
         soundPoolIndexes.put(fileName, (index + 1) % pool.length);
+    }
+
+    public static int getLoadingPercent() {
+        if (loadedCount == 0) {
+            return 0;
+        }
+        return loadedCount * 100 / totalCount;
+    }
+
+    public static boolean isAllResourcesLoaded() {
+        return allResourcesLoaded;
     }
 
 }

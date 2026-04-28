@@ -278,22 +278,23 @@ public class Team extends Actor {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
 
-                w.addObject(building, xPosition, yPosition);
+                PlaceHolder placeHolder = new PlaceHolder(building.getImage().getHeight(), building.getImage().getWidth());
+                w.addObject(placeHolder, xPosition, yPosition);
 
-                if (!building.ifTouchingOthers()) {
+                if (!placeHolder.ifTouchingOthers()) {
                     Worker worker = leastBusyWorker();
 
                     if (worker == null) {
-                        building.remove();
+                        w.removeObject(placeHolder);
                         return false;
                     }
 
                     worker.prepBuild(building, xPosition, yPosition);
-                    w.removeObject(building);
+                    w.removeObject(placeHolder);
                     return true;
                 }
 
-                w.removeObject(building);
+                w.removeObject(placeHolder);
             }
         } else if (teamId == 1) {
             int x1 = 800, x2 = 1200;
@@ -303,23 +304,22 @@ public class Team extends Actor {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
 
-                w.addObject(building, xPosition, yPosition);
+                PlaceHolder placeHolder = new PlaceHolder(building.getImage().getHeight(), building.getImage().getWidth());
+                w.addObject(placeHolder, xPosition, yPosition);
 
-                if (!building.ifTouchingOthers()) {
+                if (!placeHolder.ifTouchingOthers()) {
                     Worker worker = leastBusyWorker();
 
                     if (worker == null) {
-                        w.removeObject(building);
+                        w.removeObject(placeHolder);
                         return false;
                     }
 
                     worker.prepBuild(building, xPosition, yPosition);
-                    building.remove();;
+                    w.removeObject(placeHolder);
                     return true;
                 }
-
-                w.removeObject(building);
-                building.remove();
+                w.removeObject(placeHolder);
             }
         }
 
@@ -339,22 +339,23 @@ public class Team extends Actor {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
 
-                w.addObject(building, xPosition, yPosition);
+                PlaceHolder placeHolder = new PlaceHolder(building.getImage().getHeight(), building.getImage().getWidth());
+                w.addObject(placeHolder, xPosition, yPosition);
 
-                if (!building.ifTouchingOthers()) {
+                if (!placeHolder.ifTouchingOthers()) {
                     Worker worker = leastBusyWorker();
 
                     if (worker == null) {
-                        building.remove();
+                        w.removeObject(placeHolder);
                         return false;
                     }
 
                     worker.prepBuild(building, xPosition, yPosition);
-                    building.remove();
+                    w.removeObject(placeHolder);
                     return true;
                 }
 
-                building.remove();
+                w.removeObject(placeHolder);
             }
         } else if (teamId == 1) {
             int x1 = 600, x2 = 900;
@@ -364,24 +365,22 @@ public class Team extends Actor {
                 int xPosition = x1 + Greenfoot.getRandomNumber(x2 - x1);
                 int yPosition = y1 + Greenfoot.getRandomNumber(y2 - y1);
 
-                w.addObject(building, xPosition, yPosition);
+                PlaceHolder placeHolder = new PlaceHolder(building.getImage().getHeight(), building.getImage().getWidth());
+                w.addObject(placeHolder, xPosition, yPosition);
 
-                if (!building.ifTouchingOthers()) {
+                if (!placeHolder.ifTouchingOthers()) {
                     Worker worker = leastBusyWorker();
 
                     if (worker == null) {
-                        building.remove();
+                        w.removeObject(placeHolder);
                         return false;
                     }
 
                     worker.prepBuild(building, xPosition, yPosition);
-                    building.remove();
+                    w.removeObject(placeHolder);
                     return true;
                 }
-
-                w.removeObject(building);
-            
-                building.remove();
+                w.removeObject(placeHolder);
             }
         }
 
