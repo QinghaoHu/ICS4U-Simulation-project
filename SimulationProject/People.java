@@ -4,6 +4,9 @@ public abstract class People extends Entity{
     protected int speed;
     protected int centerDist = 20;
     private boolean hasStatBar;
+    private boolean statBarEnabled = true;
+    private SuperStatBar statBar;
+    
     
     // people is a subclass of entity and will all be able to move
     
@@ -19,16 +22,28 @@ public abstract class People extends Entity{
             getWorld().removeObject(this);
             return;
         }
+    
+        if (!hasStatBar && getWorld() != null) {
+            addStatBar(getWorld());
+        }
+    
+        updateStatBar();
+    
         super.act();
     }
 
-    protected void addedToWorld(World world) {
-        if (world != null && !hasStatBar) {
-            world.addObject(new SuperStatBar(maxHealth, health, this, 50, 6, -35), getX(), getY());
+    public void addStatBar(World world) {
+        if (world != null && statBarEnabled && !hasStatBar) {
+            statBar = new SuperStatBar(maxHealth, health, this, 50, 6, -65);
+            world.addObject(statBar, getX(), getY());
             hasStatBar = true;
         }
     }
-
+    
+    public void setStatBarEnabled(boolean statBarEnabled) {
+        this.statBarEnabled = statBarEnabled;
+    }
+    
     public int getHealth() {
         return health;
     }
@@ -43,6 +58,13 @@ public abstract class People extends Entity{
 
     public void setHealth(int health) {
         this.health = Math.max(0, Math.min(health, maxHealth));
+    }
+    
+    public void updateStatBar() {
+        if (statBar != null) {
+            statBar.setMaxVal(maxHealth);
+            statBar.update(health);
+        }
     }
     
     protected void moveTowards(int x, int y) {

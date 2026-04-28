@@ -5,7 +5,7 @@ import java.util.LinkedList;
 
 public class Worker extends People {
     protected int carryAmount = 0;
-    protected int maxCarry = 13;
+    protected int maxCarry = 17;
     protected int minRate = 5;
 
     private GreenfootImage emptyImg;
@@ -25,7 +25,8 @@ public class Worker extends People {
     private static int blueIndex = 0;
     private static final int cost = 75;
 
-    private static int maxWorkerCoolDown = 240;
+    private static int maxWorkerCoolDown = 180;
+    
 
     /*
      * The worker bot main functions are to create buildings and to collect resources
@@ -35,7 +36,7 @@ public class Worker extends People {
     
     public Worker(Team team, Base base) {
         super(team, 450, 5);
-
+        setStatBarEnabled(false);
         this.homeBase = base;
 
         if (team != null) {

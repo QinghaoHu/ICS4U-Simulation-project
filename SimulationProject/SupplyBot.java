@@ -3,11 +3,17 @@ import greenfoot.GreenfootImage;
 import java.util.ArrayList;
 
 public class SupplyBot extends People{
-    private static int MAX_HEALTH = 150;
+    private static int MAX_HEALTH = 60;
     private static double SPEED = 4; 
-    private static int cost = 85;
+    private static int cost = 100;
     private static int maxSupplyBotCoolDown = 200;
+    private static int BASE_HEALTH_GAIN = 2;
+    private static int BASE_MAX_HEALTH_GAIN = 2;
 
+    private int growthTimer = 0;
+    private int currentSize = 50;
+    
+    
     private Supply targetSupply;
     private GreenfootImage img;
 
@@ -33,10 +39,12 @@ public class SupplyBot extends People{
         super.act();
 
         if (suppliesCollected >= MAX_SUPPLIES) {
+            growTank();
             return;
         }
-
+        
         collectSupply();
+        updateStatBar();
     }
 
     private void collectSupply(){
@@ -91,10 +99,17 @@ public class SupplyBot extends People{
        move(SPEED);
     }
 
-    private void setupImage(){
-        img = new GreenfootImage ("SupplyBot.png");
-        img.scale(30, 30);
-        setImage(img);
+    private void setupImage() {
+        if (team == null) {
+            return;
+        }
+
+        img = ResourceCache.getImage(team.getName() + getClass().getName() +  ".png");
+        img.scale(50, 50);
+
+        if (img != null) {
+            setImage(img);
+        }
     }
 
     public static int getCost() {
@@ -107,5 +122,35 @@ public class SupplyBot extends People{
 
     public static void modifyMaxSupplyBotCoolDown(int supplyBotCoolDown) {
         maxSupplyBotCoolDown = supplyBotCoolDown;
+    }
+    
+    private void growTank() {
+        growthTimer++;
+    
+        if (growthTimer >= 60) {
+            maxHealth += BASE_MAX_HEALTH_GAIN;
+            health += BASE_MAX_HEALTH_GAIN;
+    
+            currentSize += 1;
+    
+            GreenfootImage newImg = ResourceCache.getImage(team.getName() + getClass().getName() + ".png");
+            newImg.scale(currentSize, currentSize);
+            setImage(newImg);
+    
+            updateStatBar();
+            
+            growthTimer = 0;
+        }
+    }
+    
+    public void upgradeCurrentBot() {
+        maxHealth += 20;
+        health += 20;
+        updateStatBar();
+    }
+    
+    public static void upgradeSupplyBot() {
+        MAX_HEALTH += 25;
+        
     }
 }

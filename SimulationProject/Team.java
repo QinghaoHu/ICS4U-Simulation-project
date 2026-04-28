@@ -451,7 +451,7 @@ public class Team extends Actor {
             } else {
                 barrackNeeded = MAX_BARRACKS;
             }
-            marineNeeded = barracks.size() * 2;
+            marineNeeded = (barracks.size() + pendingBarracks) * 2;
         } else if (strategy.equals("DEF")) {
             turretNeeded = defensiveTurrets.size() + pendingTurrets + 1;
         } else {
@@ -460,9 +460,9 @@ public class Team extends Actor {
     }
 
     private void spendMoney() {
-        if (!strategy.equals("ATK")) {
-            if (resources > 300 && marineNeeded < 4) {
-                marineNeeded = 4;
+        if (resources >= 75 && isBarrackExist()) {
+            if (marineNeeded < currentMarinedAmount + 1) {
+                marineNeeded = currentMarinedAmount + 1;
             }
         }
     }

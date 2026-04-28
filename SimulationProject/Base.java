@@ -12,7 +12,7 @@ public class Base extends Buildings {
     private int level = 1;
     
     public Base(Team team) {
-        super(team, 1500);
+        super(team, 750);
         setupImage();
         setImage(img);
     }
@@ -23,7 +23,8 @@ public class Base extends Buildings {
      */
     public void act() {
         if(health <= 0 && getWorld() != null){
-            getWorld().addObject(new EndScreen(team.getTeamId()), 600, 400);
+            getWorld().stopped();
+            Greenfoot.setWorld(new EndingWorld(team.getTeamId()));
         }
     }
 
@@ -80,9 +81,28 @@ public class Base extends Buildings {
         // every upgrade makes its level higher, increases max health by 250 and sets health to max hp
         level++;
     
-        setMaxHealth(getMaxHealth() + 150);
-        health += 150;
+        setMaxHealth(getMaxHealth() + 75);
+        health += 75;
         updateStatBar();
+    
+        for (Buildings building : team.getBuildings()) {
+            if (building instanceof Turret) {
+                Turret turret = (Turret) building;
+                turret.upgradeTurret();
+            }
+        }
+        
+        for (People unit : team.getUnits()) {
+            if (unit instanceof SupplyBot) {
+                SupplyBot supplyBot = (SupplyBot) unit;
+                supplyBot.upgradeCurrentBot();
+            }
+        }
+        
+        SupplyBot.upgradeSupplyBot();
+        
+        
+        
         return true;
     }
 

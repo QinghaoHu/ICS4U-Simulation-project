@@ -13,16 +13,27 @@ public class Turret extends Buildings
     private GreenfootImage shootingImg; // image when shooting
     private int centerDist = 70;
     private int shootCounter; // delay the time it takes to shoot for each soldier
-    private static final int attackRange = 260;
-    private static final int cost = 175;
-
+    private final int attackRange = 260;
+    private final int cost = 175;
+    private int damage = 19;
     private int decayTimer = 0;
-    private static final int DECAY_RATE = 9;
+    private int DECAY_RATE = 20;
 
     public Turret(Team team) {
-        super(team, 850);
+        super(team, 1000);
         if (team != null) {
             team.addBuilding(this);
+    
+            Base base = team.getBase();
+            if (base != null) {
+                int level = base.getLevel();
+    
+                maxHealth += (level - 1) * 50; //adds 50 health per upgrade
+                health += (level - 1) * 50;
+    
+                damage += (level - 1) * 2; //deals extra 2 damage per upgrade
+                DECAY_RATE += (level - 1) * 2; //decay rate increases by 2 per leveling upgrade
+            }
         }
         setupImage();
     }
@@ -51,7 +62,7 @@ public class Turret extends Buildings
                 int bulletX = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
                 int bulletY = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
 
-                getWorld().addObject(new SoldierBullet(this, angle, 3.5, 19, 15), bulletX, bulletY);
+                getWorld().addObject(new SoldierBullet(this, angle, 3.5, damage, 15), bulletX, bulletY);
             }
             
             
@@ -87,4 +98,11 @@ public class Turret extends Buildings
         }
     }
     
+    public void upgradeTurret() {
+        maxHealth += 50;
+        health += 50;
+        damage += 5;
+        DECAY_RATE += 10;
+        updateStatBar();
+    }
 }
