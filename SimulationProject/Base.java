@@ -112,8 +112,6 @@ public class Base extends Buildings {
         
         SupplyBot.upgradeSupplyBot();
         
-        
-        
         return true;
     }
 
