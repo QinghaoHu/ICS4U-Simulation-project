@@ -44,7 +44,7 @@ public class Marine extends Soldier
         
         if (health <= 0) {
             int random = Greenfoot.getRandomNumber(2);
-            ResourceCache.playSound("MarineDeath" + random + ".mp3", 20);
+            ResourceCache.playSound("MarineDeath" + random + ".mp3", 15);
         }
     }
     
