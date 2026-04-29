@@ -6,7 +6,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Marine extends Soldier
 {
     private static final int cost = 100;
-    private static int maxMarineCoolDown = 240;
+    private static int maxMarineCoolDown = 180;
     private int bonusDamage;
     
     public Marine(Team team) {
@@ -55,15 +55,10 @@ public class Marine extends Soldier
 
         // Base level trims the unit wait time.
         int level = base.getLevel();
-        int reduced = maxMarineCoolDown - ((level - 1) * 7);
+        int increased = maxMarineCoolDown + ((level - 1) * 5);
     
-        if (reduced < 7) {
-            reduced = 7;
-        }
-    
-        return reduced;
+        return increased;
     }
-
     public static void modifyMaxMarineCoolDown(int marineCoolDown) {
         maxMarineCoolDown = marineCoolDown;
     }
