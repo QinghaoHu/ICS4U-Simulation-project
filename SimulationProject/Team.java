@@ -624,6 +624,16 @@ public class Team extends Actor {
         }
     }
 
+    public Team getOpponentTeam() {
+        Base enemyBase = getEnemyBase();
+    
+        if (enemyBase != null) {
+            return enemyBase.team;
+        }
+    
+        return null;
+    }
+    
     public void setBase(Base base) {
         this.base = base;
     }
