@@ -380,7 +380,8 @@ public class Team extends Actor {
             if (spawnBarrack != null) {
                 officer = new Officer(this);
                 w.addObject(officer, spawnBarrack.getX(), spawnBarrack.getY());
-    
+                UI.reportUpgrade(this, "Officer", 1);
+
                 officerCooldown = OFFICER_COOLDOWN;
             }
         }

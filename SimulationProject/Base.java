@@ -92,6 +92,7 @@ public class Base extends Buildings {
     public boolean upgrade() {
         // every upgrade makes its level higher, increases max health by 250 and sets health to max hp
         level++;
+        UI.reportUpgrade(team, "Base", 1);
     
         setMaxHealth(getMaxHealth() + 75);
         health += 75;
