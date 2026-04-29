@@ -25,7 +25,7 @@ public class Barrack extends Buildings{
         
         if (marineCoolDown > 0) marineCoolDown--;
     }
-    
+    //may increase later
     public int getCost(){
         return 100; 
     }
