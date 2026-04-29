@@ -184,6 +184,9 @@ public class UI extends Actor {
         if ("SupplyBot".equals(typeName)) {
             return findExistingImage(teamName + "SupplyBot.png", "placeholder.png");
         }
+        if ("Base".equals(typeName)) {
+            return findExistingImage(teamName + "Base.png", "placeholder.png");
+        }
 
         return "placeholder.png";
     }
