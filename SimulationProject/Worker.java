@@ -127,7 +127,7 @@ public class Worker extends People {
             buildings.poll();
             targetPositions.add(resourceLocation());
             
-            ResourceCache.playSound("building.mp3", 20);
+            ResourceCache.playSound("building.mp3", 30);
         }
     }
 

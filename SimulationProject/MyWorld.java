@@ -85,7 +85,7 @@ public class MyWorld extends World {
 
     //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
     public void act() {
-        backgroundMusic.setVolume(25);
+        backgroundMusic.setVolume(30);
         backgroundMusic.playLoop();
         if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
             changeState(GAME_STATE);

@@ -30,6 +30,7 @@ public class Base extends Buildings {
                 getWorld().addObject(expld, this.getX(), this.getY());
                 img = new GreenfootImage(2, 2);
                 setImage(img);
+                ResourceCache.playSound("BaseExplosion.mp3", 100);
             }
             if (Explosion.getIsInUse()) {
                 return;
