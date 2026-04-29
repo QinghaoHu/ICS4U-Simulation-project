@@ -7,11 +7,13 @@ public class GameTimer extends Actor
 
     public GameTimer()
     {
+        // Start with a visible clock.
         updateImage();
     }
 
     public void act()
     {
+        // Count one real second every 60 frames.
         actCount++;
 
         if (actCount >= 60) {
@@ -23,6 +25,7 @@ public class GameTimer extends Actor
 
     private void updateImage()
     {
+        // Keep the on-screen timer easy to read.
         int minutes = seconds / 60;
         int remainingSeconds = seconds % 60;
 

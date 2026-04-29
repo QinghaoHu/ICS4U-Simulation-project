@@ -39,6 +39,7 @@ public class SupplyBot extends People{
         super.act();
 
         if (suppliesCollected >= MAX_SUPPLIES) {
+            // This bot turns into a growth unit after delivery.
             growTank();
             return;
         }
@@ -50,12 +51,14 @@ public class SupplyBot extends People{
     private void collectSupply(){
 
         if (targetSupply == null || targetSupply.getWorld() == null){
+            // Re-target when the old crate is gone.
             targetSupply = findTargetSupply();
         }
 
         moveTowardsSupply();
 
         if (targetSupply != null && getWorld() != null && isTouching(Supply.class)) {
+            // One pickup is enough for this bot.
             targetSupply = null;
             suppliesCollected++;
             
@@ -67,6 +70,7 @@ public class SupplyBot extends People{
         if (getWorld() == null){    
             return null;
         }
+        // Just take the nearest crate on the map.
         ArrayList<Supply> supplies = (ArrayList<Supply>)getWorld().getObjects(Supply.class);
 
         Supply closest = null;
@@ -93,6 +97,7 @@ public class SupplyBot extends People{
             return;
         }
 
+        // Keep it moving straight at the crate.
         turnTowards(targetSupply.getX(), targetSupply.getY());
 
 
@@ -128,6 +133,8 @@ public class SupplyBot extends People{
         growthTimer++;
     
         if (growthTimer >= 60) {
+            // Growth is gradual, not a one-time reward.
+            // Slow growth, one step per second-ish.
             maxHealth += BASE_MAX_HEALTH_GAIN;
             health += BASE_MAX_HEALTH_GAIN;
     
@@ -144,12 +151,14 @@ public class SupplyBot extends People{
     }
     
     public void upgradeCurrentBot() {
+        // Base upgrades also buff already-built bots.
         maxHealth += 20;
         health += 20;
         updateStatBar();
     }
     
     public static void upgradeSupplyBot() {
+        // Future spawns inherit the stronger base level.
         MAX_HEALTH += 25;
         
     }

@@ -17,6 +17,7 @@ public class Barrack extends Buildings{
     public void act(){
         super.act();
         
+        // Barracks slowly wear down over time.
         decayTimer++;
         if (decayTimer >= 60) {
             health -= (DECAY_RATE);
@@ -25,7 +26,7 @@ public class Barrack extends Buildings{
         
         if (marineCoolDown > 0) marineCoolDown--;
     }
-    //may increase later
+
     public int getCost(){
         return 100; 
     }
@@ -39,6 +40,7 @@ public class Barrack extends Buildings{
             return false;
         }
 
+        // Spawn from this barrack, then start cooldown.
         Marine marine = new Marine(team);
         if (!team.spendMoney(marine.getCost())){
             return false;
@@ -57,6 +59,7 @@ public class Barrack extends Buildings{
             return;
         }
         
+        // Match the barrack art to the team color.
         img = ResourceCache.getImage(team.getName() + getClass().getName() +  ".png");
         
         img.scale(100, 100);

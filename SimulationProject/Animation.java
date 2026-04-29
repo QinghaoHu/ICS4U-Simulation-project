@@ -1,8 +1,5 @@
 /**
- * Write a description of class Animation here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Tiny frame timer for sprite sheets.
  */
 
 import greenfoot.*;
@@ -19,6 +16,7 @@ public class Animation
     
     public Animation(String path, int length, int delay)
     {// get the path of animation, the amount of pngs in the animation, and the wait between each png
+        // Load the whole strip once.
         maxDelay = delay; 
         curDelay = delay;
         images = new GreenfootImage[length]; // sets an appropriate length to the animation
@@ -32,6 +30,7 @@ public class Animation
     
     public Animation(String path, int length, int delay, boolean looped)
     { // same as above but check if you want to loop the animation
+        // Same load path, but stop on the last frame.
         maxDelay = delay;
         curDelay = delay;
         loop = false;
@@ -45,6 +44,7 @@ public class Animation
     }
     
     public GreenfootImage img(boolean flipped){ // return the respective image and flip it if it is flipped
+        // Advance one frame at a time.
         if (curDelay == 0){
             frame += 1;
             if (loop){
@@ -64,6 +64,7 @@ public class Animation
     }
     
     public boolean isFinished(){
+        // Useful for one-shot effects.
         return frame == images.length-1; // checks if the animation is at the end
     }
 }

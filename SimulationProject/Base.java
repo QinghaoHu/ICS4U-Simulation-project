@@ -1,10 +1,8 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Base here.
- *
- * @author (your name)
- * @version (a version number or a date)
+ * Main base building.
+ * Spawns workers, buys supply bots, and handles upgrades.
  */
 public class Base extends Buildings {
     private GreenfootImage img;
@@ -19,18 +17,17 @@ public class Base extends Buildings {
         setImage(img);
     }
 
-    /**¡™
-     * Act - do whatever the Base wants to do. This method is called whenever
-     * the 'Act' or 'Run' button gets pressed in the environment.
-     */
     public void act() {
         if(health <= 0 && getWorld() != null){
+            // Death animation runs once, then the world swaps over.
             if (expld == null) {
                 expld = new Explosion(1, 5, 300, 120, Color.RED);
                 getWorld().addObject(expld, this.getX(), this.getY());
                 img = new GreenfootImage(2, 2);
                 setImage(img);
-                ResourceCache.playSound("BaseExplosion.mp3", 100);
+                GreenfootSound sound = ResourceCache.getSound("BaseExplosion.mp3");
+                sound.setVolume(100);
+                sound.play();
             }
             if (Explosion.getIsInUse()) {
                 return;
@@ -58,7 +55,7 @@ public class Base extends Buildings {
     }
 
     public boolean addPeople() {
-        // adds a worker into the world if the team can afford to buy the worker
+        // Worker purchase path.
         if (getWorld() == null) {
             return false;
         }
@@ -74,7 +71,7 @@ public class Base extends Buildings {
     }
 
     public boolean addBot() {
-        // adds a bot to the world if the team can afford it
+        // Supply bots are the other base buy.
         if (getWorld() == null) {
             return false;
         }
@@ -90,7 +87,7 @@ public class Base extends Buildings {
     }
     
     public boolean upgrade() {
-        // every upgrade makes its level higher, increases max health by 250 and sets health to max hp
+        // Base upgrades also feed into nearby unit scaling.
         level++;
         UI.reportUpgrade(team, "Base", 1);
     
@@ -112,16 +109,17 @@ public class Base extends Buildings {
             }
         }
         
+        // New bots should not stay at the old cap.
         SupplyBot.upgradeSupplyBot();
         
         return true;
     }
 
-    public int getLevel() { // returns current level
+    public int getLevel() { // current base tier
         return level;
     }
 
-    public int getMaxHealth() { // returns max health
+    public int getMaxHealth() { // max HP after upgrades
         return maxHealth;
     }
 }

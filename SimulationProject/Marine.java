@@ -1,19 +1,10 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class Marine here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Basic front-line soldier.
  */
 public class Marine extends Soldier
 {
-    /**
-     * Act - do whatever the Marine wants to do. This method is called whenever
-     * the 'Act' or 'Run' button 
-     * gets pressed in the environment.
-     */
-    
     private static final int cost = 100;
     private static int maxMarineCoolDown = 180;
     private int bonusDamage;
@@ -40,15 +31,16 @@ public class Marine extends Soldier
     public void act()
     {
         super.act();
-        // Add your action code here.
         
         if (health <= 0) {
+            // Death sound gets picked at random.
             int random = Greenfoot.getRandomNumber(2);
             ResourceCache.playSound("MarineDeath" + random + ".mp3", 15);
         }
     }
-    
+
     protected void shoot(Entity target){ // will create a bullet at the tip of it's gun going towards the entity it wants to shoot at
+        // Marine shots are simple and direct.
         turnTowards(target.getX(), target.getY());
         double angle = shootAngle(target);
         int X = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
@@ -60,7 +52,8 @@ public class Marine extends Soldier
         if (base == null) {
             return maxMarineCoolDown;
         }
-    
+
+        // Base level trims the unit wait time.
         int level = base.getLevel();
         int increased = maxMarineCoolDown + ((level - 1) * 5);
     

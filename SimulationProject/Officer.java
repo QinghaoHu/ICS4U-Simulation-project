@@ -2,10 +2,7 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.lang.Math; 
 
 /**
- * Write a description of class Officer here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Heavier marine with a burst shot.
  */
 public class Officer extends Soldier
 {
@@ -37,7 +34,6 @@ public class Officer extends Soldier
     public void act()
     {
         super.act();
-        // Add your action code here.
     }
     
     protected void setupImage() {
@@ -45,6 +41,7 @@ public class Officer extends Soldier
             return;
         }
 
+        // Bigger frame, same team palette.
         if (team.getTeamId() == Team.RED) {
             emptyImg = ResourceCache.getImage("Red" + getClass().getName() + ".png");
             shootingImg = ResourceCache.getImage("Red" + getClass().getName() + "Recoil.png");
@@ -67,6 +64,7 @@ public class Officer extends Soldier
     }
     
     protected void shoot(Entity target){
+        // Short spread shot, not a single bullet.
         double angle = shootAngle(target);
     
         int totalBullets = 3 + bonusBullets;

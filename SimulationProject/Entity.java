@@ -23,6 +23,7 @@ public abstract class Entity extends SuperSmoothMover{
     
     public void act(){
         if (health <= 0 && getWorld() != null) {
+            // Dead things leave fast.
             if (this instanceof Buildings) {
                 ((Buildings) this).remove();
                 return;
@@ -47,6 +48,7 @@ public abstract class Entity extends SuperSmoothMover{
             Entity e = (Entity) obj;
     
             if (isOpponent(e)) {
+                // Keep the nearest enemy in reach.
                 double dist = Math.hypot(e.getX() - getX(), e.getY() - getY());
                 if (dist < closestDist) {
                     closestDist = dist;
@@ -64,6 +66,7 @@ public abstract class Entity extends SuperSmoothMover{
         double shortestDist = 0;
         for (Entity e : enemies) {
             if (!e.getTeam().equals(this.getTeam())) {
+                // No range cap here, just pick the closest rival.
                 double distX = e.getX() - this.getX();
                 double distY = e.getY() - this.getY();
                 double distance = Math.sqrt(Math.pow(distX, 2) + Math.pow(distY, 2));

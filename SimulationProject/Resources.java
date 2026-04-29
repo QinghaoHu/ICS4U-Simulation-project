@@ -7,6 +7,7 @@ public class Resources extends SuperSmoothMover {
     private int teamSide; // either team red or team blue
     public Resources(int teamSide) {
         this.teamSide = teamSide;
+        // Simple ore node, full at spawn.
         maxAmount = 100;
         currentAmount = maxAmount;
         setupImage();
@@ -14,6 +15,7 @@ public class Resources extends SuperSmoothMover {
     }
 
     public void setupImage() {
+        // Pick one of the two resource sprites.
         if ((int) (Math.random() * 2) == 0) {
             img = ResourceCache.getImage("Resources1.png");
         } else {

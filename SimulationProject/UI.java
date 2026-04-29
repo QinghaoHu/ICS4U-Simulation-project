@@ -37,6 +37,7 @@ public class UI extends Actor {
     private int blueUpgradeTimer;
 
     public UI() {
+        // HUD background first, dynamic text later.
         baseImage = ResourceCache.getImage("Ui.png");
         setImage(baseImage);
         fontName = MyWorld.loadCustomFont("fonts/SupremeSpike-KVO8D.ttf");
@@ -54,13 +55,14 @@ public class UI extends Actor {
         }
 
         if (redTeam == null || blueTeam == null) {
+            // Teams can appear after the UI, so resync once.
             syncTeams(getWorld());
         }
         tickUpgradeTimers();
         updateImage();
     }
 
-    private void syncTeams(World world) { // make sure the stats are correct
+    private void syncTeams(World world) { // keep team refs fresh
         List<Team> teams = world.getObjects(Team.class);
         for (Team team : teams) {
             if (team.getTeamId() == Team.RED) {
@@ -72,39 +74,39 @@ public class UI extends Actor {
     }
 
     private void updateImage() {
-        // updates the displayed stats on screen
+        // Rebuild the HUD every frame.
         GreenfootImage image = new GreenfootImage(baseImage);
         image.setColor(Color.WHITE);
         greenfoot.Font myFont = new greenfoot.Font(fontName, FONT_SIZE);
         image.setFont(myFont);
 
-        // Resources display
+        // Resources.
         image.drawString("Resources: " + String.valueOf(getResourcesFor(redTeam)), RED_TEXT_X, RESOURCE_TEXT_Y);
         image.drawString("Resources: " + String.valueOf(getResourcesFor(blueTeam)), BLUE_TEXT_X, RESOURCE_TEXT_Y);
 
-        // Worker display
+        // Workers.
         image.drawString("Workers: " + String.valueOf(getWorkersFor(redTeam)), RED_SIDE_TEXT_X, WORKER_TEXT_Y);
         image.drawString("Workers: " + String.valueOf(getWorkersFor(blueTeam)), BLUE_SIDE_TEXT_X, WORKER_TEXT_Y);
 
-        // Base HP display
+        // Base health.
         image.drawString(getBaseHealthFor(redTeam), RED_TEXT_X, BASE_HP_TEXT_Y);
         image.drawString(getBaseHealthFor(blueTeam), BLUE_TEXT_X, BASE_HP_TEXT_Y);
         
-        //level display
+        // Base level.
         image.drawString("Level: " + getLevelFor(redTeam), RED_TEXT_X, LEVEL_TEXT_Y);
         image.drawString("Level: " + getLevelFor(blueTeam), BLUE_TEXT_X, LEVEL_TEXT_Y);
         
-        // Draws the marine damage
+        // Strongest marine snapshot.
         image.drawString(getStrongestMarineStats(redTeam), RED_SIDE_TEXT_X, MARINE_TEXT_Y);
         image.drawString(getStrongestMarineStats(blueTeam), BLUE_SIDE_TEXT_X , MARINE_TEXT_Y);
         
-        // Strategy display
+        // Strategy.
         greenfoot.Font font = new greenfoot.Font(fontName, FONT_SIZE - 3);
         image.setFont(font);
         image.drawString("Strategy: " + getStrategyFor(redTeam), RED_TEXT_X, STRATEGY_TEXT_Y);
         image.drawString("Strategy: " + getStrategyFor(blueTeam), BLUE_TEXT_X, STRATEGY_TEXT_Y);
 
-        // upgrade display
+        // Upgrade popups.
         drawUpgradeDisplay(image, redUpgradeIcon, redUpgradeAmount, redUpgradeTimer, RED_UPGRADE_X);
         drawUpgradeDisplay(image, blueUpgradeIcon, blueUpgradeAmount, blueUpgradeTimer, BLUE_UPGRADE_X);
 
@@ -140,6 +142,7 @@ public class UI extends Actor {
     }
 
     private void tickUpgradeTimers() {
+        // Let the popup fade out on its own.
         if (redUpgradeTimer > 0) {
             redUpgradeTimer--;
             if (redUpgradeTimer == 0) {
@@ -157,6 +160,7 @@ public class UI extends Actor {
     }
 
     private GreenfootImage loadUpgradeImage(Team team, String typeName) {
+        // One icon per upgrade type.
         String imageName = getUpgradeImageName(team, typeName);
         GreenfootImage icon = new GreenfootImage(imageName);
         icon.scale(UPGRADE_ICON_SIZE, UPGRADE_ICON_SIZE);
@@ -204,6 +208,7 @@ public class UI extends Actor {
             return;
         }
 
+        // Fade the popup as the timer runs down.
         int transparency = (int)(255.0 * timer / UPGRADE_DISPLAY_TIME);
 
         GreenfootImage fadedIcon = new GreenfootImage(icon);

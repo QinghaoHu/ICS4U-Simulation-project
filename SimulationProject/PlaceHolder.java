@@ -21,19 +21,20 @@ public class PlaceHolder extends Actor {
     public PlaceHolder(int height, int width) {
         this.height = height;
         this.width = width;
+        // Invisible footprint for build checks.
         img = new GreenfootImage(height, width);
         setImage(img);
     }
 
     public void act() {
-        // Add your action code here.
+        // Intentionally blank.
     }
 
     public boolean ifTouchingOthers() {
         ArrayList<Buildings> intersectingBuilding = (ArrayList<Buildings>) getIntersectingObjects(Buildings.class);
         ArrayList<Resources> intersectingResources = (ArrayList<Resources>) getIntersectingObjects(Resources.class);
         ArrayList<People> intersectingPeoples = (ArrayList<People>) getIntersectingObjects(People.class);
-        // checks if the building is touching other things to ensure where it spawns makes sense
+        // Same collision test as the real building.
         if (intersectingBuilding.isEmpty() && intersectingResources.isEmpty() && intersectingPeoples.isEmpty()) {
             return false;
         }
