@@ -58,7 +58,9 @@ public class Team extends Actor {
     private int lastWorkerAmount = 0;
     private int pendingBarracks = 0;
     private int pendingTurrets = 0;
-
+    private Officer officer = null;
+    private int officerCooldown = 0;
+    private static final int OFFICER_COOLDOWN = 600; // 10 sec at 60 fps
     private World w;
 
     private Base base;
@@ -103,15 +105,23 @@ public class Team extends Actor {
     }
 
     public void act() {
-        cleanSupplyBots();
-        cleanWorkers();
-        spendMoney();
-
         currentSupplyBotAmount = supplybots.size();
         currentWorkerAmount = workers.size();
         currentBarrackAmount = barracks.size();
         currentTurretAmount = defensiveTurrets.size();
-
+        
+        if (base != null && base.health <= 500) {
+            int totalTurrets = currentTurretAmount + pendingTurrets;
+        
+            if (totalTurrets < 2) {
+                turretNeeded = 2;
+            }
+        
+            if (currentWorkerAmount < 2) {
+                workerNeeded = 2;
+            }
+        }
+        
         if (workerCoolDown > 0) workerCoolDown--;
         //if (marineCoolDown > 0) marineCoolDown--;
         if (supplyBotCoolDown > 0) supplyBotCoolDown--;
@@ -124,7 +134,13 @@ public class Team extends Actor {
                 strategyStarted = true;
             }
         }
-
+        
+        if (officerCooldown > 0) {
+            officerCooldown--;
+        }
+        
+        handleOfficerSpawn();
+        
         if ((currentBarrackAmount + pendingBarracks) < barrackNeeded && (currentBarrackAmount + pendingBarracks) < MAX_BARRACKS) {
             if (resources >= barrackCost) {
                 Barrack barrack = new Barrack(this);
@@ -326,6 +342,67 @@ public class Team extends Actor {
         return false;
     }
 
+    private void handleOfficerSpawn() {
+        if (base == null || base.getWorld() == null) {
+            return;
+        }
+    
+        Base enemyBase = getEnemyBase();
+    
+        if (enemyBase == null) {
+            return;
+        }
+    
+        int levelDifference = enemyBase.getLevel() - base.getLevel();
+    
+        // only spawn if enemy is ahead by 3+
+        if (levelDifference >= 3) {
+    
+            // officer already alive
+            if (officer != null && officer.getWorld() != null) {
+                return;
+            }
+    
+            // waiting on cooldown
+            if (officerCooldown > 0) {
+                return;
+            }
+    
+            Barrack spawnBarrack = getRandomBarrack();
+    
+            if (spawnBarrack != null) {
+                officer = new Officer(this);
+                w.addObject(officer, spawnBarrack.getX(), spawnBarrack.getY());
+    
+                officerCooldown = OFFICER_COOLDOWN;
+            }
+        }
+    }
+    
+    private Base getEnemyBase() {
+        if (w == null) {
+            return null;
+        }
+    
+        for (Base b : w.getObjects(Base.class)) {
+            if (b != null && b != base) {
+                if (b.team != this) {
+                    return b;
+                }
+            }
+        }
+    
+        return null;
+    }
+    
+    private Barrack getRandomBarrack() {
+        if (barracks.size() == 0) {
+            return null;
+        }
+    
+        return barracks.get(Greenfoot.getRandomNumber(barracks.size()));
+    }
+    
     private Boolean placeTurret(Buildings building) {
         //building.setStatBarEnabled(false);
         // places a Turret done insuring it doesn't collide with anything else
