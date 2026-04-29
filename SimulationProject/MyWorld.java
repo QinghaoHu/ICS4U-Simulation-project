@@ -111,7 +111,7 @@ public class MyWorld extends World {
     }
 
     private void setUpWorld() {
-        ResourceCache.loadAllResources();
+//        ResourceCache.loadAllResources();
         removeObjects(getObjects(null));
         //background = new GreenfootImage(currentState + ".png");
         background = ResourceCache.getImage("Background.png");

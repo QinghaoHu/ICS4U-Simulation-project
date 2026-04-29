@@ -44,8 +44,6 @@ public class ResourceCache {
     private static final String[] SOUND_FILES = {
             "BarrackExplosion.mp3",
             "BaseExplosion.mp3",
-            "supply crate.mp3",
-            "TurretShoot.mp3",
             "BackgroundMusic.mp3",
     };
 
