@@ -19,6 +19,7 @@ public abstract class People extends Entity{
 
     public void act(){
         if (isAtEdge()) { // if the person is outside the border, the person will be deleted
+            // Drifted off-map, so just remove it.
             getWorld().removeObject(this);
             return;
         }
@@ -34,6 +35,7 @@ public abstract class People extends Entity{
 
     public void addStatBar(World world) {
         if (world != null && statBarEnabled && !hasStatBar) {
+            // Only spawn the bar once.
             statBar = new SuperStatBar(maxHealth, health, this, 50, 6, -65);
             world.addObject(statBar, getX(), getY());
             hasStatBar = true;
@@ -68,7 +70,7 @@ public abstract class People extends Entity{
     }
     
     protected void moveTowards(int x, int y) {
-        // will move to a certain location at a set speed
+        // Straight-line move, capped by speed.
         int dx = x - getX();
         int dy = y - getY();
 

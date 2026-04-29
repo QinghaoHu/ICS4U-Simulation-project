@@ -25,6 +25,7 @@ public class Supply extends SuperSmoothMover {
     private GreenfootImage img;
 
     public Supply(boolean isChaosMode) {
+        // Random drop speed keeps supplies from looking too synced.
         dropSpeed = Greenfoot.getRandomNumber(MAX_DROP_SPEED - MIN_DROP_SPEED + 1) + MIN_DROP_SPEED;
         this.isChaosMode = isChaosMode;
         setupImage();
@@ -32,6 +33,7 @@ public class Supply extends SuperSmoothMover {
 
     public void act() {
         if (!hasLanded) {
+            // Fall first, then resolve the pickup.
             moveToTargetPosition();
             return;
         }
@@ -40,6 +42,7 @@ public class Supply extends SuperSmoothMover {
     }
 
     protected void addedToWorld(World world) {
+        // Lock x on spawn, then choose a landing y.
         targetX = getX();
         int imageHalfHeight = getImage().getHeight() / 2;
         int maxLandingY = UI.PLAY_AREA_BOTTOM_Y - imageHalfHeight;
@@ -53,6 +56,7 @@ public class Supply extends SuperSmoothMover {
     private void moveToTargetPosition() {
         double distance = MyWorld.getDistance(this, targetX, targetY);
         if (distance < dropSpeed) {
+            // Snap into place once we are close enough.
             setLocation(targetX, targetY);
             hasLanded = true;
             return;
@@ -66,6 +70,7 @@ public class Supply extends SuperSmoothMover {
 
         for (SupplyBot bot : bots) {
             if (bot != null && bot.getTeam() != null) {
+                // One bot gets the crate, then the supply disappears.
                 String reward = applyBuff(bot.getTeam(), bot.getOpponentTeam(), isChaosMode);
                 
                 String message = reward;
@@ -97,14 +102,18 @@ public class Supply extends SuperSmoothMover {
             return "Nothing";
         }
     
+        // The roll decides whether this is a boost or a penalty.
         int roll = Greenfoot.getRandomNumber(100);
         int chance = Greenfoot.getRandomNumber(2);
         if(isChaosMode && chance == 0){
+            // Chaos can punish the enemy instead of helping you.
             if (roll < COMMON_CHANCE) {
+                // Small punishment, mostly resources and workers.
                 removeDrop(opponentTeam, COMMON_RESOURCE_DROP, COMMON_WORKER_DROP, 0);
                 return "-" + COMMON_RESOURCE_DROP + " RESOURCES, -" + COMMON_WORKER_DROP + " WORKER";
             }
             else if (roll < COMMON_CHANCE + RARE_CHANCE) {
+                // Bigger punishment, same pattern.
                 removeDrop(opponentTeam, RARE_RESOURCE_DROP, RARE_WORKER_DROP, 0);
                 return "-" + RARE_RESOURCE_DROP + " RESOURCES, -" + RARE_WORKER_DROP + " WORKERS";
             }
@@ -115,6 +124,7 @@ public class Supply extends SuperSmoothMover {
                     marineDrop = ULTRA_RARE_MARINE_DROP;
                 }
 
+                // Rare punishments can also remove marines.
                 removeDrop(opponentTeam, ULTRA_RARE_RESOURCE_DROP, ULTRA_RARE_WORKER_DROP, marineDrop * 2);
 
                 return "-" + ULTRA_RARE_RESOURCE_DROP + " RESOURCES, -"
@@ -122,11 +132,14 @@ public class Supply extends SuperSmoothMover {
                         + marineDrop + " MARINE";
             }
         }else if(!isChaosMode || chance != 1){
+            // Normal drops go to the team that grabbed the crate.
             if (roll < COMMON_CHANCE) {
+                // Small win: cash and workers.
                 applyDrop(team, COMMON_RESOURCE_DROP, COMMON_WORKER_DROP, 0);
                 return "+" + COMMON_RESOURCE_DROP + " RESOURCES, +" + COMMON_WORKER_DROP + " WORKER";
             }
             else if (roll < COMMON_CHANCE + RARE_CHANCE) {
+                // Medium win: a little more of everything.
                 applyDrop(team, RARE_RESOURCE_DROP, RARE_WORKER_DROP, 0);
                 return "+" + RARE_RESOURCE_DROP + " RESOURCES, +" + RARE_WORKER_DROP + " WORKERS";
             }
@@ -137,6 +150,7 @@ public class Supply extends SuperSmoothMover {
                     marineDrop = ULTRA_RARE_MARINE_DROP;
                 }
 
+                // Best roll: resource burst plus a marine if the team can support it.
                 applyDrop(team, ULTRA_RARE_RESOURCE_DROP, ULTRA_RARE_WORKER_DROP, marineDrop);
 
                 return "+" + ULTRA_RARE_RESOURCE_DROP + " RESOURCES, +"
@@ -148,12 +162,14 @@ public class Supply extends SuperSmoothMover {
     }
 
     private void applyDrop(Team team, int resources, int workerCount, int marineCount) {
+        // Positive supply: give cash, then units.
         team.addResources(resources);
         spawnWorkers(team, workerCount);
         spawnMarines(team, marineCount);
     }
 
     private void removeDrop(Team team, int resources, int workerCount, int marineCount) {
+        // Chaos mode does the same thing in reverse.
         team.addResources(-resources);
         removeWorkers(team, workerCount);
         removeMarines(team, marineCount);
@@ -166,6 +182,7 @@ public class Supply extends SuperSmoothMover {
             return;
         }
 
+        // Spawn new workers right on the base.
         for (int i = 0; i < workerCount; i++) {
             Worker worker = new Worker(team, base);
             world.addObject(worker, base.getX(), base.getY());
@@ -181,6 +198,7 @@ public class Supply extends SuperSmoothMover {
             return;
         }
 
+        // Marines come from the first working barracks we find.
         for (int i = 0; i < marineCount; i++) {
             Marine marine = new Marine(team);
             world.addObject(marine, barrack.getX(), barrack.getY());
@@ -192,6 +210,7 @@ public class Supply extends SuperSmoothMover {
     private void removeWorkers (Team team, int workerCount){
         ArrayList<Worker> workers = (ArrayList<Worker>) getWorld().getObjects(Worker.class);
         if (workers.size() >= 2) {
+            // Trim the list from the front.
             for (int i = 0; i < workerCount; i++){
                 getWorld().removeObject(workers.get(i));
             }
@@ -201,6 +220,7 @@ public class Supply extends SuperSmoothMover {
     private void removeMarines (Team team, int marineCount){
         ArrayList<Marine> marines = (ArrayList<Marine>) getWorld().getObjects(Marine.class);
         if (marines.size() >= marineCount) {
+            // Same deal for marines.
             for (int i = 0; i < marineCount; i++){
                 getWorld().removeObject(marines.get(i));
             }
@@ -208,6 +228,7 @@ public class Supply extends SuperSmoothMover {
     }
 
     private Base findBase(Team team) {
+        // First live base wins.
         for (Buildings building : team.getBuildings()) {
             if (building instanceof Base && building.getWorld() != null) {
                 return (Base) building;
@@ -218,6 +239,7 @@ public class Supply extends SuperSmoothMover {
     }
 
     private Barrack findBarrack (Team team) {
+        // Any live barrack works here.
         for (Buildings building : team.getBuildings()) {
             if (building instanceof Barrack && building.getWorld() != null) {
                 return (Barrack) building;

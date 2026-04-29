@@ -2,10 +2,8 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 import java.lang.Math;
 import java.util.*;
 /**
- * Write a description of class Soldier here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Shared logic for all combat units.
+ * Handles target choice, movement, and firing.
  */
 public abstract class Soldier extends People
 {
@@ -44,6 +42,7 @@ public abstract class Soldier extends People
      */
     public void act(){
         shootCounter++;
+        // Prefer a shot, then a chase, then the rally point.
         target = findTarget(attackRange); // first check is to see if you can fire your bullet at them
         repelSoldiers();
         if (target != null) {
@@ -61,10 +60,13 @@ public abstract class Soldier extends People
         }
         
         if (state.equals(idle)){
+            // Idle just means keep advancing.
             moveTowards(targetPosition[0], targetPosition[1]); // goes to a random position if no enemies are near enough
         }else if (state.equals(chase)){
+            // Close the gap before firing.
             moveTowards(target.getX(), target.getY()); // walks towards enemies 
         }else{
+            // Fire on a short rhythm so it does not spam.
             if (shootCounter % 15 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
                 
@@ -83,7 +85,7 @@ public abstract class Soldier extends People
 
         ArrayList<Actor> actorsTouching = new ArrayList<Actor>();
 
-        // this works, but doesn't ignore knocked down Pedestrians
+        // Tiny shove so soldiers do not stack up.
         //actorsTouching.addAll(pedsTouching);
         for (Soldier p : pedsTouching){
             actorsTouching.add(p);
@@ -97,32 +99,32 @@ public abstract class Soldier extends People
      */
     
      public void pushAwayFromObjects(ArrayList<Actor> nearbyObjects, double minDistance) {
-        // Get the current position of this actor
+        // Push along one axis only to keep it simple.
         int currentX = getX();
         int currentY = getY();
 
-        // Iterate through the nearby objects
+        // Iterate through the nearby objects.
         for (Actor object : nearbyObjects) {
-            // Get the position and bounding box of the nearby object
+            // Grab the nearby actor's footprint.
             int objectX = object.getX();
             int objectY = object.getY();
             int objectWidth = object.getImage().getWidth();
             int objectHeight = object.getImage().getHeight();
 
-            // Calculate the distance between this actor and the nearby object's bounding oval
+            // Quick distance check before doing the push.
             double distance = Math.sqrt(Math.pow(currentX - objectX, 2) + Math.pow(currentY - objectY, 2));
 
-            // Calculate the effective radii of the bounding ovals
+            // Approximate both actors as circles.
             double thisRadius = Math.max(getImage().getWidth() / 2.0, getImage().getHeight() / 2.0);
             double objectRadius = Math.max(objectWidth / 2.0, objectHeight / 2.0);
 
-            // Check if the distance is less than the sum of the radii
+            // Only nudge when they are too close.
             if (distance < (thisRadius + objectRadius + minDistance)) {
-                // Calculate the direction vector from this actor to the nearby object
+                // Direction from this soldier to the other one.
                 int deltaX = objectX - currentX;
                 int deltaY = objectY - currentY;
 
-                // Calculate the unit vector in the direction of the nearby object
+                // Normalize before applying the shove.
                 double length = Math.sqrt(deltaX * deltaX + deltaY * deltaY);
                 if (length == 0){
                     continue;
@@ -130,11 +132,10 @@ public abstract class Soldier extends People
                 double unitX = deltaX / length;
                 double unitY = deltaY / length;
 
-                // Calculate the amount by which to push the nearby object
+                // How far apart they should end up.
                 double pushAmount = (thisRadius + objectRadius + minDistance) - distance;
 
-                // Update the position of the nearby object to push it away
-
+                // Move the other actor out of the overlap.
                 object.setLocation(objectX, objectY + (int)(pushAmount * unitY));
 
                 // 2d version, allows pushing on x and y axis, commented out for now but it works, just not the
@@ -157,6 +158,7 @@ public abstract class Soldier extends People
         World world = getWorld();
 
         if (world != null) {
+            // Use the real enemy base when it exists.
             for (Base base : world.getObjects(Base.class)) {
                 if (isOpponent(base)) {
                     return new int[]{base.getX(), base.getY()};
@@ -165,9 +167,11 @@ public abstract class Soldier extends People
         }
 
         if (team != null && team.getTeamId() == Team.BLUE) {
+            // Fallback rally point for the blue side.
             return new int[]{BLUE_RALLY_X, BLUE_RALLY_Y};
         }
 
+        // Fallback rally point for the red side.
         return new int[]{RED_RALLY_X, RED_RALLY_Y};
     }
     
@@ -198,6 +202,7 @@ public abstract class Soldier extends People
     }
     
     public double shootAngle(Entity e){
+        // Convert world position into an aim angle.
         double xDiff = getX() - e.getX(); // gets the difference in x between soldier and entity
         double yDiff = getY() - e.getY(); // gets the difference in y between soldier and entity
         

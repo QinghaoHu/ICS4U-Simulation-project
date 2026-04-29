@@ -80,6 +80,8 @@ public class ResourceCache {
 
         loadingStarted = true;
 
+        // Keep load time off the main thread.
+        // Greenfoot can stall if this runs too early on the main loop.
         Thread loadingThread = new Thread(() -> {
             loadAllResources();
         });
@@ -92,6 +94,8 @@ public class ResourceCache {
             return;
         }
 
+        // Warm up images first, then sounds.
+        // This keeps the first in-game use from hitching as much.
         loadedCount = 0;
 
         for (String imageFile : IMAGE_FILES) {
@@ -120,6 +124,7 @@ public class ResourceCache {
     public static GreenfootImage getImage(String fileName) {
         GreenfootImage image = images.get(fileName);
         if (image == null) {
+            // Cache the original, return a fresh copy.
             image = new GreenfootImage(fileName);
             images.put(fileName, image);
 
@@ -130,6 +135,7 @@ public class ResourceCache {
     public static GreenfootSound getSound(String fileName) {
         GreenfootSound sound = sounds.get(fileName);
         if (sound == null) {
+            // Shared sound handle for long clips.
             sound = new GreenfootSound(fileName);
             sounds.put(fileName, sound);
         }
@@ -139,6 +145,7 @@ public class ResourceCache {
     public static void playSound(String fileName) {
         GreenfootSound[] pool = soundPools.get(fileName);
         if (pool == null) {
+            // Small pool avoids clobbering the same sound.
             pool = new GreenfootSound[soundPoolSize];
             for (int i = 0; i < pool.length; i++) {
                 pool[i] = new GreenfootSound(fileName);
@@ -154,6 +161,7 @@ public class ResourceCache {
     public static void playSound(String fileName, int volume) {
         GreenfootSound[] pool = soundPools.get(fileName);
         if (pool == null) {
+            // Same idea here, just with a volume tweak.
             pool = new GreenfootSound[soundPoolSize];
             for (int i = 0; i < pool.length; i++) {
                 pool[i] = new GreenfootSound(fileName);

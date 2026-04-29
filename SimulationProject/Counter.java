@@ -48,6 +48,7 @@ public class Counter extends Actor
      */
     public Counter(String prefix)
     {
+        // Default to a blank label if no image exists.
         background = getImage();
     
         if (background == null) {
@@ -65,6 +66,7 @@ public class Counter extends Actor
      */
     public void act()
     {
+        // Smoothly walk toward the target value.
         if (value < target) {
             value++;
             updateImage();
@@ -81,6 +83,7 @@ public class Counter extends Actor
      */
     public void add(int score)
     {
+        // Target changes, animation catches up later.
         target += score;
     }
 
@@ -97,6 +100,7 @@ public class Counter extends Actor
      */
     public void setValue(int newValue)
     {
+        // Hard set for instant updates.
         target = newValue;
         value = newValue;
         updateImage();
@@ -117,6 +121,7 @@ public class Counter extends Actor
      */
     private void updateImage()
     {
+        // Resize if the text gets longer than the frame.
         GreenfootImage image = new GreenfootImage(background);
         GreenfootImage text = new GreenfootImage(prefix + value, 22, Color.BLACK, transparent);
 

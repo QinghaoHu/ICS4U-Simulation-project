@@ -83,11 +83,12 @@ public class MyWorld extends World {
         prepare();
     }
 
-    //IF YOU PRESS YOUR SPACE KEY THEN THE SIMULATION WILL START, OTHERWISE IT WILL BE ON THE TITLE SCREEN
+    // Space key jumps from title to live sim.
     public void act() {
         backgroundMusic.setVolume(30);
         backgroundMusic.playLoop();
         if (Greenfoot.isKeyDown("space") && !GAME_STATE.equals(currentState)) {
+            // Title screen waits for a manual start.
             changeState(GAME_STATE);
         }
         if (config.isSupplyDropsEnabled()) {
@@ -117,7 +118,7 @@ public class MyWorld extends World {
         background = ResourceCache.getImage("Background.png");
         setBackground(background);
 
-        Runnable stateHandler = stateHandlers.get(currentState);
+        Runnable stateHandler = stateHandlers.get(currentState); // Route to title/game setup.
         if (stateHandler == null) {
             currentState = TITLE_STATE;
             stateHandler = stateHandlers.get(currentState);
@@ -141,9 +142,10 @@ public class MyWorld extends World {
         addObject(blueBase, 990, 165);
         blueTeam.setBase(blueBase);
         
+        // Teams stay in-world so Greenfoot keeps ticking their AI.
         addObject(redTeam, 0, 0);
         addObject(blueTeam, 0, 0);
-        //adds ui to the world
+        // Keep UI layered over the battlefield.
         addObject(new UI(), 600, 400);
 
         // resources near red base (left side)
@@ -204,8 +206,10 @@ public class MyWorld extends World {
         boolean maxSupplies;
 
         if (!isChaosMode){
+            // Normal mode keeps drops capped low.
             maxSupplies = getObjects(Supply.class).size() >= 5;
         }else{
+            // Chaos mode allows a few more drops to stack up.
             maxSupplies = getObjects(Supply.class).size() >= 10;
         }
         if (supplySpawnTimer <= 0 && !maxSupplies) {

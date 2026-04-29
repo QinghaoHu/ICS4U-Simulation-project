@@ -1,10 +1,7 @@
 import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 
 /**
- * Write a description of class DefensiveTurret here.
- * 
- * @author (your name) 
- * @version (a version number or a date)
+ * Static defense for holding lanes and burning down attackers.
  */
 public class Turret extends Buildings
 {
@@ -25,7 +22,8 @@ public class Turret extends Buildings
             Base base = team.getBase();
             if (base != null) {
                 int level = base.getLevel();
-    
+
+                // Base level boosts placed turrets too.
                 maxHealth += (level - 1) * 50; //adds 50 health per upgrade
                 health += (level - 1) * 50;
     
@@ -44,6 +42,7 @@ public class Turret extends Buildings
     {
         shootCounter++;
 
+        // Turrets decay, so they need to keep fighting.
         decayTimer++;
         if (decayTimer >= 60) {
             health -= (DECAY_RATE);
@@ -53,6 +52,7 @@ public class Turret extends Buildings
 
         Entity target = findTarget(attackRange);
         if(target != null){
+            // Fire on a fixed rhythm once something is in range.
             if (shootCounter % 60 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
                 double angle = getRotation();
@@ -75,6 +75,7 @@ public class Turret extends Buildings
             return;
         }
 
+        // Turret art follows the owning team.
         img = ResourceCache.getImage(team.getName() + getClass().getName() + ".png");
 
         if (img != null) {
@@ -100,6 +101,7 @@ public class Turret extends Buildings
     }
     
     public void upgradeTurret() {
+        // Upgrade gives more HP and a bit more bite.
         maxHealth += 50;
         health += 50;
         damage += 5;

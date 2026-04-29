@@ -22,6 +22,7 @@ public abstract class Buildings extends Entity
             team.addBuilding(this);
         }
         
+        // Each building uses its own break sound.
         sounds.put("explode", ResourceCache.getSound(this.getClass().getName() + "Explosion.mp3"));
         sounds.get("explode").setVolume(15);
     }
@@ -34,6 +35,7 @@ public abstract class Buildings extends Entity
         super.act();
     
         if (statBar != null) {
+            // Keep the bar glued to current health.
             statBar.setMaxVal(maxHealth);
             statBar.update(health);
         }
@@ -62,6 +64,7 @@ public abstract class Buildings extends Entity
         if (world == null) return;
     
         if (statBar != null && statBar.getWorld() != null) {
+            // Clean up the bar with the building.
             world.removeObject(statBar);
         }
     
@@ -90,7 +93,7 @@ public abstract class Buildings extends Entity
         ArrayList<Buildings> intersectingBuilding = (ArrayList<Buildings>) getIntersectingObjects(Buildings.class);
         ArrayList<Resources> intersectingResources = (ArrayList<Resources>) getIntersectingObjects(Resources.class);
         ArrayList<People> intersectingPeoples = (ArrayList<People>) getIntersectingObjects(People.class);
-        // checks if the building is touching other things to ensure where it spawns makes sense
+        // Only place it where the footprint is clear.
         if (intersectingBuilding.isEmpty() && intersectingResources.isEmpty() && intersectingPeoples.isEmpty()) {
             return false;
         }

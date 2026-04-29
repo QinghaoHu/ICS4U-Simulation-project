@@ -44,7 +44,7 @@ public class Worker extends People {
             team.addWorker(this);
         }
 
-        states.add("move");
+        states.add("move"); // Start by walking out to a node.
         states.add("mining");
         states.add("move");
 
@@ -59,7 +59,8 @@ public class Worker extends People {
 
     @Override
     protected void addedToWorld(World w) {
-        targetPositions.add(resourceLocation()); // the first place it will go to is to the resource it is assign to
+        // First stop: assigned resource node.
+        targetPositions.add(resourceLocation());
     }
 
     public void act() {
@@ -68,10 +69,10 @@ public class Worker extends People {
             return;
         }
 
-        timer--;
+        timer--; // Shared timer for current task.
         
         String state = states.peek();
-        // does the equivalent action it needs to do in the state
+        // Simple state machine: move, mine, deposit, build.
         if (state.equals("move")) {
             stopMusic();
             move();
@@ -89,8 +90,7 @@ public class Worker extends People {
 
     private void mine() {
         if (timer <= 0) {
-            // if a timer goes off it will collect the resources cross off the task it preformed
-            // add two more things to do, which is depositing the resources and moving to base
+            // Fill the carry slot, then head home.
             carryAmount = maxCarry;
             states.remove();
             states.add("depositing");
@@ -107,9 +107,7 @@ public class Worker extends People {
     }
 
     public void build(Buildings building) {
-        // if bot takes enough time it will add a building to a correct location
-        // it will add tell team that it has that building and proceed to go back to
-        // mining
+        // Drop building, then return to mining loop.
         
         if (timer <= 0) {
             if (getWorld() == null || building == null) {
@@ -119,6 +117,7 @@ public class Worker extends People {
             getWorld().addObject(building, getX(), getY());
             team.correctBuildingList(building);
 
+            // Tell the HUD the build landed.
             UI.reportUpgrade(team, building.getClass().getSimpleName(), 1);
             states.remove();
             states.add("mining");
@@ -132,7 +131,7 @@ public class Worker extends People {
     }
 
     public void prepBuild(Buildings building, int x, int y) {
-        // adds building to the worker's todo list
+        // Queue build order for this worker.
         states.add("building");
         states.add("move");
         buildings.add(building);
@@ -140,7 +139,7 @@ public class Worker extends People {
     }
 
     private void move() {
-        // moves to a position until it is 55 pixel away
+        // Walk to the front target in the queue.
         if (targetPositions.isEmpty()) {
             return;
         }
@@ -158,7 +157,7 @@ public class Worker extends People {
             timer = 60;
 
             String state = states.peek();
-            // sets a timer for how long the worker will preform this task
+            // Building takes longer than mine/deposit.
             if (state.equals("building")) {
                 timer = 1200;
             }
@@ -166,6 +165,7 @@ public class Worker extends People {
             states.remove();
             targetPositions.remove();
             
+            // Move tasks hand off to the next state immediately.
             ResourceCache.playSound(states.peek() + ".mp3", getSoundVolume(states.peek()));
             System.out.println(states.peek());
         }
@@ -187,7 +187,7 @@ public class Worker extends People {
     }
 
     private int[] resourceLocation() {
-        // gets the location of the resource it is assigned to
+        // Cache one resource node per worker when possible.
         if (getWorld() == null) return new int[]{-1, -1};
 
         if (assignedResource == null || assignedResource.getWorld() == null) {
@@ -221,7 +221,7 @@ public class Worker extends People {
     }
 
     private int[] goToBase() {
-        // returns the location of the base
+        // Fallback safe coord if base is gone.
         if (homeBase == null || homeBase.getWorld() == null) {
             return new int[]{-1, -1};
         }
@@ -230,7 +230,7 @@ public class Worker extends People {
     }
 
     private void deposit() {
-        // deposits resources and adds mining to its todo list
+        // Drop cargo, then head back out.
         if (timer <= 0) {
             team.addMoney(carryAmount);
             carryAmount = 0;
@@ -245,7 +245,7 @@ public class Worker extends People {
     }
 
     public int statesLeft() {
-        // returns the bots todo list size
+        // Handy for worker load balancing.
         return states.size();
     }
     
