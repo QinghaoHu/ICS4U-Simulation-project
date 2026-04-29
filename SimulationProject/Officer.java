@@ -42,12 +42,12 @@ public class Officer extends Soldier
         }
 
         if (emptyImg != null) {
-            emptyImg.scale(80, 80);
+            emptyImg.scale(85, 85);
             setImage(img);
         }
         
         if (shootingImg != null) {
-            shootingImg.scale(80, 80);
+            shootingImg.scale(85, 85);
             setImage(img);
         }
         

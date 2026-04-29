@@ -125,6 +125,11 @@ public class Team extends Actor {
         if (workerCoolDown > 0) workerCoolDown--;
         //if (marineCoolDown > 0) marineCoolDown--;
         if (supplyBotCoolDown > 0) supplyBotCoolDown--;
+        
+        cleanWorkers();
+        cleanSupplyBots();
+        spendMoney();
+        
 
         if (workerCoolDown == 0 && resources >= Worker.getCost() && base != null && currentWorkerAmount < workerNeeded) {
             if (base.addPeople()) {
@@ -341,8 +346,8 @@ public class Team extends Actor {
 
         return false;
     }
-
-    private void handleOfficerSpawn() {
+    
+        private void handleOfficerSpawn() {
         if (base == null || base.getWorld() == null) {
             return;
         }
@@ -355,8 +360,10 @@ public class Team extends Actor {
     
         int levelDifference = enemyBase.getLevel() - base.getLevel();
     
-        // only spawn if enemy is ahead by 3+
-        if (levelDifference >= 3) {
+        Team enemyTeam = enemyBase.team;
+    
+        // only spawn if enemy is ahead by 3+ and has 4 barracks
+        if (levelDifference >= 3 && enemyTeam != null && enemyTeam.barracks.size() >= 3) {
     
             // officer already alive
             if (officer != null && officer.getWorld() != null) {
@@ -546,12 +553,10 @@ public class Team extends Actor {
     }
 
     private void spendMoney() {
-        if (resources >= 75 && isBarrackExist()) {
-            if (marineNeeded < currentMarinedAmount + 1) {
-                marineNeeded = currentMarinedAmount + 1;
-            }
+        if (resources >= Marine.getCost() * 2 && barracks.size() >= 3) {
+            marineNeeded++;
         }
-    }
+    }   
 
     public void correctBuildingList(Buildings building) {
         if (building instanceof Turret) {

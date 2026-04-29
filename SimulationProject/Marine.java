@@ -15,7 +15,7 @@ public class Marine extends Soldier
      */
     
     private static final int cost = 100;
-    private static int maxMarineCoolDown = 200;
+    private static int maxMarineCoolDown = 240;
     private int bonusDamage;
     
     public Marine(Team team) {
@@ -62,10 +62,10 @@ public class Marine extends Soldier
         }
     
         int level = base.getLevel();
-        int reduced = maxMarineCoolDown - ((level - 1) * 10);
+        int reduced = maxMarineCoolDown - ((level - 1) * 7);
     
-        if (reduced < 10) {
-            reduced = 10;
+        if (reduced < 7) {
+            reduced = 7;
         }
     
         return reduced;
