@@ -14,9 +14,9 @@ public abstract class Soldier extends People
     private static final int BLUE_RALLY_X = 200;
     private static final int BLUE_RALLY_Y = 490;
 
-    private GreenfootImage img; // image when idle
-    private GreenfootImage emptyImg;
-    private GreenfootImage shootingImg; // image when shooting
+    protected GreenfootImage img; // image when idle
+    protected GreenfootImage emptyImg;
+    protected GreenfootImage shootingImg; // image when shooting
    
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private int moveCounter; // delay the time to move to a different location for each soldier
@@ -65,7 +65,7 @@ public abstract class Soldier extends People
         }else if (state.equals(chase)){
             moveTowards(target.getX(), target.getY()); // walks towards enemies 
         }else{
-            if (shootCounter % 10 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
+            if (shootCounter % 15 == 0){ // shoots by checking if delay shooting timer is correct and turns to target and shoots
                 turnTowards(target.getX(), target.getY());
                 
                 shoot(target);
@@ -171,7 +171,7 @@ public abstract class Soldier extends People
         return new int[]{RED_RALLY_X, RED_RALLY_Y};
     }
     
-    private void setupImage() {
+    protected void setupImage() {
         if (team == null) {
             return;
         }

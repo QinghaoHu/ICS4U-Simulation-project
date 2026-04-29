@@ -9,18 +9,16 @@ import greenfoot.*;  // (World, Actor, GreenfootImage, Greenfoot and MouseInfo)
 public class Turret extends Buildings
 {
     private GreenfootImage img; // image when idle
-    private GreenfootImage emptyImg;
-    private GreenfootImage shootingImg; // image when shooting
     private int centerDist = 70;
     private int shootCounter; // delay the time it takes to shoot for each soldier
     private final int attackRange = 260;
     private final int cost = 150;
-    private int damage = 24;
+    private int damage = 32;
     private int decayTimer = 0;
     private int DECAY_RATE = 20;
 
     public Turret(Team team) {
-        super(team, 1000);
+        super(team, 850);
         if (team != null) {
             team.addBuilding(this);
     
@@ -48,8 +46,9 @@ public class Turret extends Buildings
 
         decayTimer++;
         if (decayTimer >= 60) {
-            health-=(DECAY_RATE);
+            health -= (DECAY_RATE);
             decayTimer = 0; // every 60 frames it will decrease its health
+            updateStatBar();
         }
 
         Entity target = findTarget(attackRange);
@@ -62,24 +61,26 @@ public class Turret extends Buildings
                 int bulletX = getX() + (int)(centerDist * Math.cos(Math.toRadians(angle)));
                 int bulletY = getY() + (int)(centerDist * Math.sin(Math.toRadians(angle)));
 
-                getWorld().addObject(new SoldierBullet(this, angle, 3.5, damage, 15), bulletX, bulletY);
+                if (getWorld() != null) {
+                    getWorld().addObject(new SoldierBullet(this, angle, 3.5, damage, 15), bulletX, bulletY);
+                }
             }
-            
-            
         }
+
         super.act();
     }
+
     private void setupImage() {
         if (team == null) {
             return;
         }
 
-        img = ResourceCache.getImage(team.getName() + getClass().getName() +  ".png");
-        
-        img.scale(150, 150);
-        setImage(img);
-        
-        
+        img = ResourceCache.getImage(team.getName() + getClass().getName() + ".png");
+
+        if (img != null) {
+            img.scale(150, 150);
+            setImage(img);
+        }
     }
     
     public double shootAngle(Entity e){
