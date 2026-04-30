@@ -56,7 +56,7 @@ public class Team extends Actor {
     private int pendingTurrets = 0;
     private Officer officer = null;
     private int officerCooldown = 0;
-    private static final int OFFICER_COOLDOWN = 600; // 10 sec at 60 fps
+    private static final int OFFICER_COOLDOWN = 2100; // 35 sec at 60 fps
     private World w;
 
     private Base base;
@@ -107,7 +107,7 @@ public class Team extends Actor {
         currentBarrackAmount = barracks.size();
         currentTurretAmount = defensiveTurrets.size();
         
-        if (base != null && base.health <= 500) {
+        if (base != null && base.health <= 725) {
             // Emergency stabilizer when base is low.
             int totalTurrets = currentTurretAmount + pendingTurrets;
         
