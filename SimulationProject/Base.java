@@ -21,7 +21,7 @@ public class Base extends Buildings {
         if(health <= 0 && getWorld() != null){
             // Death animation runs once, then the world swaps over.
             if (expld == null) {
-                expld = new Explosion(1, 5, 300, 120, Color.RED);
+                expld = new Explosion(1, 10, 300, 50, Color.RED);
                 getWorld().addObject(expld, this.getX(), this.getY());
                 img = new GreenfootImage(2, 2);
                 setImage(img);
