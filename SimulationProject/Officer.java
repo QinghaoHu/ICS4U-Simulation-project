@@ -65,15 +65,18 @@ public class Officer extends Soldier
     
     protected void shoot(Entity target){
         // Short spread shot, not a single bullet.
+        turnTowards(target.getX(), target.getY());
         double angle = shootAngle(target);
+        int X = getX() + (int)(centerDist * 2 * Math.cos(Math.toRadians(angle)));
+        int Y = getY() + (int)(centerDist * 2 * Math.sin(Math.toRadians(angle)));
     
         int totalBullets = 3 + bonusBullets;
     
         for (int i = 0; i < totalBullets; i++){
             getWorld().addObject(
                 new SoldierBullet(this, angle - 20 + Math.random()*40, 4, 2),
-                getX(),
-                getY()
+                X,
+                Y
             );
         }
     }
