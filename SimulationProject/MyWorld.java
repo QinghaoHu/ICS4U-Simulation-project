@@ -9,6 +9,22 @@ import java.util.Map;
 import java.util.ArrayList;
 
 /**
+ *
+* Audio credits
+* pixabay.com
+* Starcraft
+*
+* Image credit:
+* All the images resources are created by Raphel Lau
+*
+* Code Credits:
+* By Mr Cohen:
+* SuperSmoothMover.java
+* Counter.java
+* SuperStarBar.java
+*/
+
+/**
  * Main simulation world.
  * <p>
  * This is the main world where all the game play occurs

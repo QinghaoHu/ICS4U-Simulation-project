@@ -167,7 +167,7 @@ public class Worker extends People {
             
             // Move tasks hand off to the next state immediately.
             ResourceCache.playSound(states.peek() + ".mp3", getSoundVolume(states.peek()));
-            System.out.println(states.peek());
+           // System.out.println(states.peek());
         }
     }
 
